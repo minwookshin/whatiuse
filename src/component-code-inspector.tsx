@@ -12,6 +12,10 @@ import {
 } from "./components/ui";
 import { copyText } from "./lib/copy-text";
 import { getComponentInstallCommand } from "./lib/component-install-command";
+import {
+  loadComponentSources,
+  type ComponentSourceFile as SourceFile,
+} from "./lib/component-registry-source";
 
 type ComponentCodeInspectorProps = {
   id: PublicLibraryItemId | null;
@@ -19,30 +23,9 @@ type ComponentCodeInspectorProps = {
   onOpenChange: (open: boolean) => void;
 };
 
-type SourceFile = "react" | "css";
 type CopyTarget = SourceFile | "install";
 
-const reactSourceModules = import.meta.glob<string>("../registry/components/ui/*.tsx", {
-  import: "default",
-  query: "?raw",
-});
-
-const cssSourceModules = import.meta.glob<string>("../registry/styles/components/*.css", {
-  import: "default",
-  query: "?raw",
-});
-
 const emptySources: Record<SourceFile, string> = { react: "", css: "" };
-
-async function loadComponentSources(id: PublicLibraryItemId) {
-  const reactLoader = reactSourceModules[`../registry/components/ui/${id}.tsx`];
-  const cssLoader = cssSourceModules[`../registry/styles/components/${id}.css`];
-
-  if (!reactLoader || !cssLoader) throw new Error(`Missing registry source for ${id}`);
-
-  const [react, css] = await Promise.all([reactLoader(), cssLoader()]);
-  return { react, css } satisfies Record<SourceFile, string>;
-}
 
 export function ComponentCodeInspector({ id, open, onOpenChange }: ComponentCodeInspectorProps) {
   const [tab, setTab] = useState("source");
@@ -64,19 +47,17 @@ export function ComponentCodeInspector({ id, open, onOpenChange }: ComponentCode
   useEffect(() => {
     if (!open || !id) return;
 
-    let active = true;
+    const controller = new AbortController();
     setSourceStatus("loading");
-    void loadComponentSources(id).then((nextSources) => {
-      if (!active) return;
+    void loadComponentSources(id, { signal: controller.signal }).then((nextSources) => {
+      if (controller.signal.aborted) return;
       setSources(nextSources);
       setSourceStatus("ready");
     }).catch(() => {
-      if (active) setSourceStatus("error");
+      if (!controller.signal.aborted) setSourceStatus("error");
     });
 
-    return () => {
-      active = false;
-    };
+    return () => controller.abort();
   }, [id, open]);
 
   useEffect(() => () => window.clearTimeout(copyTimer.current), []);

@@ -4,6 +4,7 @@
 
 @layer whatiuse.components {
 .whatiuse-analytics-frame {
+  position: relative;
   display: grid;
   width: 100%;
   min-width: 0;
@@ -52,6 +53,61 @@
 .whatiuse-analytics-frame__stage > [hidden] { display: none; }
 
 .whatiuse-analytics-frame__inspection { min-width: 0; }
+
+.whatiuse-analytics-tooltip {
+  position: absolute;
+  z-index: 4;
+  top: 52px;
+  right: 8px;
+  width: min(228px, calc(100% - 16px));
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 90ms var(--whatiuse-ease-out), visibility 0s linear 90ms;
+  visibility: hidden;
+}
+
+.whatiuse-analytics-tooltip[data-pointer-positioned] {
+  top: 0;
+  right: auto;
+  left: 0;
+}
+
+.whatiuse-analytics-tooltip:has(.whatiuse-analytics-inspection[data-active]) {
+  opacity: 1;
+  transition-delay: 0s;
+  visibility: visible;
+}
+
+.whatiuse-analytics-tooltip .whatiuse-analytics-inspection {
+  display: grid;
+  width: 100%;
+  min-height: 0;
+  justify-content: stretch;
+  gap: 6px;
+  padding: 8px 10px;
+  border: 1px solid color-mix(in oklch, var(--whatiuse-border-strong) 58%, transparent);
+  border-radius: 8px;
+  background: var(--whatiuse-bg-flyout);
+  box-shadow: var(--whatiuse-shadow-flyout);
+}
+
+.whatiuse-analytics-tooltip .whatiuse-analytics-inspection__items {
+  display: grid;
+  width: 100%;
+  gap: 4px;
+}
+
+.whatiuse-analytics-tooltip .whatiuse-analytics-inspection__item {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 6px minmax(0, 1fr) auto;
+  gap: 6px;
+}
+
+.whatiuse-analytics-tooltip .whatiuse-analytics-inspection__item > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 .whatiuse-analytics-inspection {
   display: flex;
@@ -120,6 +176,8 @@
 
 @media (prefers-reduced-motion: reduce) {
 .whatiuse-analytics-inspection { transition-duration: 0ms; }
+
+.whatiuse-analytics-tooltip { transition-duration: 0ms; }
 }
 
 .whatiuse-analytics-frame__plot {
@@ -127,7 +185,7 @@
   height: var(--whatiuse-analytics-height);
   min-width: 0;
   overflow: hidden;
-  border-radius: 9px;
+  border-radius: var(--whatiuse-radius-container);
   background: var(--whatiuse-bg-surface);
   box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--whatiuse-control-border) 58%, transparent), 0 1px 2px rgb(17 17 19 / .025);
 }
@@ -137,7 +195,7 @@
   min-width: 0;
   height: var(--whatiuse-analytics-height);
   overflow: auto;
-  border-radius: 9px;
+  border-radius: var(--whatiuse-radius-container);
   background: var(--whatiuse-bg-stage);
 }
 
@@ -161,7 +219,7 @@
   grid-auto-flow: column;
   align-items: center;
   gap: 8px;
-  border-radius: 9px;
+  border-radius: var(--whatiuse-radius-container);
   background: var(--whatiuse-bg-surface);
   color: var(--whatiuse-fg-subtle);
   font-size: var(--whatiuse-type-ui);

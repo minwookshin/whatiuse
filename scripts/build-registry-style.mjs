@@ -347,7 +347,15 @@ async function componentOutput(item) {
     });
   }
 
-  return { files, layeredRules, bytes: Buffer.byteLength(componentCss) };
+  if (item.name === "analytics-frame") {
+    files.splice(1, 0, {
+      path: "registry/lib/analytics-tooltip-position.ts",
+      type: "registry:lib",
+      target: "lib/analytics-tooltip-position.ts",
+    });
+  }
+
+  return { files, rules, layeredRules, bytes: Buffer.byteLength(componentCss) };
 }
 
 await rm(generatedRoot, { recursive: true, force: true });
@@ -365,6 +373,7 @@ await copyFile(resolve(root, "src/lib/data-view-state.ts"), resolve(generatedRoo
 await copyFile(resolve(root, "src/lib/data-export.ts"), resolve(generatedRoot, "lib/data-export.ts"));
 await copyFile(resolve(root, "src/lib/whatiuse-data-contract.ts"), resolve(generatedRoot, "lib/whatiuse-data-contract.ts"));
 await copyFile(resolve(root, "src/lib/analytics.ts"), resolve(generatedRoot, "lib/analytics.ts"));
+await copyFile(resolve(root, "src/lib/analytics-tooltip-position.ts"), resolve(generatedRoot, "lib/analytics-tooltip-position.ts"));
 await copyFile(resolve(root, "src/lib/whatiuse-analytics-contract.ts"), resolve(generatedRoot, "lib/whatiuse-analytics-contract.ts"));
 await copyFile(resolve(root, "src/lib/whatiuse-product-patterns-contract.ts"), resolve(generatedRoot, "lib/whatiuse-product-patterns-contract.ts"));
 await copyFile(resolve(root, "src/lib/whatiuse-agent-contract.ts"), resolve(generatedRoot, "lib/whatiuse-agent-contract.ts"));
@@ -381,7 +390,8 @@ const issuesWorkspaceImports = `import { ActionList, type ActionListItem } from 
 import { Badge } from "../ui/badge";
 import { BulkActionBar } from "../ui/bulk-action-bar";
 import { Button } from "../ui/button";
-import { ColumnManager, DataToolbar, SavedViews } from "../ui/data-toolbar";
+import { ColumnManager } from "../ui/column-manager";
+import { DataToolbar, SavedViews } from "../ui/data-toolbar";
 import { DataTable, type DataTableColumn } from "../ui/data-table";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import { FilterBuilder, type DataFilter, type FilterField } from "../ui/filter-builder";
@@ -416,7 +426,8 @@ const dataRecipesSource = await readFile(resolve(root, "src/documentation/data-r
 const dataRecipesImports = `import { Badge } from "../ui/badge";
 import { BulkActionBar } from "../ui/bulk-action-bar";
 import { Button } from "../ui/button";
-import { ColumnManager, DataToolbar, SavedViews } from "../ui/data-toolbar";
+import { ColumnManager } from "../ui/column-manager";
+import { DataToolbar, SavedViews } from "../ui/data-toolbar";
 import { DataExportMenu } from "../ui/data-export-menu";
 import { DataTable, type DataTableColumn } from "../ui/data-table";
 import { DateRangeFilter } from "../ui/date-range-filter";
@@ -548,7 +559,7 @@ await writeFile(resolve(generatedRoot, "styles/whatiuse.css"), registryAggregato
 
 const expandedAggregator = [
   baseCss.trim(),
-  ...componentItems.map((item) => componentResults.get(item.name).layeredRules),
+  `@layer whatiuse.components {\n${componentItems.map((item) => componentResults.get(item.name).rules).join("\n\n")}\n}`,
 ].join("\n\n");
 await writeFile(resolve(root, "src/whatiuse.css"), `${compactCssWhitespace(expandedAggregator)}\n`, "utf8");
 

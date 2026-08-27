@@ -50,7 +50,8 @@
   display: block;
   font-size: 15px;
   font-weight: 640;
-  letter-spacing: -.06em;
+  letter-spacing: -.065em;
+  white-space: nowrap;
 }
 
 .whatiuse-wordmark--scroll-docked {
@@ -61,7 +62,15 @@
   grid-column: auto;
   justify-self: auto;
   transform-origin: center;
+  transform: translate3d(0, calc(50dvh - var(--whatiuse-public-header-height) / 2), 0);
   translate: -50% -50%;
+  will-change: transform;
+}
+
+.whatiuse-wordmark--scroll-docked > strong {
+  backface-visibility: hidden;
+  transform: scale(4.8);
+  transform-origin: center;
   will-change: transform;
 }
 
@@ -548,6 +557,7 @@
 
 @media (max-width: 620px) {
   .whatiuse-wordmark strong { font-size: 14px; }
+  .whatiuse-wordmark--scroll-docked > strong { transform: scale(3.7); }
   .landing-hero { min-height: calc(100dvh - var(--whatiuse-public-header-height)); padding: 50px 12px 0; }
   .landing-hero__mark { width: 56px; height: 56px; border-radius: 16px; }
   .landing-hero__mark svg { width: 25px; height: 25px; }

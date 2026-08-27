@@ -1,4 +1,4 @@
-import { type ColumnManagerProps } from "./data-toolbar";
+import { type ColumnManagerProps } from "./column-manager";
 export type ColumnVisibilityMenuProps = ColumnManagerProps & {
     className?: string;
 };

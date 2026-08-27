@@ -40,6 +40,7 @@ jobs:
         run: npm run test:browsers
       - name: Generate Linux visual baselines
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.update_baselines }}
+        shell: bash
         run: |
           npm run test:stories:visual:update
           npm run test:visual:catalog:update

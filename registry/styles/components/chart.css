@@ -3,7 +3,66 @@
 @layer whatiuse.tokens, whatiuse.base, whatiuse.components;
 
 @layer whatiuse.components {
-.whatiuse-chart { display: grid; width: 100%; min-width: 0; margin: 0; gap: 12px; }
+.whatiuse-analytics-tooltip {
+  position: absolute;
+  z-index: 4;
+  top: 52px;
+  right: 8px;
+  width: min(228px, calc(100% - 16px));
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 90ms var(--whatiuse-ease-out), visibility 0s linear 90ms;
+  visibility: hidden;
+}
+
+.whatiuse-analytics-tooltip[data-pointer-positioned] {
+  top: 0;
+  right: auto;
+  left: 0;
+}
+
+.whatiuse-analytics-tooltip:has(.whatiuse-analytics-inspection[data-active]) {
+  opacity: 1;
+  transition-delay: 0s;
+  visibility: visible;
+}
+
+.whatiuse-analytics-tooltip .whatiuse-analytics-inspection {
+  display: grid;
+  width: 100%;
+  min-height: 0;
+  justify-content: stretch;
+  gap: 6px;
+  padding: 8px 10px;
+  border: 1px solid color-mix(in oklch, var(--whatiuse-border-strong) 58%, transparent);
+  border-radius: 8px;
+  background: var(--whatiuse-bg-flyout);
+  box-shadow: var(--whatiuse-shadow-flyout);
+}
+
+.whatiuse-analytics-tooltip .whatiuse-analytics-inspection__items {
+  display: grid;
+  width: 100%;
+  gap: 4px;
+}
+
+.whatiuse-analytics-tooltip .whatiuse-analytics-inspection__item {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 6px minmax(0, 1fr) auto;
+  gap: 6px;
+}
+
+.whatiuse-analytics-tooltip .whatiuse-analytics-inspection__item > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (prefers-reduced-motion: reduce) {
+.whatiuse-analytics-tooltip { transition-duration: 0ms; }
+}
+
+.whatiuse-chart { position: relative; display: grid; width: 100%; min-width: 0; margin: 0; gap: 12px; }
 
 .whatiuse-chart__header { display: flex; min-width: 0; align-items: flex-start; justify-content: space-between; gap: 20px; }
 
@@ -82,7 +141,7 @@
 .whatiuse-chart__grid line { stroke: var(--whatiuse-separator); stroke-width: 1; vector-effect: non-scaling-stroke; }
 
 .whatiuse-chart__grid text,
-.whatiuse-chart__x-axis text { fill: var(--whatiuse-fg-subtle); font-family: var(--whatiuse-font-ui); font-size: 10px; font-variant-numeric: tabular-nums; }
+.whatiuse-chart__x-axis text { fill: var(--whatiuse-fg-subtle); font-family: var(--whatiuse-font-ui); font-size: var(--whatiuse-type-metadata); font-variant-numeric: tabular-nums; }
 
 .whatiuse-chart__grid text { text-anchor: end; dominant-baseline: middle; }
 
@@ -110,7 +169,7 @@
 
 .whatiuse-chart__annotations line { stroke: var(--whatiuse-fg-subtle); stroke-dasharray: 2 4; stroke-width: 1; vector-effect: non-scaling-stroke; }
 
-.whatiuse-chart__annotations text { fill: var(--whatiuse-fg-subtle); font-family: var(--whatiuse-font-ui); font-size: 9px; }
+.whatiuse-chart__annotations text { fill: var(--whatiuse-fg-subtle); font-family: var(--whatiuse-font-ui); font-size: var(--whatiuse-type-metadata); }
 
 .whatiuse-chart__annotations [data-tone="danger"] line { stroke: var(--whatiuse-fg-danger); }
 

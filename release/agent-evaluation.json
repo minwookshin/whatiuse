@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "generatedBy": "scripts/evaluate-agent-layer.mjs",
-  "generatedAt": "2026-08-19T13:59:24.821Z",
-  "version": "0.1.0-rc.38",
+  "generatedAt": "2026-08-27T16:33:07.036Z",
+  "version": "0.1.0-rc.43",
   "status": "passed",
   "scope": "One clean React + TypeScript + Vite consumer installed the whatiuse agent registry item; 30 generated task modules were collectively type-checked and production-built.",
   "taskCount": 30,
@@ -15,7 +15,7 @@
   "productionBuild": "passed",
   "installedItem": "@whatiuse/whatiuse-agent",
   "registryChannel": "immutable versioned",
-  "elapsedMs": 16236,
+  "elapsedMs": 31269,
   "results": [
     {
       "id": "issues-triage-backlog",

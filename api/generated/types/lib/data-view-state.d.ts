@@ -31,6 +31,7 @@ export type DataViewState = {
     sorting: readonly DataViewSort[];
     pagination: DataViewPagination;
     columnVisibility: Readonly<Record<string, boolean>>;
+    columnOrder: readonly string[];
     columnSizing: Readonly<Record<string, number>>;
     columnPinning: DataViewColumnPinning;
     dateRange: DataDateRange;

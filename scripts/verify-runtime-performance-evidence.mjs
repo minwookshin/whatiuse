@@ -5,7 +5,7 @@ const root = process.cwd();
 const packageJson = JSON.parse(await readFile(resolve(root, "package.json"), "utf8"));
 const evidence = JSON.parse(await readFile(resolve(root, "release/runtime-performance.json"), "utf8"));
 
-if (evidence.schemaVersion !== 1) throw new Error("[runtime-performance] unsupported evidence schema");
+if (evidence.schemaVersion !== 2) throw new Error("[runtime-performance] unsupported evidence schema");
 if (evidence.releaseVersion !== packageJson.version) throw new Error(`[runtime-performance] evidence belongs to ${evidence.releaseVersion}, not ${packageJson.version}`);
 if (evidence.status !== "passed" || evidence.mode !== "local-production-preview") throw new Error("[runtime-performance] latest local production-preview run is not passing");
 if (evidence.viewport?.width !== 1280 || evidence.viewport?.height !== 720 || evidence.reducedMotion !== true) throw new Error("[runtime-performance] viewport or reduced-motion contract drifted");
@@ -21,7 +21,7 @@ const assertions = [
   [measurements.landing.longestTaskMs, budgets.longestTaskMs, "landing longest task"],
   [measurements.documentation.longestTaskMs, budgets.longestTaskMs, "documentation longest task"],
   [measurements.documentationTransitionMs, budgets.documentationTransitionMs, "documentation transition"],
-  [measurements.interactions.sharedDetailSelectionMs, budgets.sharedDetailSelectionMs, "Shared Detail selection"],
+  [measurements.interactions.buttonActivationMs, budgets.buttonActivationMs, "Button activation"],
   [measurements.interactions.dialogOpenMs, budgets.dialogOpenMs, "Dialog open"],
 ];
 for (const [actual, budget, label] of assertions) {

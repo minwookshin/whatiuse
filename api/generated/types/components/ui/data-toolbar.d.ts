@@ -19,19 +19,7 @@ export type SavedViewsProps = {
     onSaveCurrent?: () => void;
     onUpdateCurrent?: () => void;
     onDeleteCurrent?: () => void;
+    onCopyLink?: () => void;
     label?: string;
 };
-export declare function SavedViews({ views, value, onValueChange, onSaveCurrent, onUpdateCurrent, onDeleteCurrent, label }: SavedViewsProps): import("react").JSX.Element;
-export type ColumnManagerColumn = {
-    id: string;
-    label: string;
-    visible: boolean;
-    required?: boolean;
-};
-export type ColumnManagerProps = {
-    columns: readonly ColumnManagerColumn[];
-    onVisibilityChange: (id: string, visible: boolean) => void;
-    onResetSizing?: () => void;
-    label?: string;
-};
-export declare function ColumnManager({ columns, onVisibilityChange, onResetSizing, label }: ColumnManagerProps): import("react").JSX.Element;
+export declare function SavedViews({ views, value, onValueChange, onSaveCurrent, onUpdateCurrent, onDeleteCurrent, onCopyLink, label }: SavedViewsProps): import("react").JSX.Element;

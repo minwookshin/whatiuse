@@ -1,6 +1,6 @@
 {
   "name": "whatiuse",
-  "version": "0.1.0-rc.38",
+  "version": "0.1.0-rc.43",
   "description": "React components I use for product interfaces.",
   "keywords": [
     "react",
@@ -82,9 +82,9 @@
     "test:watch": "vitest",
     "storybook": "storybook dev -p 6006 --no-open",
     "build:storybook": "storybook build -o storybook-static",
-    "test:stories": "npm run test:stories:light && npm run test:stories:dark",
-    "test:stories:light": "vitest run --config vitest.storybook.config.mts --project=storybook-light",
-    "test:stories:dark": "vitest run --config vitest.storybook.config.mts --project=storybook-dark",
+    "test:stories": "node scripts/run-storybook-tests.mjs",
+    "test:stories:light": "node scripts/run-storybook-tests.mjs light",
+    "test:stories:dark": "node scripts/run-storybook-tests.mjs dark",
     "test:stories:visual": "playwright test --config playwright.storybook.config.ts",
     "test:stories:visual:update": "playwright test --config playwright.storybook.config.ts --update-snapshots",
     "test:browsers": "playwright test",

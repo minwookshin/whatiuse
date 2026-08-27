@@ -37,10 +37,10 @@ export function Alert({
       {...props}
     >
       <span className="whatiuse-alert__icon" aria-hidden="true">{icon ?? fallbackIcon}</span>
-      <span className="whatiuse-alert__content">
+      <div className="whatiuse-alert__content">
         <strong>{title}</strong>
-        {children && <span>{children}</span>}
-      </span>
+        {children && <div className="whatiuse-alert__body">{children}</div>}
+      </div>
       {action && <span className="whatiuse-alert__action">{action}</span>}
       {onDismiss && <IconButton className="whatiuse-alert__dismiss" variant="ghost" size="small" aria-label={dismissLabel} onClick={onDismiss}><X /></IconButton>}
     </div>

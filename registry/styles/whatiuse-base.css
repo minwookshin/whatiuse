@@ -73,6 +73,8 @@
   --whatiuse-radius-lg: var(--whatiuse-radius-overlay);
   --whatiuse-hover-duration: 120ms;
   --whatiuse-press-duration: 110ms;
+  --whatiuse-flyout-enter-duration: 140ms;
+  --whatiuse-flyout-exit-duration: 100ms;
   --whatiuse-enter-duration: 180ms;
   --whatiuse-exit-duration: 120ms;
   --whatiuse-fast: var(--whatiuse-hover-duration);

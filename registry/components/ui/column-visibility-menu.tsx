@@ -3,7 +3,7 @@
 import "../../styles/whatiuse-base.css";
 import "../../styles/components/column-visibility-menu.css";
 import { cn } from "../../lib/cn";
-import { ColumnManager, type ColumnManagerProps } from "./data-toolbar";
+import { ColumnManager, type ColumnManagerProps } from "./column-manager";
 
 export type ColumnVisibilityMenuProps = ColumnManagerProps & {
   className?: string;

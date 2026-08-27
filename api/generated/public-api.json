@@ -4,10 +4,10 @@
   "entryPoint": "src/components/ui/index.ts",
   "typescriptVersion": "6.0.3",
   "componentCount": 45,
-  "productComponentCount": 36,
-  "publicComponentCount": 81,
-  "exportCount": 418,
-  "runtimeExportCount": 224,
+  "productComponentCount": 40,
+  "publicComponentCount": 85,
+  "exportCount": 430,
+  "runtimeExportCount": 227,
   "indexExports": [
     "ActionList",
     "ActionListItem",
@@ -52,6 +52,7 @@
     "BreakdownProps",
     "BulkActionBar",
     "BulkActionBarProps",
+    "BulkActionBarStatus",
     "Button",
     "ButtonGroup",
     "ButtonGroupProps",
@@ -75,6 +76,7 @@
     "CollapsibleTrigger",
     "ColumnManager",
     "ColumnManagerColumn",
+    "ColumnManagerPin",
     "ColumnManagerProps",
     "ColumnVisibilityMenu",
     "ColumnVisibilityMenuProps",
@@ -109,6 +111,9 @@
     "DataExportMenu",
     "DataExportMenuProps",
     "DataExportOptions",
+    "DataExportProgress",
+    "DataExportProgressProps",
+    "DataExportProgressStatus",
     "DataFilter",
     "DataFilterOperator",
     "DataFilterValue",
@@ -159,6 +164,9 @@
     "DonutChart",
     "DonutChartDatum",
     "DonutChartProps",
+    "EditableCell",
+    "EditableCellProps",
+    "EditableCellStatus",
     "EmptyState",
     "EmptyStateProps",
     "FacetFilter",
@@ -242,6 +250,10 @@
     "PropertyList",
     "PropertyListItem",
     "PropertyListProps",
+    "QueryBuilder",
+    "QueryBuilderCombinator",
+    "QueryBuilderField",
+    "QueryBuilderProps",
     "RadarAxis",
     "RadarChart",
     "RadarChartProps",
@@ -476,6 +488,7 @@
     "DATA_VIEW_STATE_VERSION",
     "DataDensityControl",
     "DataExportMenu",
+    "DataExportProgress",
     "DataGroupMenu",
     "DataResultSummary",
     "DataSortMenu",
@@ -493,6 +506,7 @@
     "DialogTitle",
     "DialogTrigger",
     "DonutChart",
+    "EditableCell",
     "EmptyState",
     "FacetFilter",
     "Field",
@@ -536,6 +550,7 @@
     "PopoverTrigger",
     "Progress",
     "PropertyList",
+    "QueryBuilder",
     "RadarChart",
     "RadioGroup",
     "ReorderableList",
@@ -2302,7 +2317,7 @@
     },
     "alert": {
       "source": "src/components/ui/alert.tsx",
-      "sourceHash": "3be5f8111ffaf9f240c08abadb91bc37266f71d6080b62e49ec47f5e204cbb35",
+      "sourceHash": "68f52413c66d9a6b3ed3859c5cc400d4f2e56987f341d909e661af50361c1eb0",
       "declaration": "api/generated/types/components/ui/alert.d.ts",
       "exports": [
         {
@@ -2444,14 +2459,14 @@
   "productComponents": {
     "data-table": {
       "source": "src/components/ui/data-table.tsx",
-      "sourceHash": "535398e3e33bb42c2bf31d496ad63a14e1d96cc562d6eb72435fd696d1a0bda6",
+      "sourceHash": "25d0d82f4f4dc0adff23c0a02d90b051df0025f282c39bcd01be490cd8db0d30",
       "declaration": "api/generated/types/components/ui/data-table.d.ts",
       "exports": [
         {
           "name": "DataTable",
           "kind": "function",
           "signature": "DataTable<TData extends object>({ ariaLabel, data, columns, getRowId, getRowLabel, className, selectable, selectedRowIds, defaultSelectedRowIds, onSelectedRowIdsChange, sorting, defaultSorting, onSortingChange, manualSorting, columnVisibil…",
-          "typeHash": "69ad85368bf671104c32ad2be8e845d6f665373c4d28f2f1d7a45bfbf7d40e21",
+          "typeHash": "8baeb94a15950df981ba5737e3033a7468bc96fee48cb1dce233637daef512cb",
           "description": ""
         },
         {
@@ -2472,7 +2487,7 @@
           "name": "DataTableProps",
           "kind": "type",
           "signature": "DataTableProps = { ariaLabel: string; data: readonly TData[]; columns: readonly DataTableColumn<TData>[]; getRowId: (row: TData, index: number) => string; getRowLabel?: (row: TData) => string; className?: string; selectable?: boolean; sele…",
-          "typeHash": "ff197471b0610c3ac6105baea443b57186e05da0e28b954c587126d68ae5891c",
+          "typeHash": "bf2d8555a6e22bfa393af4c9d242c5d092527e8f1e54b2272ff18941e623aa14",
           "description": ""
         },
         {
@@ -2492,8 +2507,8 @@
         {
           "name": "whatiuseDataTableFeatures",
           "kind": "const",
-          "signature": "whatiuseDataTableFeatures: { columnSizingFeature: import(\"@tanstack/table-core\").TableFeature; columnResizingFeature: import(\"@tanstack/table-core\").TableFeature; columnPinningFeature: import(\"@tanstack/table-core\").TableFeature; columnVis…",
-          "typeHash": "5cb01cc8f01260f690dd151f592d67cc086dc2fcbdfb8c86f87b4393d8066208",
+          "signature": "whatiuseDataTableFeatures: { columnSizingFeature: import(\"@tanstack/table-core\").TableFeature; columnResizingFeature: import(\"@tanstack/table-core\").TableFeature; columnOrderingFeature: import(\"@tanstack/table-core\").TableFeature; columnPi…",
+          "typeHash": "003f2a0cd44368656917997d266aa399e0e042d2bab3b1f9476ab649634acc45",
           "description": ""
         }
       ]
@@ -2542,30 +2557,9 @@
     },
     "data-toolbar": {
       "source": "src/components/ui/data-toolbar.tsx",
-      "sourceHash": "cf00bdd0647665041d9118b411080fe6d5b7dc3aa6124c309874e82fb129281d",
+      "sourceHash": "c33f1c1de27f0c58e841fc8fe4a9b3b8be9aeff8c70f57a24a48036a4847bd32",
       "declaration": "api/generated/types/components/ui/data-toolbar.d.ts",
       "exports": [
-        {
-          "name": "ColumnManager",
-          "kind": "function",
-          "signature": "ColumnManager({ columns, onVisibilityChange, onResetSizing, label }: ColumnManagerProps): import(\"react\").JSX.Element",
-          "typeHash": "4c775c497e8a49e99905740194ff4d5363989acbcb720245cf8c950cb9a8fc7a",
-          "description": ""
-        },
-        {
-          "name": "ColumnManagerColumn",
-          "kind": "type",
-          "signature": "ColumnManagerColumn = { id: string; label: string; visible: boolean; required?: boolean; }",
-          "typeHash": "34b4bf9a30f385f395750d1cc541d39cfbde6da8a54113184e491904cec210ec",
-          "description": ""
-        },
-        {
-          "name": "ColumnManagerProps",
-          "kind": "type",
-          "signature": "ColumnManagerProps = { columns: readonly ColumnManagerColumn[]; onVisibilityChange: (id: string, visible: boolean) => void; onResetSizing?: () => void; label?: string; }",
-          "typeHash": "0e727ff2187eee6479fba3f88e2119dc38cf469dc0c0178c8d7b53a03bf1ba63",
-          "description": ""
-        },
         {
           "name": "DataToolbar",
           "kind": "function",
@@ -2590,36 +2584,78 @@
         {
           "name": "SavedViews",
           "kind": "function",
-          "signature": "SavedViews({ views, value, onValueChange, onSaveCurrent, onUpdateCurrent, onDeleteCurrent, label }: SavedViewsProps): import(\"react\").JSX.Element",
-          "typeHash": "f033f7236951f0d9a42186d8738de8dc6aeeddec3f3d38355f52bb7dba43febb",
+          "signature": "SavedViews({ views, value, onValueChange, onSaveCurrent, onUpdateCurrent, onDeleteCurrent, onCopyLink, label }: SavedViewsProps): import(\"react\").JSX.Element",
+          "typeHash": "434f3910d32d7ee94fbea083facc436cbaf6a011e6693870c37746d44912216d",
           "description": ""
         },
         {
           "name": "SavedViewsProps",
           "kind": "type",
-          "signature": "SavedViewsProps = { views: readonly SavedView[]; value: string; onValueChange: (value: string) => void; onSaveCurrent?: () => void; onUpdateCurrent?: () => void; onDeleteCurrent?: () => void; label?: string; }",
-          "typeHash": "beaaa07682ceeb5b6bdd7e262ee793bfea009460e120b05d23f45f894e64bf3f",
+          "signature": "SavedViewsProps = { views: readonly SavedView[]; value: string; onValueChange: (value: string) => void; onSaveCurrent?: () => void; onUpdateCurrent?: () => void; onDeleteCurrent?: () => void; onCopyLink?: () => void; label?: string; }",
+          "typeHash": "a0dd03df1a5c047145e7f86f2075467c8ceede7ed753eb5ddb6429d139ab2a47",
+          "description": ""
+        }
+      ]
+    },
+    "query-builder": {
+      "source": "src/components/ui/query-builder.tsx",
+      "sourceHash": "e884c77e861b5d2a28cbf76ba007c8c08c516cd47e9fdc9b1653f86a1ba82aa8",
+      "declaration": "api/generated/types/components/ui/query-builder.d.ts",
+      "exports": [
+        {
+          "name": "QueryBuilder",
+          "kind": "function",
+          "signature": "QueryBuilder({ fields, conditions, combinator, onApply, onCancel, className, label }: QueryBuilderProps): import(\"react\").JSX.Element",
+          "typeHash": "fd6ddef5f375c6d188720ad63fb377e98f6e1c7b243c360bf54c6a43528937fa",
+          "description": ""
+        },
+        {
+          "name": "QueryBuilderCombinator",
+          "kind": "type",
+          "signature": "QueryBuilderCombinator = \"and\" | \"or\"",
+          "typeHash": "21d3fe4bf9da3c140dc3cc5dc8eb3d7fc8c0d40359f21973e8ce1096d74d66e7",
+          "description": ""
+        },
+        {
+          "name": "QueryBuilderField",
+          "kind": "type",
+          "signature": "QueryBuilderField = { id: string; label: string; kind?: \"text\" | \"number\" | \"select\"; operators?: readonly DataFilterOperator[]; values?: readonly { label: string; value: string }[]; placeholder?: string; }",
+          "typeHash": "1730d074a5d1bfa2f57b8f34745f949fc18c632c7252192ae0740a11107000db",
+          "description": ""
+        },
+        {
+          "name": "QueryBuilderProps",
+          "kind": "type",
+          "signature": "QueryBuilderProps = { fields: readonly QueryBuilderField[]; conditions: readonly DataViewFilter[]; combinator?: QueryBuilderCombinator; onApply: (conditions: readonly DataViewFilter[], combinator: QueryBuilderCombinator) => void; onCancel?…",
+          "typeHash": "b18e45d35806f5db17d0dcaae21273ca194b70189bcd59e48df61c5b6c0a43ee",
           "description": ""
         }
       ]
     },
     "bulk-action-bar": {
       "source": "src/components/ui/bulk-action-bar.tsx",
-      "sourceHash": "8ee8e91842f4b49cbde0d52d93269c245abbe09f11f2696baad879b6ac0d9278",
+      "sourceHash": "9fe284a6ab422ad13d2b05daee4e7625e2f0cc730fecedd4eb667e1b5f747148",
       "declaration": "api/generated/types/components/ui/bulk-action-bar.d.ts",
       "exports": [
         {
           "name": "BulkActionBar",
           "kind": "function",
-          "signature": "BulkActionBar({ count, noun, actions, onClear, busy, className, ...props }: BulkActionBarProps): import(\"react\").JSX.Element | null",
-          "typeHash": "3bc5492c6b64e8fce908cfad0cb886b74cff59b777c43d18d8bb3c717302936f",
+          "signature": "BulkActionBar({ count, noun, actions, onClear, busy, status, message, onUndo, undoLabel, className, ...props }: BulkActionBarProps): import(\"react\").JSX.Element | null",
+          "typeHash": "17389386c740fc4dcc75b43e770438016b4997e86ea19da2fdcacc1a5c64229c",
           "description": ""
         },
         {
           "name": "BulkActionBarProps",
           "kind": "type",
-          "signature": "BulkActionBarProps = HTMLAttributes<HTMLDivElement> & { count: number; noun?: string; actions: ReactNode; onClear: () => void; busy?: boolean; }",
-          "typeHash": "43425363201c2f38582b0870275d27da2e7ef3c4387f4493add51424683253ad",
+          "signature": "BulkActionBarProps = HTMLAttributes<HTMLDivElement> & { count: number; noun?: string; actions?: ReactNode; onClear: () => void; busy?: boolean; status?: BulkActionBarStatus; message?: ReactNode; onUndo?: () => void; undoLabel?: string; }",
+          "typeHash": "b5eca4015521071e7ad2853344fb6a3f8bed9ffac6bce276b19d60793aa3738e",
+          "description": ""
+        },
+        {
+          "name": "BulkActionBarStatus",
+          "kind": "type",
+          "signature": "BulkActionBarStatus = \"ready\" | \"busy\" | \"complete\" | \"error\"",
+          "typeHash": "d1d323b28d35ba1213f20a8b4e758dc84501b5fc09e39b8864e3148f8ba36da6",
           "description": ""
         }
       ]
@@ -2654,7 +2690,7 @@
     },
     "column-visibility-menu": {
       "source": "src/components/ui/column-visibility-menu.tsx",
-      "sourceHash": "e2a20280c47cff0c7b43205648587b22ab3e34f7d817fd08fa15e6c74823be2e",
+      "sourceHash": "5d95f3873de7384bfae21e2ed3fd084aaf15256ac52b1afb7e18cdf2eaedbd30",
       "declaration": "api/generated/types/components/ui/column-visibility-menu.d.ts",
       "exports": [
         {
@@ -2669,6 +2705,69 @@
           "kind": "type",
           "signature": "ColumnVisibilityMenuProps = ColumnManagerProps & { className?: string; }",
           "typeHash": "245092f6671213f0970c16e83dea77672e76fe8bb72ee2b0bf17ff5df44e1925",
+          "description": ""
+        }
+      ]
+    },
+    "column-manager": {
+      "source": "src/components/ui/column-manager.tsx",
+      "sourceHash": "f017e69f379b9057641bc0ab8835d3ff965d457ea1482e141161912f7f6b3e5f",
+      "declaration": "api/generated/types/components/ui/column-manager.d.ts",
+      "exports": [
+        {
+          "name": "ColumnManager",
+          "kind": "function",
+          "signature": "ColumnManager({ columns, onVisibilityChange, onOrderChange, onPinningChange, onResetSizing, label, }: ColumnManagerProps): import(\"react\").JSX.Element",
+          "typeHash": "ba547a496141e878ce67f82c744c4a91f55a733f58025c6162084eb1d41569a2",
+          "description": ""
+        },
+        {
+          "name": "ColumnManagerColumn",
+          "kind": "type",
+          "signature": "ColumnManagerColumn = { id: string; label: string; visible: boolean; required?: boolean; pinned?: ColumnManagerPin; }",
+          "typeHash": "b6ed097db495e42409cdaacd1866faa2f678ca4f4dce0faf0ca66e8d8e230028",
+          "description": ""
+        },
+        {
+          "name": "ColumnManagerPin",
+          "kind": "type",
+          "signature": "ColumnManagerPin = false | \"start\" | \"end\"",
+          "typeHash": "2779c92b9dec7576550bcb3183c8566f60f4f1788c89c665a0802a43900ce5a0",
+          "description": ""
+        },
+        {
+          "name": "ColumnManagerProps",
+          "kind": "type",
+          "signature": "ColumnManagerProps = { columns: readonly ColumnManagerColumn[]; onVisibilityChange: (id: string, visible: boolean) => void; onOrderChange?: (orderedIds: readonly string[]) => void; onPinningChange?: (id: string, pinned: ColumnManagerPin) =…",
+          "typeHash": "6e4c91fccb925b544e169cd262c31edab7f63c4e5da497bee42e44b5a4f48f09",
+          "description": ""
+        }
+      ]
+    },
+    "editable-cell": {
+      "source": "src/components/ui/editable-cell.tsx",
+      "sourceHash": "c3be0e7c368e3622ea97bcdbdfcef2e04bdbcc01216918c071e45393eadf6ef9",
+      "declaration": "api/generated/types/components/ui/editable-cell.d.ts",
+      "exports": [
+        {
+          "name": "EditableCell",
+          "kind": "function",
+          "signature": "EditableCell({ value, onCommit, onCancel, validate, label, emptyValue, disabled, className, ...props }: EditableCellProps): import(\"react\").JSX.Element",
+          "typeHash": "f4c35845e4d8e9a731e7672190e03f11b70bec5d16119ee51804ebf557b9a6ba",
+          "description": ""
+        },
+        {
+          "name": "EditableCellProps",
+          "kind": "type",
+          "signature": "EditableCellProps = Omit<HTMLAttributes<HTMLDivElement>, \"onChange\"> & { value: string; onCommit: (value: string) => void | Promise<void>; onCancel?: () => void; validate?: (value: string) => string | null; label?: string; emptyValue?: Rea…",
+          "typeHash": "f71f9db20012531a4f1f2653e8864609777a3fa90899d4e71ce8e8e1f70f45c7",
+          "description": ""
+        },
+        {
+          "name": "EditableCellStatus",
+          "kind": "type",
+          "signature": "EditableCellStatus = \"idle\" | \"editing\" | \"saving\" | \"error\"",
+          "typeHash": "d734fe0deac6e0aca674360d42b2d85d9dae262144d2e587256a5e39c6726f13",
           "description": ""
         }
       ]
@@ -2920,7 +3019,7 @@
     },
     "data-state": {
       "source": "src/components/ui/data-state.tsx",
-      "sourceHash": "3681c7aecbae11c95060e9c288037e7882575a62e4466aa2a9fb4f335f5f2cb2",
+      "sourceHash": "7b3bbfba0061283bce92ced93d4590db482a33771f347d9b5e63dc630eb11846",
       "declaration": "api/generated/types/components/ui/data-state.d.ts",
       "exports": [
         {
@@ -2933,8 +3032,8 @@
         {
           "name": "DataStateProps",
           "kind": "type",
-          "signature": "DataStateProps = HTMLAttributes<HTMLDivElement> & { state: \"loading\" | \"empty\" | \"error\"; title?: ReactNode; description?: ReactNode; action?: ReactNode; }",
-          "typeHash": "bd6b5ec6cdecf453e3f7c07fe395ad29441dd438b187bcd8bf350d13a9de69a6",
+          "signature": "DataStateProps = HTMLAttributes<HTMLDivElement> & { state: \"loading\" | \"empty\" | \"error\" | \"forbidden\"; title?: ReactNode; description?: ReactNode; action?: ReactNode; }",
+          "typeHash": "656c1c32c2a93acb1da96dbfc1331e4d431bce48c42dd27946743f4f73d7a2c0",
           "description": ""
         }
       ]
@@ -2984,6 +3083,34 @@
           "kind": "type",
           "signature": "DataExportMenuProps = { rows: readonly TData[]; selectedRows?: readonly TData[]; columns: readonly DataExportColumn<TData>[]; fileName: string; label?: string; download?: boolean; disabled?: boolean; onExport?: (artifact: DataExportArtifac…",
           "typeHash": "99082a91428b5d77c2f115a1cbf6b198b96ed630a77a4aad678df9d89ff2dd22",
+          "description": ""
+        }
+      ]
+    },
+    "data-export-progress": {
+      "source": "src/components/ui/data-export-progress.tsx",
+      "sourceHash": "7a86fb8a3854c386a41784b480437a95074cd6ea96f2b8c00a51d06442adabcb",
+      "declaration": "api/generated/types/components/ui/data-export-progress.d.ts",
+      "exports": [
+        {
+          "name": "DataExportProgress",
+          "kind": "function",
+          "signature": "DataExportProgress({ status, progress, title, description, fileName, processedRows, totalRows, onCancel, onRetry, onDownload, className, role, ...props }: DataExportProgressProps): import(\"react\").JSX.Element",
+          "typeHash": "6ef4ab59ca98926520b2273ece637a8cbb1257627223c41a378499f371195e0e",
+          "description": ""
+        },
+        {
+          "name": "DataExportProgressProps",
+          "kind": "type",
+          "signature": "DataExportProgressProps = HTMLAttributes<HTMLDivElement> & { status: DataExportProgressStatus; progress?: number; title?: ReactNode; description?: ReactNode; fileName?: string; processedRows?: number; totalRows?: number; onCancel?: () => v…",
+          "typeHash": "5b63e9d271b49439d79acefb4259cd5e30806b002d1be04bca7ca2a25c3a7e33",
+          "description": ""
+        },
+        {
+          "name": "DataExportProgressStatus",
+          "kind": "type",
+          "signature": "DataExportProgressStatus = \"idle\" | \"running\" | \"complete\" | \"error\" | \"cancelled\"",
+          "typeHash": "40e49cc4fc96eea6adec2c7ca3bb4f4ed48ce5d04be3c745c75ffa53905b2a81",
           "description": ""
         }
       ]
@@ -3039,7 +3166,7 @@
     },
     "chart": {
       "source": "src/components/ui/chart.tsx",
-      "sourceHash": "4e893fa7f2b2fcaa5d377042e3dab931da82a57263275673b21e4771650a4695",
+      "sourceHash": "f12a6bb793aa948336bdcd6f2724192b20ac79ebeba328742383696521febc96",
       "declaration": "api/generated/types/components/ui/chart.d.ts",
       "exports": [
         {
@@ -3074,7 +3201,7 @@
     },
     "analytics-frame": {
       "source": "src/components/ui/analytics-frame.tsx",
-      "sourceHash": "fc9c160d6da62bf94c5793f8fc3d6b21bbfc3613fd2e2540d7552e3b742cfc39",
+      "sourceHash": "8fc9cd932e15c32901b3711a5fe2bb5d03940acdf04a782e721a303e9fb36e7c",
       "declaration": "api/generated/types/components/ui/analytics-frame.d.ts",
       "exports": [
         {
@@ -3580,7 +3707,7 @@
     },
     "data-view-state": {
       "source": "lib/data-view-state.ts",
-      "sourceHash": "6dc96f7f0f28504a9184592a4332c19c64309c0996770bd42ebb8ee38e54b5c5",
+      "sourceHash": "60411dcf7c434a4dd673f59591962ba82cc1cbc73cc7d1acc082c52e65af0a30",
       "declaration": "api/generated/types/lib/data-view-state.d.ts",
       "exports": [
         {
@@ -3691,8 +3818,8 @@
         {
           "name": "DataViewState",
           "kind": "type",
-          "signature": "DataViewState = { version: typeof DATA_VIEW_STATE_VERSION; query: string; filters: readonly DataViewFilter[]; sorting: readonly DataViewSort[]; pagination: DataViewPagination; columnVisibility: Readonly<Record<string, boolean>>; columnSizi…",
-          "typeHash": "208fad89d022fbd2657cbe37d31f8690455c228dd17d52d534fbd4808b46c851",
+          "signature": "DataViewState = { version: typeof DATA_VIEW_STATE_VERSION; query: string; filters: readonly DataViewFilter[]; sorting: readonly DataViewSort[]; pagination: DataViewPagination; columnVisibility: Readonly<Record<string, boolean>>; columnOrde…",
+          "typeHash": "0614e1cc3fb59b9ba8be17c034257ab1b21b6082606f22e6d2b8d9909b60f138",
           "description": ""
         },
         {
@@ -3853,7 +3980,7 @@
     },
     "whatiuse-data-contract": {
       "source": "lib/whatiuse-data-contract.ts",
-      "sourceHash": "8713a84c99aa7ff10569b127461ba46793b77bb0e298307f49abef2d34080872",
+      "sourceHash": "ec579f03289232e86a9c5f1188bfed9474193bf5a8137d194c44c37f0d16be60",
       "declaration": "api/generated/types/lib/whatiuse-data-contract.d.ts",
       "exports": [
         {
@@ -3888,7 +4015,7 @@
           "name": "whatiuseDataComponentContracts",
           "kind": "const",
           "signature": "whatiuseDataComponentContracts: readonly [{ readonly id: \"data-table\"; readonly intent: \"Compare and act on structured records without hiding the underlying table semantics.\"; readonly useWhen: readonly [\"Rows share comparable attributes.\"…",
-          "typeHash": "3c0a1319f706c5807e029ac1701a52c399ad12785a657a5f6d2f26bec84d4500",
+          "typeHash": "86229027db0fdfe284d6e2a3e59a22fc7bb736306bad68d39260af9a83c33b3d",
           "description": ""
         },
         {
@@ -3901,8 +4028,8 @@
         {
           "name": "whatiuseDataViewStateContract",
           "kind": "const",
-          "signature": "whatiuseDataViewStateContract: { readonly version: 1; readonly serverOwned: readonly [\"query\", \"filters\", \"sorting\", \"grouping\", \"pagination\", \"dateRange\"]; readonly viewOwned: readonly [\"columnVisibility\", \"columnSizing\", \"columnPinning\",…",
-          "typeHash": "d39daeb1ba3e60d38b9da5f403e13c2587342ddc91c1cd376be0e8309f36d049",
+          "signature": "whatiuseDataViewStateContract: { readonly version: 1; readonly serverOwned: readonly [\"query\", \"filters\", \"sorting\", \"grouping\", \"pagination\", \"dateRange\"]; readonly viewOwned: readonly [\"columnVisibility\", \"columnOrder\", \"columnSizing\", \"…",
+          "typeHash": "21939fa41dc81c80543a82f63b0fe442c2fcfd48f26dd8360a9a3ff00351ddc1",
           "description": ""
         }
       ]

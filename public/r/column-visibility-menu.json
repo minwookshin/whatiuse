@@ -5,12 +5,12 @@
   "description": "Visible-column preferences with required-column protection.",
   "registryDependencies": [
     "@whatiuse/whatiuse-base",
-    "@whatiuse/data-toolbar"
+    "@whatiuse/column-manager"
   ],
   "files": [
     {
       "path": "registry/components/ui/column-visibility-menu.tsx",
-      "content": "\"use client\";\n\nimport \"../../styles/whatiuse-base.css\";\nimport \"../../styles/components/column-visibility-menu.css\";\nimport { cn } from \"../../lib/cn\";\nimport { ColumnManager, type ColumnManagerProps } from \"./data-toolbar\";\n\nexport type ColumnVisibilityMenuProps = ColumnManagerProps & {\n  className?: string;\n};\n\nexport function ColumnVisibilityMenu({ className, ...props }: ColumnVisibilityMenuProps) {\n  return (\n    <span className={cn(\"whatiuse-column-visibility-menu\", className)}>\n      <ColumnManager {...props} />\n    </span>\n  );\n}\n",
+      "content": "\"use client\";\n\nimport \"../../styles/whatiuse-base.css\";\nimport \"../../styles/components/column-visibility-menu.css\";\nimport { cn } from \"../../lib/cn\";\nimport { ColumnManager, type ColumnManagerProps } from \"./column-manager\";\n\nexport type ColumnVisibilityMenuProps = ColumnManagerProps & {\n  className?: string;\n};\n\nexport function ColumnVisibilityMenu({ className, ...props }: ColumnVisibilityMenuProps) {\n  return (\n    <span className={cn(\"whatiuse-column-visibility-menu\", className)}>\n      <ColumnManager {...props} />\n    </span>\n  );\n}\n",
       "type": "registry:component",
       "target": "components/ui/column-visibility-menu.tsx"
     },

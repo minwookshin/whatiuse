@@ -1,0 +1,410 @@
+{
+  "schemaVersion": 3,
+  "name": "whatiuse",
+  "version": "0.1.0-rc.40",
+  "immutable": true,
+  "channel": "versioned",
+  "registryScope": "@whatiuse",
+  "dependencyPolicy": "same-version-internal-and-exact-external",
+  "installer": "shadcn@4.18.0",
+  "externalDependencyVersions": {
+    "@base-ui/react": "1.7.0",
+    "@fontsource-variable/inter": "5.3.0",
+    "@internationalized/date": "3.12.3",
+    "@phosphor-icons/react": "2.1.10",
+    "@tanstack/react-table": "9.1.2",
+    "@tanstack/react-virtual": "3.14.9",
+    "class-variance-authority": "0.7.1",
+    "clsx": "2.1.1",
+    "motion": "13.1.0",
+    "react-aria-components": "1.20.0",
+    "sonner": "2.0.8",
+    "tailwind-merge": "3.6.0"
+  },
+  "urlTemplate": "https://whatiuse.minwookshin.com/r/v/0.1.0-rc.40/{name}.json",
+  "cacheControl": "public, max-age=31536000, immutable",
+  "sourceManifestSha256": "60d12f7f9657de72e1330da22d611eef7dbc3f589f292e477a58908eb4d52a3a",
+  "versionedManifestSha256": "1cc0c6a60b6b75c1c777ffd30d1f9e318ace0b5a4623a02faeae44da465cb015",
+  "artifacts": {
+    "action-list.json": {
+      "bytes": 11102,
+      "sha256": "36fb7abe3b4d9d0f2ca059458733066a943e378683f9087e815d868b962fa7a0"
+    },
+    "alert-dialog.json": {
+      "bytes": 5882,
+      "sha256": "c95edfa7af3e1dff5db5b7fb72850db4a9a8ec247d846aa2ff57580c0310a4fc"
+    },
+    "alert.json": {
+      "bytes": 4292,
+      "sha256": "0eb133a5f5c9c59705f4c5516a1ced7fbda85f01fd5906a955bbb5a9e5378115"
+    },
+    "analytics-frame.json": {
+      "bytes": 17738,
+      "sha256": "14aee37dd77c44ba02b43977c4772a8fe508ec271a775cfd45761ecea4289b9c"
+    },
+    "analytics.json": {
+      "bytes": 9480,
+      "sha256": "e05cc2d0dc9fca38eacf68c0213bec6c1be2a30f7ea8d90bda4ba2fc6606fd8e"
+    },
+    "audit-log.json": {
+      "bytes": 4125,
+      "sha256": "5d1838cbd93ae6ab4dbdbc606a8f63eacc1f25370ad19617c95223ab9443b467"
+    },
+    "avatar.json": {
+      "bytes": 5116,
+      "sha256": "7b67fcd779c228ae1b0e6b271425e45a73b270acdd4b3e5a0f46b60df8986d1e"
+    },
+    "badge.json": {
+      "bytes": 4003,
+      "sha256": "abb746ce6c082c72a2c2f3be3b349773aad66e9d4d114cd7bf20f4ce95d36c8b"
+    },
+    "breadcrumbs.json": {
+      "bytes": 3961,
+      "sha256": "124860c1a00fbbba9525660849d13a53bb240a6fefec573e34649f3a29031b76"
+    },
+    "breakdown.json": {
+      "bytes": 5038,
+      "sha256": "53278f95b6d736a755c4b70a1a8299d7d4977143a43034db79dfbe4139f239d5"
+    },
+    "bulk-action-bar.json": {
+      "bytes": 4626,
+      "sha256": "555c0a95c647ece9077a9eceac5c9e2fd4f216efc4eba1591b39311338aa4a90"
+    },
+    "button-group.json": {
+      "bytes": 4180,
+      "sha256": "12ed0b6e6b041271bd1f6e1bce410598dc22cb00fae0b6199163d79db7a052cc"
+    },
+    "button.json": {
+      "bytes": 8459,
+      "sha256": "ffe1c0618013a296b7831f368e46452d4d02eaf14ddbea1360a85b7c4a084e54"
+    },
+    "chart.json": {
+      "bytes": 30779,
+      "sha256": "54a10ca88474a37528e958ef16ad541f1512124dd04245dee0e98d9497bbfbd8"
+    },
+    "checkbox.json": {
+      "bytes": 5520,
+      "sha256": "32dfaaf47b5f18ce28ff746700351a9889a204b52b4bc41c05e07b932505552f"
+    },
+    "cohort.json": {
+      "bytes": 3938,
+      "sha256": "64a30b8baf97c90f9e30eb5850be7eb7cc3572870491867eb847dc43fe0f1990"
+    },
+    "collapsible.json": {
+      "bytes": 4352,
+      "sha256": "9c3d1f8f118d940a4c944413dbcf053ae3d0ba2d9fa05a3e91812bbc7851b70c"
+    },
+    "column-visibility-menu.json": {
+      "bytes": 1766,
+      "sha256": "5aa45a999565e94cfb6af592d9c22a2b6d1ae085cac2e66aab16de46edfed2ce"
+    },
+    "combobox.json": {
+      "bytes": 11171,
+      "sha256": "3b094049d95077d1ae79716c5483dfca8bd7d0760726febb8d097d06ddfcc8a3"
+    },
+    "comparison.json": {
+      "bytes": 4320,
+      "sha256": "3a569be16421d8be0da5679dbce037994dd4d9063107fe059e02e5f56583147d"
+    },
+    "context-menu.json": {
+      "bytes": 8119,
+      "sha256": "f1c002ea0735e44c3d6c816f3b998a5e2bcba2324dc1d86435b022776c0da423"
+    },
+    "context-switcher.json": {
+      "bytes": 11562,
+      "sha256": "1a7197e9ac3e9b669b51af924d09eab71ffef73f974458bba05d799450d7e6f4"
+    },
+    "cursor-pagination.json": {
+      "bytes": 2840,
+      "sha256": "508b50ff550ce2521498e7334b068fb8f5e6646c690197f30e9ff3562950af4b"
+    },
+    "data-density-control.json": {
+      "bytes": 2631,
+      "sha256": "c776ae4482d950ed60eb13b105030e8b133ae66a3f6b7dfa52931dbb3bd45284"
+    },
+    "data-export-menu.json": {
+      "bytes": 5394,
+      "sha256": "ec6d317ca2006991272eb2da949a41b5f91eb2c54fbfe43e186f8cd024cf574f"
+    },
+    "data-export.json": {
+      "bytes": 3925,
+      "sha256": "04fb91613646840a1fc599a5a6ed35ee999bef9fe96d8f4f82b39a9778cbe7a7"
+    },
+    "data-group-menu.json": {
+      "bytes": 3328,
+      "sha256": "4180b8278660570266109704c3dc71ea845a02583b92b68c3adbf4db4d58d03f"
+    },
+    "data-result-summary.json": {
+      "bytes": 2752,
+      "sha256": "1e70d5ff3c19622ea9246d48f10e6ddfc529540099d6fcadd3cdf7ad6ab26f7b"
+    },
+    "data-sort-menu.json": {
+      "bytes": 4280,
+      "sha256": "f2f8cdf534b2654be929b0f9122876f1834ee642ac3855c2bf21a51a1eee3857"
+    },
+    "data-state.json": {
+      "bytes": 4013,
+      "sha256": "0076e08cba1e6cc3839de06a9f9c162552559d082e99761ec66c66a613ac6b4e"
+    },
+    "data-table.json": {
+      "bytes": 34357,
+      "sha256": "515a9ded892aea8c298fecc266b0ae57e8c0e76e463b8da6766be7ac9fe1f77b"
+    },
+    "data-toolbar.json": {
+      "bytes": 7903,
+      "sha256": "24d6daf35fa94a5c07277370714ac6e567142b06254ac58e87459644c689bab8"
+    },
+    "data-view-state.json": {
+      "bytes": 22997,
+      "sha256": "15e9ca9db636e51d721a32142df190654a89fef7036fc349c7b3806e0e59ae5c"
+    },
+    "date-picker.json": {
+      "bytes": 10695,
+      "sha256": "ad7cefae68887a26cf3a46ec49cddc497b7780268b3c16db7320c29a03ad1aa0"
+    },
+    "date-range-filter.json": {
+      "bytes": 8521,
+      "sha256": "ff071dff922ed17295d89a53ed60aed6604d00fa24e8774abb4af111db5d81b0"
+    },
+    "dialog.json": {
+      "bytes": 5780,
+      "sha256": "cf345f11951a09dc303fd6f611d45d6bb4f81056574b824d89d5e3263e080e31"
+    },
+    "donut-chart.json": {
+      "bytes": 19087,
+      "sha256": "ff2ebcebd44677836e0f50037757382b0796f064b820def5bcb1b588fdffd1a8"
+    },
+    "empty-state.json": {
+      "bytes": 3724,
+      "sha256": "2a43d3b5ad9f82e7eacc2a20d455ab5aa6fff1ab5635f524131644c450ee22a2"
+    },
+    "facet-filter.json": {
+      "bytes": 5201,
+      "sha256": "1ef696765df3f841f6ce650e21eacc11aca2e814c9838fe008b564992c3b284e"
+    },
+    "field.json": {
+      "bytes": 6073,
+      "sha256": "965cf4130152af9b90e67459b3c67385a188561a01978f4dfa9893dbf032e837"
+    },
+    "filter-builder.json": {
+      "bytes": 11439,
+      "sha256": "0532baf82d393d84213121f5a2b9dcca62b7fdad30d37cb1cfdb1aebde380b86"
+    },
+    "funnel.json": {
+      "bytes": 4769,
+      "sha256": "1edaf3c50f7493b8c717a415588348c55b50d42b28d9cd794142aa40d7f15517"
+    },
+    "gauge.json": {
+      "bytes": 8150,
+      "sha256": "57a577eb16639385f46233fe62fd0a16e221e7423c0741a8f55898c12554b98d"
+    },
+    "goal.json": {
+      "bytes": 3709,
+      "sha256": "5dd30403857cc1851c5701e8cc59376742a72729cc0eed999e37e99263e01dd8"
+    },
+    "heatmap.json": {
+      "bytes": 13012,
+      "sha256": "dbc39a8dd9d96332cfa426f8838563d5f0ab93a2b734063f599c705b2ecff61b"
+    },
+    "histogram.json": {
+      "bytes": 9162,
+      "sha256": "e8c8c8dbd93164bd35ad1356a34eef980a7133257db5bf3c0968f974a5b3ad72"
+    },
+    "icon-button.json": {
+      "bytes": 2865,
+      "sha256": "318377709457bb3bca387eea7caa1194e0112be5c3fb35c155aa2f6d62f14898"
+    },
+    "inline-edit.json": {
+      "bytes": 8918,
+      "sha256": "8d142eb6635b375f5273c67110643b5ac72bc8e7f6a34cd6c653054ed35fec3b"
+    },
+    "input-group.json": {
+      "bytes": 5769,
+      "sha256": "a788cc1a5c1c531cfe48ce6b2a78e2fc2cf91a48c6fa57d1e26901603fda4fc4"
+    },
+    "kbd.json": {
+      "bytes": 2377,
+      "sha256": "a6fdd4a098384093d3b07f4623bcec04de923957d1c80c84671b637af1433cc0"
+    },
+    "menu.json": {
+      "bytes": 7372,
+      "sha256": "81d766494e7f34fad3517cfe39f7a55304f10be2226ee8d7b56be5ce9101c580"
+    },
+    "metric.json": {
+      "bytes": 5980,
+      "sha256": "7c89d50de55af52e04db0e6cc899d458196dc0cb4e30017a5bff1367766c2e4a"
+    },
+    "number-field.json": {
+      "bytes": 6701,
+      "sha256": "1f23ee8b2b411a5afa4207052c0daa13e425d96c31d363fbc68befa9708fd7a8"
+    },
+    "pagination.json": {
+      "bytes": 4968,
+      "sha256": "f8a98e20c76903054427a2cb75df91a5d6ae8daca1c2da714afc0ceb6c1384e0"
+    },
+    "popover.json": {
+      "bytes": 3457,
+      "sha256": "cded08a6adaa33d63a32875f484621f1e2ad923c0dacacff905b0c8b98f476c3"
+    },
+    "progress.json": {
+      "bytes": 4070,
+      "sha256": "73631b9ab810d44cd2202b63fd6c14e20395157dc8a8a2d08797fe2275ede89a"
+    },
+    "property-list.json": {
+      "bytes": 3441,
+      "sha256": "83fc0e3e9716cdb8ec7cc3c4ac8c240ab4b3579680bd4036f32a9129fa1ef4e2"
+    },
+    "radar-chart.json": {
+      "bytes": 11445,
+      "sha256": "44d6c672bb2c6547225ee71c19a6159387081ebd15434d48c45df54498a36f76"
+    },
+    "radio-group.json": {
+      "bytes": 6222,
+      "sha256": "f2e6ea6faf42efb1ce870b5e2048a96d191c8efc7d449412e02b43e9c8b41172"
+    },
+    "registry.json": {
+      "bytes": 123791,
+      "sha256": "5e4808306eb8595272ca17153dcf81b1ae502c4ccece7bee3dae41fd3128abc8"
+    },
+    "reorderable-list.json": {
+      "bytes": 7456,
+      "sha256": "858471d45b5ebd0247478d53cf8d0f31f5881ac7b326f835cc51af3321032a5e"
+    },
+    "row-actions-menu.json": {
+      "bytes": 3326,
+      "sha256": "60ea7c4148046121d827b717684cc0919f8fcf6b9a6dc2126815799f57081647"
+    },
+    "sankey-chart.json": {
+      "bytes": 12214,
+      "sha256": "959c2dbb70b9ce5adad39ba609d15407722b083cae2fedd75dc29c52d2b154e9"
+    },
+    "saved-view-menu.json": {
+      "bytes": 1807,
+      "sha256": "396914d1ef0b283f07d3350878cecc9495463c5b71f8b76b9ddd8b41de85cb99"
+    },
+    "scatter-chart.json": {
+      "bytes": 10900,
+      "sha256": "899513a00893745e95c0aeba10e551043a650323dfe5fd8180d951cd042ac90f"
+    },
+    "search-input.json": {
+      "bytes": 5698,
+      "sha256": "24086f01ed0fd246420326f594b2c761cc99f9271e2ab70cb363e03621a642c3"
+    },
+    "segmented-control.json": {
+      "bytes": 5559,
+      "sha256": "408b093a4bcb991ae9094b2aec46f21c9da0202de2f926f8454d431ab86859d4"
+    },
+    "select.json": {
+      "bytes": 10038,
+      "sha256": "61d8705ad8bb9837fe32f94436a0adda5500af4f751626d4270a1b3d4a72d4a2"
+    },
+    "shared-detail.json": {
+      "bytes": 21288,
+      "sha256": "1a1d60c51fadab90bdfda100c529a8c2a5d0c632fa5e832002107b6d9db76ae5"
+    },
+    "sheet.json": {
+      "bytes": 7240,
+      "sha256": "f662a34e8f1245d0b5b159d0227343a4b2ee3fad7fc28c622469bad0f736f6a8"
+    },
+    "skeleton.json": {
+      "bytes": 2718,
+      "sha256": "0e3b12d2d2798da4df7ac6d53be91baacaaa9ab8aaca2b26648d5cd7a97d406d"
+    },
+    "sparkline.json": {
+      "bytes": 3945,
+      "sha256": "423036c93ffbd29f9c82d2e25f74f14f0d8fcbe4f1675e67dea37fbc979a5c6c"
+    },
+    "spinner.json": {
+      "bytes": 2226,
+      "sha256": "ac0eb27bd198f8587e7903788875d947ed9bc030e48d0c1fe9d0236359b60aa8"
+    },
+    "switch.json": {
+      "bytes": 4580,
+      "sha256": "72b6f5034c70d642f86bd7a7c2d42df39be36d144b5e2fbd0b17e5e36cd75bcf"
+    },
+    "table.json": {
+      "bytes": 5480,
+      "sha256": "ca73a61ae97840ccfb510d4a9b246ffd963661575fc56c8c022a53362f8afecd"
+    },
+    "tabs.json": {
+      "bytes": 3880,
+      "sha256": "b68356ec026252eb54c996c99f88bcb692b623a11a89361471939311183e74c4"
+    },
+    "text-field.json": {
+      "bytes": 5416,
+      "sha256": "3df9f12de39e02be9c506f9adf706a914fe1f88607cdeb291d689ab4e45cbeb9"
+    },
+    "textarea.json": {
+      "bytes": 5078,
+      "sha256": "32c748c4f0207c5f60e15987b0b9a695698de0bf7d9f244c701fce5240298243"
+    },
+    "timeline.json": {
+      "bytes": 4892,
+      "sha256": "1ce16b4990acf191f4dc5b7c7b57bbfb1b9510f1a4cc7a7560f524e54c4763c0"
+    },
+    "toast.json": {
+      "bytes": 5051,
+      "sha256": "927ab617ac393d5729c43b6532750fb854ef81ac6ceb2979620e030cd4392b01"
+    },
+    "toolbar.json": {
+      "bytes": 5838,
+      "sha256": "c56c1c387b1c577ddd1722bfbba75f31b9ff2db5682546d42dbe6520729542a8"
+    },
+    "tooltip.json": {
+      "bytes": 4390,
+      "sha256": "6a031937241b09e5a1b57701753774a4ba33d81d5f5a4585814eaad0e3767220"
+    },
+    "tree.json": {
+      "bytes": 6438,
+      "sha256": "7547b324d48fce2532d1fa5a91509514da77b4d75e99aa000eda18d3bbd48cea"
+    },
+    "undo-stack.json": {
+      "bytes": 6545,
+      "sha256": "a5e9e596e67245d5a2311e07f3cfb9c1febf81c88be0065e408f8ed1e2690f72"
+    },
+    "waterfall-chart.json": {
+      "bytes": 11132,
+      "sha256": "b7f2442a774032843187254489332f31b88e9d405b288b118040c42255af7406"
+    },
+    "whatiuse-agent.json": {
+      "bytes": 119848,
+      "sha256": "1bb4ce7aade1ff622dd8ba24f46f1d816fbe6aa0e5cd9674ca7afe9efb4e81e3"
+    },
+    "whatiuse-analytics-contract.json": {
+      "bytes": 21716,
+      "sha256": "48f5da53ca81ed7fb0705685c5ebc1f4e111ee671be4f80468f876c463f90261"
+    },
+    "whatiuse-analytics.json": {
+      "bytes": 66863,
+      "sha256": "3929c0fff992758ce658f63f720431b4fe0d48573690ec8634d7e56dc775fda4"
+    },
+    "whatiuse-base.json": {
+      "bytes": 14046,
+      "sha256": "a02f954e1fc7813efd712be446aecfc3b7c0dafe20603bfe21dfe5cd2af4dd4e"
+    },
+    "whatiuse-data.json": {
+      "bytes": 103226,
+      "sha256": "651a7dda07e073fd666b4931ea7821d1686f57ee9cfd96db435b2023f92d4b6d"
+    },
+    "whatiuse-product-patterns-contract.json": {
+      "bytes": 6604,
+      "sha256": "5b8f6b411c57b4390e0aa6d3bc868690f4586ce0756ad440a5009083f602eec7"
+    },
+    "whatiuse-product-patterns.json": {
+      "bytes": 42921,
+      "sha256": "70e715bca620515c1ef440f11e9c7db74b46277fd7b334394919e29ee9e95fd8"
+    },
+    "whatiuse-tailwind.json": {
+      "bytes": 2934,
+      "sha256": "15fe524cf01a54a5cd0fa310debac0f83c18b4b49f77ac1ed4692b510f66c3e0"
+    },
+    "whatiuse.json": {
+      "bytes": 743692,
+      "sha256": "b848888a0b2f858aacafcb2d1e7ef1ce34bddca690cbd5328eb193a9431a754f"
+    },
+    "manifest.json": {
+      "bytes": 229208,
+      "sha256": "1cc0c6a60b6b75c1c777ffd30d1f9e318ace0b5a4623a02faeae44da465cb015"
+    }
+  }
+}

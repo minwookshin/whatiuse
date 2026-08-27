@@ -5,9 +5,9 @@
 @layer whatiuse.components {
 .whatiuse-scatter-chart__grid line { stroke: color-mix(in oklch, var(--whatiuse-separator) 70%, transparent); stroke-width: 1; vector-effect: non-scaling-stroke; }
 
-.whatiuse-scatter-chart__grid text { fill: var(--whatiuse-fg-subtle); font-size: 9px; dominant-baseline: middle; }
+.whatiuse-scatter-chart__grid text { fill: var(--whatiuse-fg-subtle); font-size: var(--whatiuse-type-metadata); dominant-baseline: middle; }
 
-.whatiuse-scatter-chart__axis-label { fill: var(--whatiuse-fg-muted); font-size: 9px; font-weight: 540; letter-spacing: .01em; }
+.whatiuse-scatter-chart__axis-label { fill: var(--whatiuse-fg-muted); font-size: var(--whatiuse-type-metadata); font-weight: 540; letter-spacing: .01em; }
 
 .whatiuse-scatter-chart__points circle {
   fill: var(--whatiuse-fg-default);

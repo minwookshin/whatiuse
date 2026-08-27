@@ -58,14 +58,17 @@
       "table",
       "tree"
     ],
-    "productComponentCount": 36,
+    "productComponentCount": 40,
     "productComponentIds": [
       "data-table",
       "filter-builder",
       "data-toolbar",
+      "query-builder",
       "bulk-action-bar",
       "saved-view-menu",
       "column-visibility-menu",
+      "column-manager",
+      "editable-cell",
       "facet-filter",
       "data-sort-menu",
       "data-group-menu",
@@ -78,6 +81,7 @@
       "data-state",
       "date-range-filter",
       "data-export-menu",
+      "data-export-progress",
       "sparkline",
       "metric",
       "chart",
@@ -97,11 +101,11 @@
       "cohort",
       "timeline"
     ],
-    "registryItemCount": 93
+    "registryItemCount": 97
   },
   "publicApi": {
-    "exportCount": 418,
-    "runtimeExportCount": 224,
+    "exportCount": 430,
+    "runtimeExportCount": 227,
     "indexExports": [
       "ActionList",
       "ActionListItem",
@@ -146,6 +150,7 @@
       "BreakdownProps",
       "BulkActionBar",
       "BulkActionBarProps",
+      "BulkActionBarStatus",
       "Button",
       "ButtonGroup",
       "ButtonGroupProps",
@@ -169,6 +174,7 @@
       "CollapsibleTrigger",
       "ColumnManager",
       "ColumnManagerColumn",
+      "ColumnManagerPin",
       "ColumnManagerProps",
       "ColumnVisibilityMenu",
       "ColumnVisibilityMenuProps",
@@ -203,6 +209,9 @@
       "DataExportMenu",
       "DataExportMenuProps",
       "DataExportOptions",
+      "DataExportProgress",
+      "DataExportProgressProps",
+      "DataExportProgressStatus",
       "DataFilter",
       "DataFilterOperator",
       "DataFilterValue",
@@ -253,6 +262,9 @@
       "DonutChart",
       "DonutChartDatum",
       "DonutChartProps",
+      "EditableCell",
+      "EditableCellProps",
+      "EditableCellStatus",
       "EmptyState",
       "EmptyStateProps",
       "FacetFilter",
@@ -336,6 +348,10 @@
       "PropertyList",
       "PropertyListItem",
       "PropertyListProps",
+      "QueryBuilder",
+      "QueryBuilderCombinator",
+      "QueryBuilderField",
+      "QueryBuilderProps",
       "RadarAxis",
       "RadarChart",
       "RadarChartProps",
@@ -570,6 +586,7 @@
       "DATA_VIEW_STATE_VERSION",
       "DataDensityControl",
       "DataExportMenu",
+      "DataExportProgress",
       "DataGroupMenu",
       "DataResultSummary",
       "DataSortMenu",
@@ -587,6 +604,7 @@
       "DialogTitle",
       "DialogTrigger",
       "DonutChart",
+      "EditableCell",
       "EmptyState",
       "FacetFilter",
       "Field",
@@ -630,6 +648,7 @@
       "PopoverTrigger",
       "Progress",
       "PropertyList",
+      "QueryBuilder",
       "RadarChart",
       "RadioGroup",
       "ReorderableList",
@@ -1895,7 +1914,7 @@
         {
           "name": "DataTable",
           "kind": "function",
-          "typeHash": "69ad85368bf671104c32ad2be8e845d6f665373c4d28f2f1d7a45bfbf7d40e21"
+          "typeHash": "8baeb94a15950df981ba5737e3033a7468bc96fee48cb1dce233637daef512cb"
         },
         {
           "name": "DataTableColumn",
@@ -1910,7 +1929,7 @@
         {
           "name": "DataTableProps",
           "kind": "type",
-          "typeHash": "ff197471b0610c3ac6105baea443b57186e05da0e28b954c587126d68ae5891c"
+          "typeHash": "bf2d8555a6e22bfa393af4c9d242c5d092527e8f1e54b2272ff18941e623aa14"
         },
         {
           "name": "DataTableSort",
@@ -1925,7 +1944,7 @@
         {
           "name": "whatiuseDataTableFeatures",
           "kind": "const",
-          "typeHash": "5cb01cc8f01260f690dd151f592d67cc086dc2fcbdfb8c86f87b4393d8066208"
+          "typeHash": "003f2a0cd44368656917997d266aa399e0e042d2bab3b1f9476ab649634acc45"
         }
       ],
       "filter-builder": [
@@ -1957,21 +1976,6 @@
       ],
       "data-toolbar": [
         {
-          "name": "ColumnManager",
-          "kind": "function",
-          "typeHash": "4c775c497e8a49e99905740194ff4d5363989acbcb720245cf8c950cb9a8fc7a"
-        },
-        {
-          "name": "ColumnManagerColumn",
-          "kind": "type",
-          "typeHash": "34b4bf9a30f385f395750d1cc541d39cfbde6da8a54113184e491904cec210ec"
-        },
-        {
-          "name": "ColumnManagerProps",
-          "kind": "type",
-          "typeHash": "0e727ff2187eee6479fba3f88e2119dc38cf469dc0c0178c8d7b53a03bf1ba63"
-        },
-        {
           "name": "DataToolbar",
           "kind": "function",
           "typeHash": "0a369582b320db39390976f4be3df19891d1a4028331e0f691fbd23f94f126b1"
@@ -1989,24 +1993,51 @@
         {
           "name": "SavedViews",
           "kind": "function",
-          "typeHash": "f033f7236951f0d9a42186d8738de8dc6aeeddec3f3d38355f52bb7dba43febb"
+          "typeHash": "434f3910d32d7ee94fbea083facc436cbaf6a011e6693870c37746d44912216d"
         },
         {
           "name": "SavedViewsProps",
           "kind": "type",
-          "typeHash": "beaaa07682ceeb5b6bdd7e262ee793bfea009460e120b05d23f45f894e64bf3f"
+          "typeHash": "a0dd03df1a5c047145e7f86f2075467c8ceede7ed753eb5ddb6429d139ab2a47"
+        }
+      ],
+      "query-builder": [
+        {
+          "name": "QueryBuilder",
+          "kind": "function",
+          "typeHash": "fd6ddef5f375c6d188720ad63fb377e98f6e1c7b243c360bf54c6a43528937fa"
+        },
+        {
+          "name": "QueryBuilderCombinator",
+          "kind": "type",
+          "typeHash": "21d3fe4bf9da3c140dc3cc5dc8eb3d7fc8c0d40359f21973e8ce1096d74d66e7"
+        },
+        {
+          "name": "QueryBuilderField",
+          "kind": "type",
+          "typeHash": "1730d074a5d1bfa2f57b8f34745f949fc18c632c7252192ae0740a11107000db"
+        },
+        {
+          "name": "QueryBuilderProps",
+          "kind": "type",
+          "typeHash": "b18e45d35806f5db17d0dcaae21273ca194b70189bcd59e48df61c5b6c0a43ee"
         }
       ],
       "bulk-action-bar": [
         {
           "name": "BulkActionBar",
           "kind": "function",
-          "typeHash": "3bc5492c6b64e8fce908cfad0cb886b74cff59b777c43d18d8bb3c717302936f"
+          "typeHash": "17389386c740fc4dcc75b43e770438016b4997e86ea19da2fdcacc1a5c64229c"
         },
         {
           "name": "BulkActionBarProps",
           "kind": "type",
-          "typeHash": "43425363201c2f38582b0870275d27da2e7ef3c4387f4493add51424683253ad"
+          "typeHash": "b5eca4015521071e7ad2853344fb6a3f8bed9ffac6bce276b19d60793aa3738e"
+        },
+        {
+          "name": "BulkActionBarStatus",
+          "kind": "type",
+          "typeHash": "d1d323b28d35ba1213f20a8b4e758dc84501b5fc09e39b8864e3148f8ba36da6"
         }
       ],
       "saved-view-menu": [
@@ -2036,6 +2067,45 @@
           "name": "ColumnVisibilityMenuProps",
           "kind": "type",
           "typeHash": "245092f6671213f0970c16e83dea77672e76fe8bb72ee2b0bf17ff5df44e1925"
+        }
+      ],
+      "column-manager": [
+        {
+          "name": "ColumnManager",
+          "kind": "function",
+          "typeHash": "ba547a496141e878ce67f82c744c4a91f55a733f58025c6162084eb1d41569a2"
+        },
+        {
+          "name": "ColumnManagerColumn",
+          "kind": "type",
+          "typeHash": "b6ed097db495e42409cdaacd1866faa2f678ca4f4dce0faf0ca66e8d8e230028"
+        },
+        {
+          "name": "ColumnManagerPin",
+          "kind": "type",
+          "typeHash": "2779c92b9dec7576550bcb3183c8566f60f4f1788c89c665a0802a43900ce5a0"
+        },
+        {
+          "name": "ColumnManagerProps",
+          "kind": "type",
+          "typeHash": "6e4c91fccb925b544e169cd262c31edab7f63c4e5da497bee42e44b5a4f48f09"
+        }
+      ],
+      "editable-cell": [
+        {
+          "name": "EditableCell",
+          "kind": "function",
+          "typeHash": "f4c35845e4d8e9a731e7672190e03f11b70bec5d16119ee51804ebf557b9a6ba"
+        },
+        {
+          "name": "EditableCellProps",
+          "kind": "type",
+          "typeHash": "f71f9db20012531a4f1f2653e8864609777a3fa90899d4e71ce8e8e1f70f45c7"
+        },
+        {
+          "name": "EditableCellStatus",
+          "kind": "type",
+          "typeHash": "d734fe0deac6e0aca674360d42b2d85d9dae262144d2e587256a5e39c6726f13"
         }
       ],
       "facet-filter": [
@@ -2195,7 +2265,7 @@
         {
           "name": "DataStateProps",
           "kind": "type",
-          "typeHash": "bd6b5ec6cdecf453e3f7c07fe395ad29441dd438b187bcd8bf350d13a9de69a6"
+          "typeHash": "656c1c32c2a93acb1da96dbfc1331e4d431bce48c42dd27946743f4f73d7a2c0"
         }
       ],
       "date-range-filter": [
@@ -2225,6 +2295,23 @@
           "name": "DataExportMenuProps",
           "kind": "type",
           "typeHash": "99082a91428b5d77c2f115a1cbf6b198b96ed630a77a4aad678df9d89ff2dd22"
+        }
+      ],
+      "data-export-progress": [
+        {
+          "name": "DataExportProgress",
+          "kind": "function",
+          "typeHash": "6ef4ab59ca98926520b2273ece637a8cbb1257627223c41a378499f371195e0e"
+        },
+        {
+          "name": "DataExportProgressProps",
+          "kind": "type",
+          "typeHash": "5b63e9d271b49439d79acefb4259cd5e30806b002d1be04bca7ca2a25c3a7e33"
+        },
+        {
+          "name": "DataExportProgressStatus",
+          "kind": "type",
+          "typeHash": "40e49cc4fc96eea6adec2c7ca3bb4f4ed48ce5d04be3c745c75ffa53905b2a81"
         }
       ],
       "sparkline": [
@@ -2671,7 +2758,7 @@
         {
           "name": "DataViewState",
           "kind": "type",
-          "typeHash": "208fad89d022fbd2657cbe37d31f8690455c228dd17d52d534fbd4808b46c851"
+          "typeHash": "0614e1cc3fb59b9ba8be17c034257ab1b21b6082606f22e6d2b8d9909b60f138"
         },
         {
           "name": "DataViewStateInput",
@@ -2805,7 +2892,7 @@
         {
           "name": "whatiuseDataComponentContracts",
           "kind": "const",
-          "typeHash": "3c0a1319f706c5807e029ac1701a52c399ad12785a657a5f6d2f26bec84d4500"
+          "typeHash": "86229027db0fdfe284d6e2a3e59a22fc7bb736306bad68d39260af9a83c33b3d"
         },
         {
           "name": "whatiuseDataRecipeContracts",
@@ -2815,7 +2902,7 @@
         {
           "name": "whatiuseDataViewStateContract",
           "kind": "const",
-          "typeHash": "d39daeb1ba3e60d38b9da5f403e13c2587342ddc91c1cd376be0e8309f36d049"
+          "typeHash": "21939fa41dc81c80543a82f63b0fe442c2fcfd48f26dd8360a9a3ff00351ddc1"
         }
       ],
       "analytics": [
@@ -3029,7 +3116,7 @@
       "light",
       "dark"
     ],
-    "count": 145,
+    "count": 147,
     "contract": [
       {
         "path": "foundation.system.neutral-h",
@@ -3401,6 +3488,18 @@
         "path": "foundation.motion.duration.press-duration",
         "type": "duration",
         "cssVariable": "--whatiuse-press-duration",
+        "deprecated": false
+      },
+      {
+        "path": "foundation.motion.duration.flyout-enter-duration",
+        "type": "duration",
+        "cssVariable": "--whatiuse-flyout-enter-duration",
+        "deprecated": false
+      },
+      {
+        "path": "foundation.motion.duration.flyout-exit-duration",
+        "type": "duration",
+        "cssVariable": "--whatiuse-flyout-exit-duration",
         "deprecated": false
       },
       {

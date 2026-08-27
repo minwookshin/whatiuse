@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
@@ -7,10 +7,14 @@ import {
   Button,
   ColumnManager,
   DataExportMenu,
+  DataExportProgress,
+  DataState,
   DataTable,
   type DataTableColumn,
   DateRangeFilter,
   FilterBuilder,
+  QueryBuilder,
+  EditableCell,
   type DataFilter,
   SavedViews,
 } from ".";
@@ -103,7 +107,7 @@ describe("whatiuse Data components", () => {
     expect(screen.queryByText("Status is Open")).not.toBeInTheDocument();
   });
 
-  it("keeps saved views and column visibility in system menus", async () => {
+  it("keeps saved views and column display controls explicit", async () => {
     const user = userEvent.setup();
     const onViewChange = vi.fn();
     const onVisibilityChange = vi.fn();
@@ -117,8 +121,48 @@ describe("whatiuse Data components", () => {
     expect(onViewChange).toHaveBeenCalledWith("mine");
 
     await user.click(screen.getByRole("button", { name: "2 of 2 columns visible" }));
-    await user.click(await screen.findByRole("menuitemcheckbox", { name: "Status" }));
+    await user.click(await screen.findByRole("checkbox", { name: "Status" }));
     expect(onVisibilityChange).toHaveBeenCalledWith("status", false);
+  });
+
+  it("respects a view-owned column order", () => {
+    render(<DataTable ariaLabel="Ordered issues" data={issues} columns={columns} getRowId={(issue) => issue.id} columnOrder={["status", "name"]} />);
+    const headers = within(screen.getByRole("table", { name: "Ordered issues" })).getAllByRole("columnheader");
+    expect(headers.map((header) => header.textContent)).toEqual(["Status", "Name"]);
+  });
+
+  it("moves and pins columns with named controls", async () => {
+    const user = userEvent.setup();
+    const onOrderChange = vi.fn();
+    const onPinningChange = vi.fn();
+    render(<ColumnManager columns={[{ id: "name", label: "Name", visible: true }, { id: "status", label: "Status", visible: true }]} onVisibilityChange={() => undefined} onOrderChange={onOrderChange} onPinningChange={onPinningChange} />);
+    await user.click(screen.getByRole("button", { name: "2 of 2 columns visible" }));
+    await user.click(screen.getByRole("button", { name: "Move Status up" }));
+    expect(onOrderChange).toHaveBeenCalledWith(["status", "name"]);
+    await user.click(screen.getByRole("button", { name: "Pin Status to start" }));
+    expect(onPinningChange).toHaveBeenCalledWith("status", "start");
+  });
+
+  it("drafts a query and applies the matching rule once", async () => {
+    const user = userEvent.setup();
+    const onApply = vi.fn();
+    render(<QueryBuilder fields={[{ id: "status", label: "Status", kind: "select", values: [{ label: "Open", value: "open" }] }]} conditions={[{ id: "status", fieldId: "status", operator: "is", value: "open" }]} onApply={onApply} />);
+    await user.click(screen.getByRole("button", { name: "Any" }));
+    await user.click(screen.getByRole("button", { name: "Apply" }));
+    expect(onApply).toHaveBeenCalledWith([{ id: "status", fieldId: "status", operator: "is", value: "open" }], "or");
+  });
+
+  it("edits one compact value and restores the trigger after save", async () => {
+    const user = userEvent.setup();
+    const onCommit = vi.fn().mockResolvedValue(undefined);
+    render(<EditableCell value="Avery" label="owner" onCommit={onCommit} />);
+    const trigger = screen.getByRole("button", { name: "Edit owner" });
+    await user.click(trigger);
+    const input = screen.getByRole("textbox", { name: "Edit owner" });
+    await user.clear(input);
+    await user.type(input, "Mina{Enter}");
+    await waitFor(() => expect(onCommit).toHaveBeenCalledWith("Mina"));
+    await waitFor(() => expect(screen.getByRole("button", { name: "Edit owner" })).toHaveFocus());
   });
 
   it("appears only for a real selection and exposes a clear path", async () => {
@@ -134,6 +178,15 @@ describe("whatiuse Data components", () => {
     expect(onArchive).toHaveBeenCalledOnce();
     await user.click(screen.getByRole("button", { name: "Clear selection" }));
     expect(onClear).toHaveBeenCalledOnce();
+  });
+
+  it("keeps reversible bulk completion in the same geometry", async () => {
+    const user = userEvent.setup();
+    const onUndo = vi.fn();
+    render(<BulkActionBar count={2} noun="issue" status="complete" message="Issues archived" onUndo={onUndo} onClear={() => undefined} />);
+    expect(screen.getByRole("region", { name: "Bulk actions" })).toHaveTextContent("Issues archived");
+    await user.click(screen.getByRole("button", { name: "Undo" }));
+    expect(onUndo).toHaveBeenCalledOnce();
   });
 
   it("supports controlled server pagination without processing the supplied page again", async () => {
@@ -230,5 +283,17 @@ describe("whatiuse Data components", () => {
     await user.click(await screen.findByRole("menuitem", { name: "Export selected rows as CSV" }));
     expect(onExport).toHaveBeenCalledWith(expect.objectContaining({ fileName: "issues-selected.csv", rowCount: 1 }), "selected");
     expect(screen.getByText("1 rows exported as CSV")).toBeInTheDocument();
+  });
+
+  it("reports background export progress and permission state without a table wrapper", async () => {
+    const user = userEvent.setup();
+    const onCancel = vi.fn();
+    const { rerender } = render(<DataExportProgress status="running" progress={64} processedRows={64} totalRows={100} onCancel={onCancel} />);
+    expect(screen.getByRole("progressbar", { name: "Export progress" })).toHaveAttribute("aria-valuenow", "64");
+    await user.click(screen.getByRole("button", { name: "Cancel export" }));
+    expect(onCancel).toHaveBeenCalledOnce();
+
+    rerender(<DataState state="forbidden" />);
+    expect(screen.getByRole("status")).toHaveTextContent("Access required");
   });
 });

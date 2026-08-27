@@ -1,5 +1,5 @@
 import { Archive, Eye, PencilSimple, Trash, UserCircle } from "@phosphor-icons/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { CollectionLibraryComponentId } from "./component-catalog";
 import {
   Badge,
@@ -8,23 +8,25 @@ import {
   Button,
   Chart,
   ColumnManager,
-  ColumnVisibilityMenu,
   Comparison,
   Cohort,
   CursorPagination,
   DataDensityControl,
   DataExportMenu,
+  DataExportProgress,
   DataGroupMenu,
   DataResultSummary,
   DataSortMenu,
   DataState,
   DataTable,
   type DataTableColumn,
+  type ColumnManagerColumn,
   DataToolbar,
   DateRangeFilter,
   DonutChart,
   FacetFilter,
   FilterBuilder,
+  EditableCell,
   Funnel,
   type FilterField,
   Gauge,
@@ -158,12 +160,14 @@ function DataToolbarPreview() {
 
 function SavedViewPreview() {
   const [view, setView] = useState("all");
+  const [copied, setCopied] = useState(false);
   return (
     <div className="collection-control-surface">
-      <span>Account view</span>
+      <span role="status">{copied ? "View link copied" : "Account view"}</span>
       <SavedViewMenu
         value={view}
         onValueChange={setView}
+        onCopyLink={() => setCopied(true)}
         views={[
           { id: "all", label: "All accounts", count: 24, scope: "system" },
           { id: "risk", label: "At risk", count: 4, scope: "personal" },
@@ -175,8 +179,8 @@ function SavedViewPreview() {
 }
 
 function ColumnVisibilityPreview() {
-  const [columns, setColumns] = useState([
-    { id: "account", label: "Account", visible: true, required: true },
+  const [columns, setColumns] = useState<ColumnManagerColumn[]>([
+    { id: "account", label: "Account", visible: true, required: true, pinned: "start" as const },
     { id: "status", label: "Status", visible: true },
     { id: "owner", label: "Owner", visible: true },
     { id: "arr", label: "ARR", visible: false },
@@ -184,7 +188,23 @@ function ColumnVisibilityPreview() {
   return (
     <div className="collection-control-surface">
       <span>{columns.filter((column) => column.visible).length} columns shown</span>
-      <ColumnVisibilityMenu columns={columns} onVisibilityChange={(id, visible) => setColumns((current) => current.map((column) => column.id === id ? { ...column, visible } : column))} />
+      <ColumnManager
+        columns={columns}
+        onVisibilityChange={(id, visible) => setColumns((current) => current.map((column) => column.id === id ? { ...column, visible } : column))}
+        onOrderChange={(orderedIds) => setColumns((current) => orderedIds.flatMap((id) => current.find((column) => column.id === id) ?? []))}
+        onPinningChange={(id, pinned) => setColumns((current) => current.map((column) => column.id === id ? { ...column, pinned } : column))}
+        onResetSizing={() => undefined}
+      />
+    </div>
+  );
+}
+
+function EditableCellPreview() {
+  const [value, setValue] = useState("Avery Stone");
+  return (
+    <div className="collection-editable-cell-preview">
+      <span>Owner</span>
+      <EditableCell value={value} label="account owner" validate={(next) => next ? null : "Enter an owner."} onCommit={async (next) => { await new Promise((resolve) => window.setTimeout(resolve, 360)); setValue(next); }} />
     </div>
   );
 }
@@ -243,11 +263,17 @@ function DataResultSummaryPreview() {
 
 function BulkActionPreview() {
   const [count, setCount] = useState(3);
+  const [status, setStatus] = useState<"ready" | "busy" | "complete">("ready");
+  useEffect(() => {
+    if (status !== "busy") return;
+    const timeout = window.setTimeout(() => setStatus("complete"), 620);
+    return () => window.clearTimeout(timeout);
+  }, [status]);
   return (
     <div className="collection-bulk-preview">
-      {count > 0 ? <BulkActionBar count={count} noun="account" onClear={() => setCount(0)} actions={<>
+      {count > 0 ? <BulkActionBar count={count} noun="account" status={status} message="Accounts archived" onUndo={() => setStatus("ready")} onClear={() => { setCount(0); setStatus("ready"); }} actions={<>
         <Button size="small" variant="ghost" leadingIcon={<UserCircle />}>Assign</Button>
-        <Button size="small" variant="ghost" leadingIcon={<Archive />}>Archive</Button>
+        <Button size="small" variant="ghost" leadingIcon={<Archive />} onClick={() => setStatus("busy")}>Archive</Button>
       </>} /> : <Button size="small" variant="secondary" onClick={() => setCount(3)}>Select accounts</Button>}
     </div>
   );
@@ -296,6 +322,24 @@ function ExportMenuPreview() {
   );
 }
 
+function ExportProgressPreview() {
+  const [status, setStatus] = useState<"running" | "complete" | "error">("running");
+  const [progress, setProgress] = useState(64);
+  return (
+    <DataExportProgress
+      className="collection-export-progress-preview"
+      status={status}
+      progress={progress}
+      processedRows={status === "complete" ? 248 : 159}
+      totalRows={248}
+      fileName="accounts.csv"
+      onCancel={() => setStatus("error")}
+      onRetry={() => { setProgress(64); setStatus("running"); }}
+      onDownload={() => { setProgress(100); setStatus("complete"); }}
+    />
+  );
+}
+
 function PropertyListPreview() {
   return (
     <PropertyList className="collection-property-preview" items={[
@@ -317,12 +361,12 @@ function AuditLogPreview() {
 }
 
 function DataStatePreview() {
-  const [state, setState] = useState<"empty" | "error">("empty");
+  const [state, setState] = useState<"empty" | "error" | "forbidden">("empty");
   return (
     <DataState
       className="collection-data-state-preview"
       state={state}
-      action={<Button size="small" variant="secondary" onClick={() => setState((current) => current === "empty" ? "error" : "empty")}>{state === "empty" ? "Show error" : "Reset"}</Button>}
+      action={<Button size="small" variant="secondary" onClick={() => setState((current) => current === "empty" ? "forbidden" : current === "forbidden" ? "error" : "empty")}>{state === "empty" ? "Show permission" : state === "forbidden" ? "Show error" : "Reset"}</Button>}
     />
   );
 }
@@ -509,7 +553,8 @@ export function CollectionPreviewFor({ id }: { id: CollectionLibraryComponentId 
   if (id === "filter-builder") return <FilterBuilderPreview />;
   if (id === "data-toolbar") return <DataToolbarPreview />;
   if (id === "saved-view-menu") return <SavedViewPreview />;
-  if (id === "column-visibility-menu") return <ColumnVisibilityPreview />;
+  if (id === "column-manager") return <ColumnVisibilityPreview />;
+  if (id === "editable-cell") return <EditableCellPreview />;
   if (id === "facet-filter") return <FacetFilterPreview />;
   if (id === "data-sort-menu") return <DataSortPreview />;
   if (id === "data-group-menu") return <DataGroupPreview />;
@@ -520,6 +565,7 @@ export function CollectionPreviewFor({ id }: { id: CollectionLibraryComponentId 
   if (id === "cursor-pagination") return <CursorPaginationPreview />;
   if (id === "date-range-filter") return <DateRangePreview />;
   if (id === "data-export-menu") return <ExportMenuPreview />;
+  if (id === "data-export-progress") return <ExportProgressPreview />;
   if (id === "property-list") return <PropertyListPreview />;
   if (id === "audit-log") return <AuditLogPreview />;
   if (id === "data-state") return <DataStatePreview />;

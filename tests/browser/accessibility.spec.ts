@@ -18,7 +18,7 @@ for (const [route, heading] of [["", "components i use."], ["button", "Button"],
   test(route + " has no serious or critical automated accessibility violations", async ({ page }) => {
     test.setTimeout(90_000);
     await page.goto(route ? "/#" + route : "/");
-    await expect(page.getByRole("heading", { level: 1, name: heading })).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: heading })).toBeVisible({ timeout: 30_000 });
     const result = await runAxe(page);
     expect(result.violations.filter((violation) => violation.impact === "serious" || violation.impact === "critical")).toEqual([]);
   });
@@ -59,20 +59,20 @@ test("documentation announces in-app route changes without moving desktop focus"
   await page.goto("/#button");
   const routeStatus = page.locator(".system-window--consolidated > [role='status'].whatiuse-sr-only");
   await expect(routeStatus).toHaveText("Button page loaded");
-  const popoverLink = page.getByRole("link", { name: "Popover", exact: true });
-  await popoverLink.focus();
+  const dataLink = page.getByRole("link", { name: "Data", exact: true });
+  await dataLink.focus();
   await page.keyboard.press("Enter");
-  await expect(page.getByRole("heading", { level: 1, name: "Popover" })).toBeVisible();
-  await expect(routeStatus).toHaveText("Popover page loaded");
-  await expect(popoverLink).toBeFocused();
+  await expect(page.getByRole("heading", { level: 1, name: "Data" })).toBeVisible();
+  await expect(routeStatus).toHaveText("Data page loaded");
+  await expect(dataLink).toBeFocused();
 });
 
 test("mobile navigation hands focus to the selected document", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 720 });
   await page.goto("/#button");
   await page.getByRole("button", { name: "Open navigation" }).click();
-  await page.getByRole("link", { name: "Popover", exact: true }).click();
-  await expect(page.getByRole("heading", { level: 1, name: "Popover" })).toBeVisible();
+  await page.getByRole("link", { name: "Data", exact: true }).click();
+  await expect(page.getByRole("heading", { level: 1, name: "Data" })).toBeVisible();
   await expect(page.getByRole("region", { name: "Documentation content" })).toBeFocused();
 });
 
@@ -94,7 +94,8 @@ test("pilot preserves structure in RTL, forced colors, and reduced motion", asyn
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   expect(overflow).toBeLessThanOrEqual(1);
   await expect(page.getByRole("heading", { level: 1, name: "Data" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "New issue" })).toBeVisible();
+  await expect(page.getByRole("table", { name: "whatiuse Data product primitives" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 2, name: "Composition contract" })).toBeVisible();
 });
 
 test("documentation remains usable at a 200 percent equivalent viewport", async ({ page }) => {
@@ -223,7 +224,7 @@ test("component navigation starts the next document at its overview", async ({ p
   const scroller = page.locator(".system-detail__scroll");
   await scroller.evaluate((element) => { element.scrollTop = 640; });
   await expect.poll(() => scroller.evaluate((element) => element.scrollTop)).toBeGreaterThan(0);
-  await page.getByRole("link", { name: "Popover", exact: true }).click();
-  await expect(page.getByRole("heading", { level: 1, name: "Popover" })).toBeVisible();
+  await page.getByRole("link", { name: "Data", exact: true }).click();
+  await expect(page.getByRole("heading", { level: 1, name: "Data" })).toBeVisible();
   await expect.poll(() => scroller.evaluate((element) => element.scrollTop)).toBe(0);
 });

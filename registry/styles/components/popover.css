@@ -5,11 +5,11 @@
 @layer whatiuse.components {
 .whatiuse-positioner { z-index: var(--whatiuse-layer-flyout); }
 
-.whatiuse-popover { width: 278px; padding: 12px; border-radius: var(--whatiuse-radius-overlay); background: var(--whatiuse-bg-flyout); box-shadow: var(--whatiuse-shadow-flyout); outline: 0; transform-origin: var(--transform-origin); transition: opacity var(--whatiuse-enter-duration) var(--whatiuse-ease-out), transform var(--whatiuse-enter-duration) var(--whatiuse-ease-out); }
+.whatiuse-popover { width: 278px; padding: 12px; border-radius: var(--whatiuse-radius-overlay); background: var(--whatiuse-bg-flyout); box-shadow: var(--whatiuse-shadow-flyout); outline: 0; transform-origin: var(--transform-origin); transition: opacity var(--whatiuse-flyout-enter-duration) var(--whatiuse-ease-out), transform var(--whatiuse-flyout-enter-duration) var(--whatiuse-ease-out); }
 
 .whatiuse-popover[data-starting-style] { opacity: 0; transform: scale(0.98); }
 
-.whatiuse-popover[data-ending-style] { opacity: 0; transform: scale(0.99); transition-duration: var(--whatiuse-exit-duration); }
+.whatiuse-popover[data-ending-style] { opacity: 0; transform: scale(0.99); transition-duration: var(--whatiuse-flyout-exit-duration); }
 
 .whatiuse-popover { background: var(--whatiuse-bg-flyout); }
 

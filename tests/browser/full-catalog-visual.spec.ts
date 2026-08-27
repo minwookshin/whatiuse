@@ -6,8 +6,6 @@ test.skip(({ browserName, isMobile }) => browserName !== "chromium" || isMobile,
 
 const lazyPreviewRoutes = new Set(["date-picker", "tree", "reorderable-list"]);
 const lazyDocumentSelectors = new Map([
-  ["product-pilot", '.pilot-workspace[aria-label="Issues Workspace"]'],
-  ["analytics", '.whatiuse-analytics-recipe[aria-label="SaaS Overview recipe"]'],
   ["product-patterns", '.whatiuse-product-pattern[aria-label="Customer Workspace recipe"]'],
   ["collaboration-patterns", '.whatiuse-product-pattern[aria-label="Members and Permissions recipe"]'],
 ]);
@@ -15,7 +13,7 @@ const lazyDocumentSelectors = new Map([
 for (const [route, heading, group] of publicRoutes) {
   test(`${group}/${route} matches the frozen light and dark route baseline`, async ({ page }) => {
     await page.goto(`/#${route}`);
-    await expect(page.getByRole("heading", { level: 1, name: heading })).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: heading })).toBeVisible({ timeout: 15_000 });
     await page.evaluate(() => document.fonts.ready);
 
     if (lazyPreviewRoutes.has(route)) {

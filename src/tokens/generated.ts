@@ -65,6 +65,8 @@ export const tokenPaths = [
   "foundation.layout.radius-lg",
   "foundation.motion.duration.hover-duration",
   "foundation.motion.duration.press-duration",
+  "foundation.motion.duration.flyout-enter-duration",
+  "foundation.motion.duration.flyout-exit-duration",
   "foundation.motion.duration.enter-duration",
   "foundation.motion.duration.exit-duration",
   "foundation.motion.duration.fast",
@@ -1144,9 +1146,41 @@ export const tokenManifest = [
     }
   },
   {
+    "path": "foundation.motion.duration.flyout-enter-duration",
+    "type": "duration",
+    "description": "Anchored tooltip, menu, select, and popover entrance.",
+    "deprecated": false,
+    "cssVariable": "--whatiuse-flyout-enter-duration",
+    "scope": "foundation",
+    "values": {
+      "light": "140ms",
+      "dark": "140ms"
+    },
+    "resolvedValues": {
+      "light": "140ms",
+      "dark": "140ms"
+    }
+  },
+  {
+    "path": "foundation.motion.duration.flyout-exit-duration",
+    "type": "duration",
+    "description": "Anchored temporary surface exit.",
+    "deprecated": false,
+    "cssVariable": "--whatiuse-flyout-exit-duration",
+    "scope": "foundation",
+    "values": {
+      "light": "100ms",
+      "dark": "100ms"
+    },
+    "resolvedValues": {
+      "light": "100ms",
+      "dark": "100ms"
+    }
+  },
+  {
     "path": "foundation.motion.duration.enter-duration",
     "type": "duration",
-    "description": "Occasional small overlay entrance.",
+    "description": "Modal, sheet, and larger overlay entrance.",
     "deprecated": false,
     "cssVariable": "--whatiuse-enter-duration",
     "scope": "foundation",

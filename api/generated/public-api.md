@@ -5,9 +5,9 @@
 - Entry point: `src/components/ui/index.ts`
 - TypeScript: `6.0.3`
 - Core components: `45`
-- Product components: `36`
-- Public exports: `418`
-- Runtime exports: `224`
+- Product components: `40`
+- Public exports: `430`
+- Runtime exports: `227`
 
 ## button
 
@@ -456,7 +456,7 @@ Declaration: [`data-table.d.ts`](./types/components/ui/data-table.d.ts)
 - **DataTableProps** · type · `DataTableProps = { ariaLabel: string; data: readonly TData[]; columns: readonly DataTableColumn<TData>[]; getRowId: (row: TData, index: number) => string; getRowLabel?: (row: TData) => string; className?: string; selectable?: boolean; sele…`
 - **DataTableSort** · type · `DataTableSort = DataViewSort`
 - **DataTableVirtualization** · type · `DataTableVirtualization = { height?: number; estimateRowHeight?: number; overscan?: number; }`
-- **whatiuseDataTableFeatures** · const · `whatiuseDataTableFeatures: { columnSizingFeature: import("@tanstack/table-core").TableFeature; columnResizingFeature: import("@tanstack/table-core").TableFeature; columnPinningFeature: import("@tanstack/table-core").TableFeature; columnVis…`
+- **whatiuseDataTableFeatures** · const · `whatiuseDataTableFeatures: { columnSizingFeature: import("@tanstack/table-core").TableFeature; columnResizingFeature: import("@tanstack/table-core").TableFeature; columnOrderingFeature: import("@tanstack/table-core").TableFeature; columnPi…`
 
 ## filter-builder
 
@@ -472,21 +472,28 @@ Declaration: [`filter-builder.d.ts`](./types/components/ui/filter-builder.d.ts)
 
 Declaration: [`data-toolbar.d.ts`](./types/components/ui/data-toolbar.d.ts)
 
-- **ColumnManager** · function · `ColumnManager({ columns, onVisibilityChange, onResetSizing, label }: ColumnManagerProps): import("react").JSX.Element`
-- **ColumnManagerColumn** · type · `ColumnManagerColumn = { id: string; label: string; visible: boolean; required?: boolean; }`
-- **ColumnManagerProps** · type · `ColumnManagerProps = { columns: readonly ColumnManagerColumn[]; onVisibilityChange: (id: string, visible: boolean) => void; onResetSizing?: () => void; label?: string; }`
 - **DataToolbar** · function · `DataToolbar({ label, start, end, className, ...props }: DataToolbarProps): import("react").JSX.Element`
 - **DataToolbarProps** · type · `DataToolbarProps = HTMLAttributes<HTMLDivElement> & { label: string; start?: ReactNode; end?: ReactNode; }`
 - **SavedView** · type · `SavedView = { id: string; label: string; description?: string; count?: number; scope?: "system" | "personal"; }`
-- **SavedViews** · function · `SavedViews({ views, value, onValueChange, onSaveCurrent, onUpdateCurrent, onDeleteCurrent, label }: SavedViewsProps): import("react").JSX.Element`
-- **SavedViewsProps** · type · `SavedViewsProps = { views: readonly SavedView[]; value: string; onValueChange: (value: string) => void; onSaveCurrent?: () => void; onUpdateCurrent?: () => void; onDeleteCurrent?: () => void; label?: string; }`
+- **SavedViews** · function · `SavedViews({ views, value, onValueChange, onSaveCurrent, onUpdateCurrent, onDeleteCurrent, onCopyLink, label }: SavedViewsProps): import("react").JSX.Element`
+- **SavedViewsProps** · type · `SavedViewsProps = { views: readonly SavedView[]; value: string; onValueChange: (value: string) => void; onSaveCurrent?: () => void; onUpdateCurrent?: () => void; onDeleteCurrent?: () => void; onCopyLink?: () => void; label?: string; }`
+
+## query-builder
+
+Declaration: [`query-builder.d.ts`](./types/components/ui/query-builder.d.ts)
+
+- **QueryBuilder** · function · `QueryBuilder({ fields, conditions, combinator, onApply, onCancel, className, label }: QueryBuilderProps): import("react").JSX.Element`
+- **QueryBuilderCombinator** · type · `QueryBuilderCombinator = "and" | "or"`
+- **QueryBuilderField** · type · `QueryBuilderField = { id: string; label: string; kind?: "text" | "number" | "select"; operators?: readonly DataFilterOperator[]; values?: readonly { label: string; value: string }[]; placeholder?: string; }`
+- **QueryBuilderProps** · type · `QueryBuilderProps = { fields: readonly QueryBuilderField[]; conditions: readonly DataViewFilter[]; combinator?: QueryBuilderCombinator; onApply: (conditions: readonly DataViewFilter[], combinator: QueryBuilderCombinator) => void; onCancel?…`
 
 ## bulk-action-bar
 
 Declaration: [`bulk-action-bar.d.ts`](./types/components/ui/bulk-action-bar.d.ts)
 
-- **BulkActionBar** · function · `BulkActionBar({ count, noun, actions, onClear, busy, className, ...props }: BulkActionBarProps): import("react").JSX.Element | null`
-- **BulkActionBarProps** · type · `BulkActionBarProps = HTMLAttributes<HTMLDivElement> & { count: number; noun?: string; actions: ReactNode; onClear: () => void; busy?: boolean; }`
+- **BulkActionBar** · function · `BulkActionBar({ count, noun, actions, onClear, busy, status, message, onUndo, undoLabel, className, ...props }: BulkActionBarProps): import("react").JSX.Element | null`
+- **BulkActionBarProps** · type · `BulkActionBarProps = HTMLAttributes<HTMLDivElement> & { count: number; noun?: string; actions?: ReactNode; onClear: () => void; busy?: boolean; status?: BulkActionBarStatus; message?: ReactNode; onUndo?: () => void; undoLabel?: string; }`
+- **BulkActionBarStatus** · type · `BulkActionBarStatus = "ready" | "busy" | "complete" | "error"`
 
 ## saved-view-menu
 
@@ -502,6 +509,23 @@ Declaration: [`column-visibility-menu.d.ts`](./types/components/ui/column-visibi
 
 - **ColumnVisibilityMenu** · function · `ColumnVisibilityMenu({ className, ...props }: ColumnVisibilityMenuProps): import("react").JSX.Element`
 - **ColumnVisibilityMenuProps** · type · `ColumnVisibilityMenuProps = ColumnManagerProps & { className?: string; }`
+
+## column-manager
+
+Declaration: [`column-manager.d.ts`](./types/components/ui/column-manager.d.ts)
+
+- **ColumnManager** · function · `ColumnManager({ columns, onVisibilityChange, onOrderChange, onPinningChange, onResetSizing, label, }: ColumnManagerProps): import("react").JSX.Element`
+- **ColumnManagerColumn** · type · `ColumnManagerColumn = { id: string; label: string; visible: boolean; required?: boolean; pinned?: ColumnManagerPin; }`
+- **ColumnManagerPin** · type · `ColumnManagerPin = false | "start" | "end"`
+- **ColumnManagerProps** · type · `ColumnManagerProps = { columns: readonly ColumnManagerColumn[]; onVisibilityChange: (id: string, visible: boolean) => void; onOrderChange?: (orderedIds: readonly string[]) => void; onPinningChange?: (id: string, pinned: ColumnManagerPin) =…`
+
+## editable-cell
+
+Declaration: [`editable-cell.d.ts`](./types/components/ui/editable-cell.d.ts)
+
+- **EditableCell** · function · `EditableCell({ value, onCommit, onCancel, validate, label, emptyValue, disabled, className, ...props }: EditableCellProps): import("react").JSX.Element`
+- **EditableCellProps** · type · `EditableCellProps = Omit<HTMLAttributes<HTMLDivElement>, "onChange"> & { value: string; onCommit: (value: string) => void | Promise<void>; onCancel?: () => void; validate?: (value: string) => string | null; label?: string; emptyValue?: Rea…`
+- **EditableCellStatus** · type · `EditableCellStatus = "idle" | "editing" | "saving" | "error"`
 
 ## facet-filter
 
@@ -579,7 +603,7 @@ Declaration: [`audit-log.d.ts`](./types/components/ui/audit-log.d.ts)
 Declaration: [`data-state.d.ts`](./types/components/ui/data-state.d.ts)
 
 - **DataState** · function · `DataState({ state, title, description, action, className, ...props }: DataStateProps): import("react").JSX.Element`
-- **DataStateProps** · type · `DataStateProps = HTMLAttributes<HTMLDivElement> & { state: "loading" | "empty" | "error"; title?: ReactNode; description?: ReactNode; action?: ReactNode; }`
+- **DataStateProps** · type · `DataStateProps = HTMLAttributes<HTMLDivElement> & { state: "loading" | "empty" | "error" | "forbidden"; title?: ReactNode; description?: ReactNode; action?: ReactNode; }`
 
 ## date-range-filter
 
@@ -595,6 +619,14 @@ Declaration: [`data-export-menu.d.ts`](./types/components/ui/data-export-menu.d.
 
 - **DataExportMenu** · function · `DataExportMenu<TData>({ rows, selectedRows, columns, fileName, label, download, disabled, onExport, }: DataExportMenuProps<TData>): import("react").JSX.Element`
 - **DataExportMenuProps** · type · `DataExportMenuProps = { rows: readonly TData[]; selectedRows?: readonly TData[]; columns: readonly DataExportColumn<TData>[]; fileName: string; label?: string; download?: boolean; disabled?: boolean; onExport?: (artifact: DataExportArtifac…`
+
+## data-export-progress
+
+Declaration: [`data-export-progress.d.ts`](./types/components/ui/data-export-progress.d.ts)
+
+- **DataExportProgress** · function · `DataExportProgress({ status, progress, title, description, fileName, processedRows, totalRows, onCancel, onRetry, onDownload, className, role, ...props }: DataExportProgressProps): import("react").JSX.Element`
+- **DataExportProgressProps** · type · `DataExportProgressProps = HTMLAttributes<HTMLDivElement> & { status: DataExportProgressStatus; progress?: number; title?: ReactNode; description?: ReactNode; fileName?: string; processedRows?: number; totalRows?: number; onCancel?: () => v…`
+- **DataExportProgressStatus** · type · `DataExportProgressStatus = "idle" | "running" | "complete" | "error" | "cancelled"`
 
 ## sparkline
 
@@ -777,7 +809,7 @@ Declaration: [`data-view-state.d.ts`](./types/lib/data-view-state.d.ts)
 - **DataViewLocationAdapter** · type · `DataViewLocationAdapter = { read: () => string; write: (search: string, mode: "push" | "replace") => void; subscribe: (listener: () => void) => () => void; }`
 - **DataViewPagination** · type · `DataViewPagination = { page: number; pageSize: number; }`
 - **DataViewSort** · type · `DataViewSort = { id: string; direction: "asc" | "desc"; }`
-- **DataViewState** · type · `DataViewState = { version: typeof DATA_VIEW_STATE_VERSION; query: string; filters: readonly DataViewFilter[]; sorting: readonly DataViewSort[]; pagination: DataViewPagination; columnVisibility: Readonly<Record<string, boolean>>; columnSizi…`
+- **DataViewState** · type · `DataViewState = { version: typeof DATA_VIEW_STATE_VERSION; query: string; filters: readonly DataViewFilter[]; sorting: readonly DataViewSort[]; pagination: DataViewPagination; columnVisibility: Readonly<Record<string, boolean>>; columnOrde…`
 - **DataViewStateInput** · type · `DataViewStateInput = Partial<Omit<DataViewState, "version" | "pagination" | "columnPinning" | "dateRange">> & { pagination?: Partial<DataViewPagination>; columnPinning?: Partial<DataViewColumnPinning>; dateRange?: Partial<DataDateRange>; }`
 - **DataViewStorageAdapter** · type · `DataViewStorageAdapter = { read: (key: string) => string | null; write: (key: string, value: string) => void; remove: (key: string) => void; }`
 - **getDataRequestKey** · function · `getDataRequestKey(state: DataViewState): string`
@@ -815,7 +847,7 @@ Declaration: [`whatiuse-data-contract.d.ts`](./types/lib/whatiuse-data-contract.
 - **WhatiuseDataComponentContract** · type · `WhatiuseDataComponentContract = { id: string; intent: string; useWhen: readonly string[]; avoidWhen: readonly string[]; requires: readonly string[]; states: readonly string[]; compositionRules: readonly string[]; accessibility: readonly st…`
 - **whatiuseDataComponentContracts** · const · `whatiuseDataComponentContracts: readonly [{ readonly id: "data-table"; readonly intent: "Compare and act on structured records without hiding the underlying table semantics."; readonly useWhen: readonly ["Rows share comparable attributes."…`
 - **whatiuseDataRecipeContracts** · const · `whatiuseDataRecipeContracts: readonly [{ readonly id: "issues-workspace"; readonly intent: "Find, compare, inspect, mutate, and recover work from one shared issue collection."; readonly taskSequence: readonly ["Search or filter", "Sort and…`
-- **whatiuseDataViewStateContract** · const · `whatiuseDataViewStateContract: { readonly version: 1; readonly serverOwned: readonly ["query", "filters", "sorting", "grouping", "pagination", "dateRange"]; readonly viewOwned: readonly ["columnVisibility", "columnSizing", "columnPinning",…`
+- **whatiuseDataViewStateContract** · const · `whatiuseDataViewStateContract: { readonly version: 1; readonly serverOwned: readonly ["query", "filters", "sorting", "grouping", "pagination", "dateRange"]; readonly viewOwned: readonly ["columnVisibility", "columnOrder", "columnSizing", "…`
 
 ## analytics
 

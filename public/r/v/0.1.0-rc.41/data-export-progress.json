@@ -1,0 +1,36 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "data-export-progress",
+  "title": "Data Export Progress",
+  "description": "Background export progress with cancel, retry, completion, and download actions.",
+  "dependencies": [
+    "@phosphor-icons/react@2.1.10"
+  ],
+  "registryDependencies": [
+    "@whatiuse/whatiuse-base",
+    "@whatiuse/button",
+    "@whatiuse/icon-button",
+    "@whatiuse/progress"
+  ],
+  "files": [
+    {
+      "path": "registry/components/ui/data-export-progress.tsx",
+      "content": "\"use client\";\n\nimport \"../../styles/whatiuse-base.css\";\nimport \"../../styles/components/data-export-progress.css\";\nimport { ArrowCounterClockwise, CheckCircle, DownloadSimple, WarningCircle, X } from \"@phosphor-icons/react\";\nimport type { HTMLAttributes, ReactNode } from \"react\";\nimport { cn } from \"../../lib/cn\";\nimport { Button } from \"./button\";\nimport { IconButton } from \"./icon-button\";\nimport { Progress } from \"./progress\";\n\nexport type DataExportProgressStatus = \"idle\" | \"running\" | \"complete\" | \"error\" | \"cancelled\";\n\nexport type DataExportProgressProps = HTMLAttributes<HTMLDivElement> & {\n  status: DataExportProgressStatus;\n  progress?: number;\n  title?: ReactNode;\n  description?: ReactNode;\n  fileName?: string;\n  processedRows?: number;\n  totalRows?: number;\n  onCancel?: () => void;\n  onRetry?: () => void;\n  onDownload?: () => void;\n};\n\nexport function DataExportProgress({\n  status,\n  progress = 0,\n  title,\n  description,\n  fileName,\n  processedRows,\n  totalRows,\n  onCancel,\n  onRetry,\n  onDownload,\n  className,\n  ...props\n}: DataExportProgressProps) {\n  const value = Math.max(0, Math.min(100, progress));\n  const defaultTitle = status === \"running\" ? \"Preparing export\" : status === \"complete\" ? \"Export ready\" : status === \"error\" ? \"Export failed\" : status === \"cancelled\" ? \"Export cancelled\" : \"Export queued\";\n  const rowDetail = typeof processedRows === \"number\" && typeof totalRows === \"number\" ? `${processedRows.toLocaleString()} of ${totalRows.toLocaleString()} rows` : null;\n  const role = status === \"error\" ? \"alert\" : \"status\";\n  return (\n    <div className={cn(\"whatiuse-data-export-progress\", className)} data-status={status} role={role} aria-live=\"polite\" {...props}>\n      <div className=\"whatiuse-data-export-progress__icon\" aria-hidden=\"true\">\n        {status === \"complete\" ? <CheckCircle weight=\"fill\" /> : status === \"error\" ? <WarningCircle /> : status === \"cancelled\" ? <X /> : <DownloadSimple />}\n      </div>\n      <div className=\"whatiuse-data-export-progress__content\">\n        <div className=\"whatiuse-data-export-progress__heading\">\n          <strong>{title ?? defaultTitle}</strong>\n          <span>{description ?? rowDetail ?? fileName}</span>\n        </div>\n        {status === \"running\" && <Progress aria-label=\"Export progress\" value={value} showValue size=\"small\" />}\n      </div>\n      <div className=\"whatiuse-data-export-progress__actions\">\n        {status === \"running\" && onCancel && <IconButton size=\"small\" variant=\"ghost\" aria-label=\"Cancel export\" onClick={onCancel}><X aria-hidden=\"true\" /></IconButton>}\n        {(status === \"error\" || status === \"cancelled\") && onRetry && <Button size=\"small\" variant=\"secondary\" leadingIcon={<ArrowCounterClockwise />} onClick={onRetry}>Retry</Button>}\n        {status === \"complete\" && onDownload && <Button size=\"small\" variant=\"secondary\" leadingIcon={<DownloadSimple />} onClick={onDownload}>Download</Button>}\n      </div>\n    </div>\n  );\n}\n",
+      "type": "registry:component",
+      "target": "components/ui/data-export-progress.tsx"
+    },
+    {
+      "path": "registry/styles/components/data-export-progress.css",
+      "content": "/* Generated from src/foundation.css and src/styles.css. Do not edit directly. */\n\n@layer whatiuse.tokens, whatiuse.base, whatiuse.components;\n\n@layer whatiuse.components {\n.whatiuse-data-export-progress {\n  display: grid;\n  width: min(520px, 100%);\n  min-width: 0;\n  min-height: 66px;\n  grid-template-columns: 32px minmax(0, 1fr) auto;\n  align-items: center;\n  gap: 10px;\n  padding: 10px;\n  border-radius: 10px;\n  background: var(--whatiuse-bg-surface);\n  box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--whatiuse-control-border) 58%, transparent), var(--whatiuse-shadow-control);\n}\n\n.whatiuse-data-export-progress__icon {\n  display: grid;\n  width: 32px;\n  height: 32px;\n  place-items: center;\n  border-radius: 8px;\n  background: var(--whatiuse-bg-subtle);\n  color: var(--whatiuse-fg-muted);\n}\n\n.whatiuse-data-export-progress__icon svg { width: 15px; height: 15px; }\n\n.whatiuse-data-export-progress[data-status=\"error\"] .whatiuse-data-export-progress__icon { background: color-mix(in oklch, var(--whatiuse-fg-danger) 9%, transparent); color: var(--whatiuse-fg-danger); }\n\n.whatiuse-data-export-progress__content { display: grid; min-width: 0; gap: 7px; }\n\n.whatiuse-data-export-progress__heading { display: grid; min-width: 0; gap: 2px; }\n\n.whatiuse-data-export-progress__heading strong { color: var(--whatiuse-fg-default); font-size: var(--whatiuse-type-label); font-weight: 590; }\n\n.whatiuse-data-export-progress__heading span { overflow: hidden; color: var(--whatiuse-fg-subtle); font-size: var(--whatiuse-type-metadata); text-overflow: ellipsis; white-space: nowrap; }\n\n.whatiuse-data-export-progress__actions { display: flex; align-items: center; gap: 4px; }\n\n@media (max-width: 640px) {\n.whatiuse-data-export-progress { grid-template-columns: 32px minmax(0, 1fr); }\n\n.whatiuse-data-export-progress__actions { grid-column: 2; justify-content: flex-start; }\n}\n}\n",
+      "type": "registry:style",
+      "target": "styles/components/data-export-progress.css"
+    }
+  ],
+  "meta": {
+    "whatiuse": {
+      "contract": "/agent/whatiuse-agent.json",
+      "registryItem": "@whatiuse/data-export-progress"
+    }
+  },
+  "type": "registry:component"
+}

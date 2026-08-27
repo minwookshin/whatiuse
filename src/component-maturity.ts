@@ -1,4 +1,4 @@
-export type MaturityStatus = "Experimental" | "Ready" | "Deprecated";
+export type MaturityStatus = "Experimental" | "Ready candidate" | "Ready" | "Deprecated";
 
 export type ComponentMaturityRecord = {
   id: string;
@@ -58,15 +58,28 @@ const componentNames = {
 
 const authoredComponents = new Set(["inline-edit", "action-list", "shared-detail", "undo-stack"]);
 
-export const componentMaturity: readonly ComponentMaturityRecord[] = Object.entries(componentNames).map(([id, name]) => ({
-  id,
-  name,
-  status: "Experimental",
-  evidence: authoredComponents.has(id)
-    ? "Behavior contract, keyboard path, product composition, registry, and light/dark coverage"
-    : "State contract, keyboard path, registry artifact, and light/dark route coverage",
-  nextGate: "Manual assistive-technology sign-off and independent product adoption",
-}));
+export const readyCandidateIds = ["button", "select", "dialog", "tabs", "toast", "table"] as const;
+const readyCandidates = new Set<string>(readyCandidateIds);
+
+export const componentMaturity: readonly ComponentMaturityRecord[] = Object.entries(componentNames).map(([id, name]) => {
+  const isReadyCandidate = readyCandidates.has(id);
+
+  return {
+    id,
+    name,
+    status: isReadyCandidate ? "Ready candidate" : "Experimental",
+    evidence: isReadyCandidate
+      ? "RC automated gate: interaction contract, keyboard path, light and dark routes, 200% zoom, forced colors, reduced motion, versioned registry, clean install, and upgrade review"
+      : authoredComponents.has(id)
+        ? "Behavior contract, keyboard path, product composition, registry, and light/dark coverage"
+        : "State contract, keyboard path, registry artifact, and light/dark route coverage",
+    nextGate: isReadyCandidate
+      ? "Manual assistive-technology sign-off and one independent product consumer"
+      : "Complete the RC automated gate, then record manual assistive-technology review and independent product adoption",
+  };
+});
+
+export const readyCandidateComponents = componentMaturity.filter((component) => component.status === "Ready candidate");
 
 export const maturityDefinitions: readonly {
   status: MaturityStatus;
@@ -77,6 +90,11 @@ export const maturityDefinitions: readonly {
     status: "Experimental",
     meaning: "Useful for evaluation and alpha product work; the API may still change.",
     releaseContract: "Every breaking change is named in the changelog and paired with a migration note.",
+  },
+  {
+    status: "Ready candidate",
+    meaning: "The internal RC gate passes, while external product and manual assistive-technology evidence remain open.",
+    releaseContract: "The component stays pre-release until both external gates are recorded.",
   },
   {
     status: "Ready",

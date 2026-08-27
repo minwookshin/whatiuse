@@ -2,13 +2,13 @@
 
 import "../../styles/whatiuse-base.css";
 import "../../styles/components/data-state.css";
-import { MagnifyingGlass, WarningCircle } from "@phosphor-icons/react";
+import { LockKey, MagnifyingGlass, WarningCircle } from "@phosphor-icons/react";
 import type { HTMLAttributes, ReactNode } from "react";
 import { cn } from "../../lib/cn";
 import { Spinner } from "./spinner";
 
 export type DataStateProps = HTMLAttributes<HTMLDivElement> & {
-  state: "loading" | "empty" | "error";
+  state: "loading" | "empty" | "error" | "forbidden";
   title?: ReactNode;
   description?: ReactNode;
   action?: ReactNode;
@@ -19,6 +19,8 @@ export function DataState({ state, title, description, action, className, ...pro
     ? { title: "Loading data", description: "This view will update when the data is ready." }
     : state === "error"
       ? { title: "Data could not be loaded", description: "Try again or change the active filters." }
+      : state === "forbidden"
+        ? { title: "Access required", description: "Ask a workspace admin for permission to view this data." }
       : { title: "No results", description: "Try changing the search or active filters." };
   return (
     <div
@@ -29,7 +31,7 @@ export function DataState({ state, title, description, action, className, ...pro
       {...props}
     >
       <span className="whatiuse-data-state__icon" aria-hidden="true">
-        {state === "loading" ? <Spinner label="Loading" role="presentation" aria-hidden="true" /> : state === "error" ? <WarningCircle /> : <MagnifyingGlass />}
+        {state === "loading" ? <Spinner label="Loading" role="presentation" aria-hidden="true" /> : state === "error" ? <WarningCircle /> : state === "forbidden" ? <LockKey /> : <MagnifyingGlass />}
       </span>
       <strong>{title ?? defaults.title}</strong>
       <p>{description ?? defaults.description}</p>

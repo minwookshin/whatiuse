@@ -1,0 +1,46 @@
+/* Generated from src/foundation.css and src/styles.css. Do not edit directly. */
+
+@layer whatiuse.tokens, whatiuse.base, whatiuse.components;
+
+@layer whatiuse.components {
+.whatiuse-column-manager {
+  width: min(316px, calc(100vw - 24px));
+  padding: 8px;
+}
+
+.whatiuse-column-manager__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 2px 4px 7px;
+}
+
+.whatiuse-column-manager__title { font-weight: 600; }
+
+.whatiuse-column-manager__header > span { color: var(--whatiuse-fg-subtle); }
+
+.whatiuse-column-manager__list { display: grid; gap: 2px; margin: 0; padding: 0; list-style: none; }
+
+.whatiuse-column-manager__row {
+  display: grid;
+  min-height: 36px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 3px 3px 7px;
+  border-radius: 7px;
+}
+
+.whatiuse-column-manager__row[data-pinned] { background: var(--whatiuse-selected); }
+
+.whatiuse-column-manager__row .whatiuse-choice-row { min-width: 0; }
+
+.whatiuse-column-manager__row .whatiuse-choice-copy { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.whatiuse-column-manager__reset { width: 100%; justify-content: flex-start; margin-top: 5px; }
+
+@media (hover: hover) and (pointer: fine) {
+.whatiuse-column-manager__row:hover { background: var(--whatiuse-hover); }
+}
+}

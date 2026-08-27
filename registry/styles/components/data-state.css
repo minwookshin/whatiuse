@@ -38,4 +38,6 @@
 .whatiuse-data-state__action { margin-top: 7px; }
 
 .whatiuse-data-state[data-state="error"] .whatiuse-data-state__icon { background: color-mix(in oklch, var(--whatiuse-fg-danger) 9%, transparent); color: var(--whatiuse-fg-danger); }
+
+.whatiuse-data-state[data-state="forbidden"] .whatiuse-data-state__icon { color: var(--whatiuse-fg-default); }
 }

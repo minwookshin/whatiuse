@@ -56,6 +56,7 @@ export type DataViewState = {
   sorting: readonly DataViewSort[];
   pagination: DataViewPagination;
   columnVisibility: Readonly<Record<string, boolean>>;
+  columnOrder: readonly string[];
   columnSizing: Readonly<Record<string, number>>;
   columnPinning: DataViewColumnPinning;
   dateRange: DataDateRange;
@@ -190,6 +191,7 @@ export function createDataViewState(input: DataViewStateInput = {}): DataViewSta
       pageSize: finiteInteger(input.pagination?.pageSize, DEFAULT_PAGE_SIZE, 1, MAX_PAGE_SIZE),
     },
     columnVisibility: cleanVisibility(input.columnVisibility),
+    columnOrder: cleanStringList(input.columnOrder),
     columnSizing: cleanSizing(input.columnSizing),
     columnPinning: {
       start: cleanStringList(pinning.start),
@@ -258,6 +260,7 @@ export function serializeDataViewState(state: DataViewState, options: DataViewCo
   if (state.pagination.page !== baseline.pagination.page) params.set(key(prefix, "page"), String(state.pagination.page));
   if (state.pagination.pageSize !== baseline.pagination.pageSize) params.set(key(prefix, "size"), String(state.pagination.pageSize));
   if (changed(state.columnVisibility, baseline.columnVisibility)) params.set(key(prefix, "visibility"), JSON.stringify(state.columnVisibility));
+  if (changed(state.columnOrder, baseline.columnOrder)) params.set(key(prefix, "order"), JSON.stringify(state.columnOrder));
   if (changed(state.columnSizing, baseline.columnSizing)) params.set(key(prefix, "width"), JSON.stringify(Object.entries(state.columnSizing).map(([id, width]) => ({ id, width }))));
   if (changed(state.columnPinning.start, baseline.columnPinning.start)) params.set(key(prefix, "pin-start"), JSON.stringify(state.columnPinning.start));
   if (changed(state.columnPinning.end, baseline.columnPinning.end)) params.set(key(prefix, "pin-end"), JSON.stringify(state.columnPinning.end));
@@ -296,6 +299,7 @@ export function parseDataViewState(
   const params = new URLSearchParams(search.startsWith("?") ? search.slice(1) : search);
   const base = createDataViewState(fallback);
   const hidden = cleanStringList(parseJsonArray(params, key(prefix, "hidden")));
+  const order = cleanStringList(parseJsonArray(params, key(prefix, "order")));
   const widths = parseJsonArray(params, key(prefix, "width")).flatMap((item) => {
     if (!isRecord(item)) return [];
     const id = cleanId(item.id);
@@ -314,6 +318,7 @@ export function parseDataViewState(
       pageSize: params.get(key(prefix, "size")) ?? base.pagination.pageSize,
     } as unknown as DataViewPagination,
     columnVisibility: visibility ? cleanVisibility(visibility) : hidden.length ? Object.fromEntries(hidden.map((id) => [id, false])) : base.columnVisibility,
+    columnOrder: params.has(key(prefix, "order")) ? order : base.columnOrder,
     columnSizing: params.has(key(prefix, "width")) ? cleanSizing(Object.fromEntries(widths)) : base.columnSizing,
     columnPinning: {
       start: params.has(key(prefix, "pin-start")) ? pinStart : base.columnPinning.start,

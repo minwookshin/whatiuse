@@ -1452,7 +1452,7 @@
       "name": "data-table",
       "type": "registry:component",
       "title": "Data Table",
-      "description": "Headless sorting, selection, visibility, pagination, and collection states over semantic table markup.",
+      "description": "Headless sorting, selection, visibility, ordering, pagination, and collection states over semantic table markup.",
       "dependencies": [
         "@phosphor-icons/react@^2.1.10",
         "@tanstack/react-table@9.1.2",
@@ -1557,6 +1557,43 @@
       }
     },
     {
+      "name": "query-builder",
+      "type": "registry:component",
+      "title": "Query Builder",
+      "description": "A flat all-or-any condition builder with draft, apply, and cancel behavior.",
+      "dependencies": [
+        "@phosphor-icons/react@^2.1.10"
+      ],
+      "registryDependencies": [
+        "@whatiuse/whatiuse-base",
+        "@whatiuse/button",
+        "@whatiuse/button-group",
+        "@whatiuse/data-view-state",
+        "@whatiuse/icon-button",
+        "@whatiuse/segmented-control",
+        "@whatiuse/select",
+        "@whatiuse/text-field"
+      ],
+      "files": [
+        {
+          "path": "registry/components/ui/query-builder.tsx",
+          "type": "registry:component",
+          "target": "components/ui/query-builder.tsx"
+        },
+        {
+          "path": "registry/styles/components/query-builder.css",
+          "type": "registry:style",
+          "target": "styles/components/query-builder.css"
+        }
+      ],
+      "meta": {
+        "whatiuse": {
+          "contract": "/agent/whatiuse-agent.json",
+          "registryItem": "@whatiuse/query-builder"
+        }
+      }
+    },
+    {
       "name": "bulk-action-bar",
       "type": "registry:component",
       "title": "Bulk Action Bar",
@@ -1566,7 +1603,9 @@
       ],
       "registryDependencies": [
         "@whatiuse/whatiuse-base",
-        "@whatiuse/icon-button"
+        "@whatiuse/button",
+        "@whatiuse/icon-button",
+        "@whatiuse/spinner"
       ],
       "files": [
         {
@@ -1622,7 +1661,7 @@
       "description": "Visible-column preferences with required-column protection.",
       "registryDependencies": [
         "@whatiuse/whatiuse-base",
-        "@whatiuse/data-toolbar"
+        "@whatiuse/column-manager"
       ],
       "meta": {
         "whatiuse": {
@@ -1642,6 +1681,74 @@
           "target": "styles/components/column-visibility-menu.css"
         }
       ]
+    },
+    {
+      "name": "column-manager",
+      "type": "registry:component",
+      "title": "Column Manager",
+      "description": "Column visibility, order, pinning, and width reset with accessible named controls.",
+      "dependencies": [
+        "@phosphor-icons/react@^2.1.10"
+      ],
+      "registryDependencies": [
+        "@whatiuse/whatiuse-base",
+        "@whatiuse/button",
+        "@whatiuse/button-group",
+        "@whatiuse/checkbox",
+        "@whatiuse/icon-button",
+        "@whatiuse/popover"
+      ],
+      "files": [
+        {
+          "path": "registry/components/ui/column-manager.tsx",
+          "type": "registry:component",
+          "target": "components/ui/column-manager.tsx"
+        },
+        {
+          "path": "registry/styles/components/column-manager.css",
+          "type": "registry:style",
+          "target": "styles/components/column-manager.css"
+        }
+      ],
+      "meta": {
+        "whatiuse": {
+          "contract": "/agent/whatiuse-agent.json",
+          "registryItem": "@whatiuse/column-manager"
+        }
+      }
+    },
+    {
+      "name": "editable-cell",
+      "type": "registry:component",
+      "title": "Editable Cell",
+      "description": "Compact in-place editing with async save, cancel, validation, and focus restoration.",
+      "dependencies": [
+        "@phosphor-icons/react@^2.1.10"
+      ],
+      "registryDependencies": [
+        "@whatiuse/whatiuse-base",
+        "@whatiuse/button-group",
+        "@whatiuse/icon-button",
+        "@whatiuse/spinner"
+      ],
+      "files": [
+        {
+          "path": "registry/components/ui/editable-cell.tsx",
+          "type": "registry:component",
+          "target": "components/ui/editable-cell.tsx"
+        },
+        {
+          "path": "registry/styles/components/editable-cell.css",
+          "type": "registry:style",
+          "target": "styles/components/editable-cell.css"
+        }
+      ],
+      "meta": {
+        "whatiuse": {
+          "contract": "/agent/whatiuse-agent.json",
+          "registryItem": "@whatiuse/editable-cell"
+        }
+      }
     },
     {
       "name": "facet-filter",
@@ -1992,6 +2099,7 @@
       "registryDependencies": [
         "@whatiuse/whatiuse-base",
         "@whatiuse/button",
+        "@whatiuse/button-group",
         "@whatiuse/data-view-state",
         "@whatiuse/date-picker",
         "@whatiuse/popover"
@@ -2045,6 +2153,40 @@
         "whatiuse": {
           "contract": "/agent/whatiuse-agent.json",
           "registryItem": "@whatiuse/data-export-menu"
+        }
+      }
+    },
+    {
+      "name": "data-export-progress",
+      "type": "registry:component",
+      "title": "Data Export Progress",
+      "description": "Background export progress with cancel, retry, completion, and download actions.",
+      "dependencies": [
+        "@phosphor-icons/react@^2.1.10"
+      ],
+      "registryDependencies": [
+        "@whatiuse/whatiuse-base",
+        "@whatiuse/alert",
+        "@whatiuse/button",
+        "@whatiuse/icon-button",
+        "@whatiuse/progress"
+      ],
+      "files": [
+        {
+          "path": "registry/components/ui/data-export-progress.tsx",
+          "type": "registry:component",
+          "target": "components/ui/data-export-progress.tsx"
+        },
+        {
+          "path": "registry/styles/components/data-export-progress.css",
+          "type": "registry:style",
+          "target": "styles/components/data-export-progress.css"
+        }
+      ],
+      "meta": {
+        "whatiuse": {
+          "contract": "/agent/whatiuse-agent.json",
+          "registryItem": "@whatiuse/data-export-progress"
         }
       }
     },
@@ -2239,6 +2381,11 @@
           "path": "registry/components/ui/analytics-frame.tsx",
           "type": "registry:component",
           "target": "components/ui/analytics-frame.tsx"
+        },
+        {
+          "path": "registry/lib/analytics-tooltip-position.ts",
+          "type": "registry:lib",
+          "target": "lib/analytics-tooltip-position.ts"
         },
         {
           "path": "registry/styles/components/analytics-frame.css",
@@ -2665,6 +2812,7 @@
         "@whatiuse/badge",
         "@whatiuse/bulk-action-bar",
         "@whatiuse/button",
+        "@whatiuse/column-manager",
         "@whatiuse/column-visibility-menu",
         "@whatiuse/cursor-pagination",
         "@whatiuse/data-density-control",
@@ -2676,13 +2824,16 @@
         "@whatiuse/data-toolbar",
         "@whatiuse/date-range-filter",
         "@whatiuse/data-export-menu",
+        "@whatiuse/data-export-progress",
         "@whatiuse/data-export",
         "@whatiuse/data-view-state",
         "@whatiuse/dialog",
         "@whatiuse/facet-filter",
         "@whatiuse/filter-builder",
+        "@whatiuse/query-builder",
         "@whatiuse/icon-button",
         "@whatiuse/inline-edit",
+        "@whatiuse/editable-cell",
         "@whatiuse/menu",
         "@whatiuse/property-list",
         "@whatiuse/row-actions-menu",
@@ -3424,6 +3575,16 @@
           "target": "styles/components/data-toolbar.css"
         },
         {
+          "path": "registry/components/ui/query-builder.tsx",
+          "type": "registry:component",
+          "target": "components/ui/query-builder.tsx"
+        },
+        {
+          "path": "registry/styles/components/query-builder.css",
+          "type": "registry:style",
+          "target": "styles/components/query-builder.css"
+        },
+        {
           "path": "registry/components/ui/bulk-action-bar.tsx",
           "type": "registry:component",
           "target": "components/ui/bulk-action-bar.tsx"
@@ -3452,6 +3613,26 @@
           "path": "registry/styles/components/column-visibility-menu.css",
           "type": "registry:style",
           "target": "styles/components/column-visibility-menu.css"
+        },
+        {
+          "path": "registry/components/ui/column-manager.tsx",
+          "type": "registry:component",
+          "target": "components/ui/column-manager.tsx"
+        },
+        {
+          "path": "registry/styles/components/column-manager.css",
+          "type": "registry:style",
+          "target": "styles/components/column-manager.css"
+        },
+        {
+          "path": "registry/components/ui/editable-cell.tsx",
+          "type": "registry:component",
+          "target": "components/ui/editable-cell.tsx"
+        },
+        {
+          "path": "registry/styles/components/editable-cell.css",
+          "type": "registry:style",
+          "target": "styles/components/editable-cell.css"
         },
         {
           "path": "registry/components/ui/facet-filter.tsx",
@@ -3574,6 +3755,16 @@
           "target": "styles/components/data-export-menu.css"
         },
         {
+          "path": "registry/components/ui/data-export-progress.tsx",
+          "type": "registry:component",
+          "target": "components/ui/data-export-progress.tsx"
+        },
+        {
+          "path": "registry/styles/components/data-export-progress.css",
+          "type": "registry:style",
+          "target": "styles/components/data-export-progress.css"
+        },
+        {
           "path": "registry/components/ui/sparkline.tsx",
           "type": "registry:component",
           "target": "components/ui/sparkline.tsx"
@@ -3607,6 +3798,11 @@
           "path": "registry/components/ui/analytics-frame.tsx",
           "type": "registry:component",
           "target": "components/ui/analytics-frame.tsx"
+        },
+        {
+          "path": "registry/lib/analytics-tooltip-position.ts",
+          "type": "registry:lib",
+          "target": "lib/analytics-tooltip-position.ts"
         },
         {
           "path": "registry/styles/components/analytics-frame.css",

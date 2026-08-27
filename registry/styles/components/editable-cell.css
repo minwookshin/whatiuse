@@ -1,0 +1,67 @@
+/* Generated from src/foundation.css and src/styles.css. Do not edit directly. */
+
+@layer whatiuse.tokens, whatiuse.base, whatiuse.components;
+
+@layer whatiuse.components {
+.whatiuse-editable-cell { width: min(240px, 100%); min-width: 0; }
+
+.whatiuse-editable-cell__trigger,
+.whatiuse-editable-cell__form {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  min-height: 32px;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid transparent;
+  border-radius: var(--whatiuse-radius-control);
+  background: transparent;
+  color: var(--whatiuse-fg-default);
+}
+
+.whatiuse-editable-cell__trigger {
+  justify-content: space-between;
+  padding: 0 8px;
+  font: inherit;
+  text-align: start;
+  cursor: text;
+}
+
+.whatiuse-editable-cell__trigger > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.whatiuse-editable-cell__trigger > svg { color: var(--whatiuse-fg-subtle); }
+
+.whatiuse-editable-cell__trigger:disabled { cursor: default; opacity: .52; }
+
+.whatiuse-editable-cell__form {
+  padding: 2px;
+  border-color: var(--whatiuse-control-border-hover);
+  background: var(--whatiuse-bg-surface);
+}
+
+.whatiuse-editable-cell__input {
+  width: 100%;
+  min-width: 0;
+  height: 26px;
+  padding: 0 6px;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--whatiuse-fg-default);
+  font: inherit;
+}
+
+.whatiuse-editable-cell__actions { flex: 0 0 auto; }
+
+.whatiuse-editable-cell__error {
+  display: none;
+  color: var(--whatiuse-fg-danger);
+  font-size: var(--whatiuse-type-metadata);
+}
+
+.whatiuse-editable-cell__error:not(:empty) { display: block; }
+
+@media (hover: hover) and (pointer: fine) {
+.whatiuse-editable-cell__trigger:not(:disabled):hover { background: var(--whatiuse-hover); }
+}
+}

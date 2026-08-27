@@ -10,6 +10,7 @@
   "registryDependencies": [
     "@whatiuse/whatiuse-base",
     "@whatiuse/button",
+    "@whatiuse/button-group",
     "@whatiuse/data-view-state",
     "@whatiuse/date-picker",
     "@whatiuse/popover"

@@ -7,7 +7,7 @@ import { getComponentInstallCommand } from "./component-install-command";
 
 describe("component install copy contract", () => {
   it("points every public Library copy action at its exact versioned registry item", () => {
-    expect(publicLibraryItems).toHaveLength(74);
+    expect(publicLibraryItems).toHaveLength(76);
 
     for (const component of publicLibraryItems) {
       const expectedArtifact = `${packageManifest.homepage}/r/v/${packageManifest.version}/${component.id}.json`;

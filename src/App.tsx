@@ -20,7 +20,6 @@ import {
   FileText,
   Gear,
   GithubLogo,
-  GitBranch,
   LinkSimple,
   List,
   MagnifyingGlass,
@@ -37,7 +36,6 @@ import {
   Stack,
   DeviceMobile,
   Sun,
-  Tag,
   TerminalWindow,
   TextT,
   Trash,
@@ -208,13 +206,13 @@ import {
 } from "./components/showcase/navigation-feedback-previews";
 import type { BehaviorContract } from "./lib/behavior-contract";
 import { componentGuidance, type ComponentGuidance } from "./component-guidance";
-import { components, libraryComponentGroups, libraryComponents, type ComponentId } from "./component-catalog";
+import { components, libraryComponents, type ComponentId } from "./component-catalog";
 import { componentApi } from "./documentation/component-api";
 import { generatedComponentExports } from "./documentation/generated-component-exports";
 import { FoundationDetail, FoundationOverview, foundationItems, type FoundationId } from "./documentation/foundations";
 import { LiveSpecimen } from "./documentation/live-specimen";
 import { ComponentStatePreview, getStateFlags } from "./documentation/state-preview";
-import { publicDocItems, publicDocOutlines, type PublicDocId, type PublicDocGroup } from "./documentation/public-doc-metadata";
+import { publicDocItems, publicDocOutlines, resolvePublicDocId, type PublicDocId, type PublicDocGroup } from "./documentation/public-doc-metadata";
 import { copyText } from "./lib/copy-text";
 
 const DatePickerExample = lazy(() => import("./documentation/date-picker-previews").then((module) => ({ default: module.DatePickerExample })));
@@ -292,7 +290,7 @@ type NavSectionId = "getting-started" | "foundations" | "components" | "patterns
 
 const publicDocGroups: readonly { id: NavSectionId; label: PublicDocGroup }[] = [
   { id: "getting-started", label: "Getting started" },
-  { id: "project", label: "Project" },
+  { id: "project", label: "Reference" },
 ];
 
 function isPublicDocId(value: string): value is PublicDocId {
@@ -1352,7 +1350,7 @@ export function PrimaryPreviewFor({ id }: { id: ComponentId }) {
   if (id === "alert") return <DismissibleAlertPreview />;
   if (id === "empty-state") return <EmptyCollectionPreview />;
   if (id === "badge") return <PrimaryBadgePreview />;
-  if (id === "avatar") return <AvatarGroup aria-label="Project members"><Avatar fallback="AS" alt="Avery Stone" size="large" /><Avatar fallback="MP" alt="Mina Park" size="large" status="online" /><Avatar fallback="NW" alt="Noah Williams" size="large" /></AvatarGroup>;
+  if (id === "avatar") return <div className="primary-avatar-preview"><AvatarGroup aria-label="Project members"><Avatar fallback="AS" alt="Avery Stone" size="large" /><Avatar fallback="MP" alt="Mina Park" size="large" status="online" /><Avatar fallback="NW" alt="Noah Williams" size="large" /></AvatarGroup></div>;
   if (id === "table") return <DataTableRecipe compact />;
   if (id === "tree") return <Suspense fallback={<ReactAriaPreviewFallback />}><TreePrimaryPreview /></Suspense>;
   if (id === "reorderable-list") return <Suspense fallback={<ReactAriaPreviewFallback />}><ReorderableListPrimaryPreview /></Suspense>;
@@ -1507,10 +1505,7 @@ const navigationLeafIcons: Partial<Record<string, typeof Compass>> = {
   "recover-from-action": ArrowCounterClockwise,
   "component-status": CheckCircle,
   accessibility: PersonArmsSpread,
-  "browser-support": Browsers,
-  security: ShieldCheck,
-  contributing: GitBranch,
-  releases: Tag,
+  support: Browsers,
   licensing: FileText,
 };
 
@@ -1731,7 +1726,7 @@ function ConsolidatedDesignSystemMode({ view, onSelect, onHome, theme, onThemeCh
                 {!filteredDocs.length && !filteredFoundations.length && !filtered.length && !filteredPatterns.length && <div className="system-component-empty">No matching documentation</div>}
               </div> : <>
                 <NavigationSection label="Getting started" expanded={expandedSections["getting-started"]} active={activeSection === "getting-started"} onToggle={() => toggleSection("getting-started")}>
-                  <div className="system-component-list" role="region" aria-label="Getting started documentation"><div className="system-component-group">{publicDocItems.filter((doc) => doc.group === "Getting started").map((doc) => <NavigationLeaf key={doc.id} id={doc.id} label={doc.label} selected={doc.id === publicDoc?.id} onSelect={() => navigate(doc.id)} />)}</div></div>
+                  <div className="system-component-list" role="region" aria-label="Getting started documentation"><div className="system-component-group">{publicDocItems.filter((doc) => doc.group === "Getting started" && doc.navigation).map((doc) => <NavigationLeaf key={doc.id} id={doc.id} label={doc.label} selected={doc.id === publicDoc?.id} onSelect={() => navigate(doc.id)} />)}</div></div>
                 </NavigationSection>
 
                 <NavigationSection label="Foundations" expanded={expandedSections.foundations} active={activeSection === "foundations"} onToggle={() => toggleSection("foundations")}>
@@ -1740,19 +1735,17 @@ function ConsolidatedDesignSystemMode({ view, onSelect, onHome, theme, onThemeCh
 
                 <NavigationSection label="Components" expanded={expandedSections.components} active={activeSection === "components"} onToggle={() => toggleSection("components")}>
                   <div className="system-component-list system-component-list--catalog" role="region" aria-label="Component catalog">
-                    <div className="system-component-group system-component-group--collections"><span>Collections</span>{publicDocItems.filter((doc) => doc.group === "Components").map((doc) => <NavigationLeaf key={doc.id} id={doc.id} label={doc.label} selected={doc.id === publicDoc?.id} onSelect={() => navigate(doc.id)} />)}</div>
-                    {libraryComponentGroups.map((group) => <div className="system-component-group" key={group}><span>{group}</span>{libraryComponents.filter((component) => component.group === group).map((component) => <a href={`#${component.id}`} key={component.id} data-selected={component.id === activeId && componentsMode || undefined} aria-current={component.id === activeId && componentsMode ? "page" : undefined} onClick={(event) => { event.preventDefault(); openComponent(component.id); }}><strong>{component.name}</strong></a>)}</div>)}
+                    <div className="system-component-group">{publicDocItems.filter((doc) => doc.group === "Components" && doc.navigation).map((doc) => <NavigationLeaf key={doc.id} id={doc.id} label={doc.label} selected={doc.id === publicDoc?.id} onSelect={() => navigate(doc.id)} />)}</div>
                   </div>
                 </NavigationSection>
 
                 <NavigationSection label="Patterns" expanded={expandedSections.patterns} active={activeSection === "patterns"} onToggle={() => toggleSection("patterns")}>
                   <div className="system-component-list" role="region" aria-label="Pattern catalog">
-                    <div className="system-component-group"><NavigationLeaf id="patterns" label="Overview" selected={view === "patterns"} onSelect={() => navigate("patterns")} />{publicDocItems.filter((doc) => doc.group === "Patterns").map((doc) => <NavigationLeaf key={doc.id} id={doc.id} label={doc.label} selected={doc.id === publicDoc?.id} onSelect={() => navigate(doc.id)} />)}</div>
-                    <div className="system-component-group"><span>Interaction</span>{patterns.map((pattern) => <NavigationLeaf key={pattern.id} id={pattern.id} label={pattern.name} selected={pattern.id === activePattern?.id} onSelect={() => openPattern(pattern.id)} />)}</div>
+                    <div className="system-component-group"><NavigationLeaf id="patterns" label="Overview" selected={view === "patterns"} onSelect={() => navigate("patterns")} />{patterns.map((pattern) => <NavigationLeaf key={pattern.id} id={pattern.id} label={pattern.name} selected={pattern.id === activePattern?.id} onSelect={() => openPattern(pattern.id)} />)}</div>
                   </div>
                 </NavigationSection>
 
-                {publicDocGroups.filter((group) => group.id === "project").map((group) => <NavigationSection key={group.id} label={group.label} expanded={expandedSections[group.id]} active={activeSection === group.id} onToggle={() => toggleSection(group.id)}><div className="system-component-list" role="region" aria-label={`${group.label} documentation`}><div className="system-component-group">{publicDocItems.filter((doc) => doc.group === group.label).map((doc) => <NavigationLeaf key={doc.id} id={doc.id} label={doc.label} selected={doc.id === publicDoc?.id} onSelect={() => navigate(doc.id)} />)}</div></div></NavigationSection>)}
+                {publicDocGroups.filter((group) => group.id === "project").map((group) => <NavigationSection key={group.id} label={group.label} expanded={expandedSections[group.id]} active={activeSection === group.id} onToggle={() => toggleSection(group.id)}><div className="system-component-list" role="region" aria-label={`${group.label} documentation`}><div className="system-component-group">{publicDocItems.filter((doc) => doc.group === group.label && doc.navigation).map((doc) => <NavigationLeaf key={doc.id} id={doc.id} label={doc.label} selected={doc.id === publicDoc?.id} onSelect={() => navigate(doc.id)} />)}</div></div></NavigationSection>)}
               </>}
             </nav>
           </div>
@@ -1895,14 +1888,14 @@ export function DocumentationApp({ view, onSelect, onHome, theme, onThemeChange 
   theme: Theme;
   onThemeChange: (theme: Theme) => void;
 }) {
-  const normalizedView: ViewId = isPublicDocId(view)
+  const resolvedPublicDoc = resolvePublicDocId(view);
+  const knownView = isPublicDocId(view)
     || view === "foundations"
     || view === "patterns"
     || foundationItems.some((item) => `foundation-${item.id}` === view)
     || patterns.some((pattern) => pattern.id === view)
-    || components.some((component) => component.id === view)
-    ? view as ViewId
-    : "installation";
+    || components.some((component) => component.id === view);
+  const normalizedView: ViewId = resolvedPublicDoc ?? (knownView ? view as ViewId : "installation");
 
   return (
     <TooltipProvider>

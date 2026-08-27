@@ -11,8 +11,9 @@
   justify-content: space-between;
   gap: 14px;
   padding: 15px;
-  border-radius: 10px;
-  background: color-mix(in srgb, var(--whatiuse-bg-stage) 68%, transparent);
+  border-radius: var(--whatiuse-radius-container);
+  background: var(--whatiuse-bg-surface);
+  box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--whatiuse-control-border) 58%, transparent), 0 1px 2px rgb(17 17 19 / .025);
 }
 
 .whatiuse-metric__body { display: grid; min-width: 0; gap: 5px; }
@@ -74,9 +75,9 @@
 .whatiuse-metric {
     min-height: 124px;
     padding: 16px;
-    border-radius: 10px;
-    background: color-mix(in oklch, var(--whatiuse-bg-stage) 72%, transparent);
-    box-shadow: none;
+    border-radius: var(--whatiuse-radius-container);
+    background: var(--whatiuse-bg-surface);
+    box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--whatiuse-control-border) 58%, transparent), 0 1px 2px rgb(17 17 19 / .025);
   }
 
 .whatiuse-metric__body { gap: 4px; }

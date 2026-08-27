@@ -1,32 +1,39 @@
 export const publicDocItems = [
-  { id: "installation", label: "Installation", group: "Getting started", description: "Install your first component." },
-  { id: "agent-native", label: "For coding agents", group: "Getting started", description: "Give coding agents the same selection and composition rules as the documentation." },
-  { id: "choosing-components", label: "Core", group: "Components", description: "Choose interface primitives by task, focus, and recovery." },
-  { id: "product-pilot", label: "Data", group: "Components", description: "Tables, filters, bulk actions, and product data workflows." },
-  { id: "analytics", label: "Analytics", group: "Components", description: "Metrics, charts, comparison views, and analytic workflows." },
-  { id: "product-patterns", label: "Workflow", group: "Patterns", description: "Customer and billing workflows." },
-  { id: "collaboration-patterns", label: "Collaboration", group: "Patterns", description: "People, roles, and access." },
-  { id: "component-status", label: "Status", group: "Project", description: "Maturity and release status for every component." },
-  { id: "accessibility", label: "Accessibility", group: "Project", description: "Keyboard, focus, motion, contrast, and assistive technology." },
-  { id: "browser-support", label: "Browser support", group: "Project", description: "Tested browsers, viewports, and release requirements." },
-  { id: "security", label: "Security", group: "Project", description: "Report vulnerabilities and review supported versions." },
-  { id: "contributing", label: "Contributing", group: "Project", description: "How changes are proposed, tested, and reviewed." },
-  { id: "releases", label: "Releases", group: "Project", description: "Versioning, deprecation, and support policy." },
-  { id: "licensing", label: "Licensing", group: "Project", description: "MIT terms and third-party notices." },
+  { id: "installation", label: "Installation", group: "Getting started", description: "Add the registry and install a component.", navigation: true },
+  { id: "agent-native", label: "Coding agents", group: "Getting started", description: "Give coding agents the same component rules.", navigation: true },
+  { id: "choosing-components", label: "Core", group: "Components", description: "Choose interface primitives by task, focus, and recovery.", navigation: true },
+  { id: "product-pilot", label: "Data", group: "Components", description: "Tables, filters, bulk actions, and product data workflows.", navigation: true },
+  { id: "analytics", label: "Analytics", group: "Components", description: "Metrics, charts, comparison views, and analytic workflows.", navigation: true },
+  { id: "product-patterns", label: "Workflow", group: "Patterns", description: "Customer and billing workflows.", navigation: false },
+  { id: "collaboration-patterns", label: "Collaboration", group: "Patterns", description: "People, roles, and access.", navigation: false },
+  { id: "component-status", label: "Compatibility", group: "Reference", description: "Runtime, browser, and release boundaries.", navigation: true },
+  { id: "accessibility", label: "Accessibility", group: "Reference", description: "Keyboard, focus, motion, contrast, and assistive technology.", navigation: true },
+  { id: "support", label: "Open source", group: "Reference", description: "Security, contributions, and MIT terms.", navigation: true },
+  { id: "licensing", label: "License", group: "Reference", description: "MIT terms and third-party notices.", navigation: false },
 ] as const;
 
 export type PublicDocId = (typeof publicDocItems)[number]["id"];
 export type PublicDocGroup = (typeof publicDocItems)[number]["group"];
 
+export const legacyPublicDocAliases = {
+  "browser-support": "component-status",
+  security: "support",
+  contributing: "support",
+  releases: "component-status",
+} as const satisfies Record<string, PublicDocId>;
+
+export function resolvePublicDocId(value: string): PublicDocId | undefined {
+  const current = publicDocItems.find((item) => item.id === value);
+  if (current) return current.id;
+  return legacyPublicDocAliases[value as keyof typeof legacyPublicDocAliases];
+}
+
 export const publicDocOutlines: Record<PublicDocId, readonly { id: string; label: string }[]> = {
   installation: [
-    { id: "quickstart", label: "Choose a path" },
-    { id: "vite", label: "Vite" },
-    { id: "next", label: "Next.js" },
+    { id: "install", label: "Install" },
+    { id: "frameworks", label: "Frameworks" },
     { id: "theme", label: "Theme" },
-    { id: "registry", label: "Registry" },
     { id: "update", label: "Update" },
-    { id: "migrate", label: "Migrate" },
     { id: "troubleshooting", label: "Troubleshooting" },
   ],
   "choosing-components": [
@@ -36,18 +43,11 @@ export const publicDocOutlines: Record<PublicDocId, readonly { id: string; label
     { id: "decision-rule", label: "Decision rule" },
   ],
   "product-pilot": [
-    { id: "data-workspace", label: "Issues Workspace" },
-    { id: "customer-directory", label: "Customer Directory" },
-    { id: "audit-log", label: "Audit Log" },
     { id: "data-layer", label: "Product primitives" },
     { id: "data-contract", label: "Composition contract" },
     { id: "data-install", label: "Install" },
   ],
   analytics: [
-    { id: "renderer-family", label: "Primitives" },
-    { id: "saas-overview", label: "SaaS Overview" },
-    { id: "product-usage", label: "Usage & Adoption" },
-    { id: "conversion-retention", label: "Conversion & Retention" },
     { id: "analytics-layer", label: "Product primitives" },
     { id: "analytics-contract", label: "Composition contract" },
     { id: "analytics-install", label: "Install" },
@@ -64,18 +64,15 @@ export const publicDocOutlines: Record<PublicDocId, readonly { id: string; label
     { id: "collaboration-install", label: "Install" },
   ],
   "agent-native": [
-    { id: "agent-contract", label: "Machine contract" },
-    { id: "selection-rules", label: "Selection rules" },
-    { id: "composition-rules", label: "Composition rules" },
-    { id: "forbidden-rules", label: "Forbidden rules" },
-    { id: "skill-install", label: "Install the skill" },
+    { id: "agent-contract", label: "Contract" },
+    { id: "selection-rules", label: "Selection" },
+    { id: "skill-install", label: "Install" },
     { id: "agent-evaluation", label: "Evaluation" },
   ],
   "component-status": [
-    { id: "status-model", label: "Status model" },
-    { id: "promotion-gate", label: "Promotion gate" },
-    { id: "current-matrix", label: "Current matrix" },
-    { id: "migration-contract", label: "Migration contract" },
+    { id: "runtime-support", label: "Runtime" },
+    { id: "browser-support", label: "Browsers" },
+    { id: "release-status", label: "Release" },
   ],
   accessibility: [
     { id: "baseline-contract", label: "Baseline contract" },
@@ -83,35 +80,14 @@ export const publicDocOutlines: Record<PublicDocId, readonly { id: string; label
     { id: "motion-contrast", label: "Motion and contrast" },
     { id: "manual-review", label: "Manual review" },
   ],
-  "browser-support": [
-    { id: "support-policy", label: "Support policy" },
-    { id: "browser-matrix", label: "Browser matrix" },
-    { id: "viewport-matrix", label: "Viewport matrix" },
-    { id: "failure-policy", label: "Failure policy" },
-  ],
-  security: [
-    { id: "reporting", label: "Reporting" },
-    { id: "response", label: "Response process" },
-    { id: "supported-versions", label: "Supported versions" },
-  ],
-  contributing: [
-    { id: "entry-criteria", label: "Entry criteria" },
-    { id: "workflow", label: "Workflow" },
-    { id: "review-evidence", label: "Review evidence" },
-    { id: "change-boundaries", label: "Change boundaries" },
-  ],
-  releases: [
-    { id: "current-candidate", label: "Current candidate" },
-    { id: "version-policy", label: "Version policy" },
-    { id: "release-evidence", label: "Release evidence" },
-    { id: "package-candidate", label: "Package candidate" },
-    { id: "deprecation", label: "Deprecation" },
-    { id: "support-window", label: "Support window" },
+  support: [
+    { id: "security-reporting", label: "Security" },
+    { id: "contributing", label: "Contributing" },
+    { id: "license", label: "MIT license" },
   ],
   licensing: [
     { id: "license", label: "MIT license" },
     { id: "permissions", label: "Permissions" },
-    { id: "attribution", label: "Attribution" },
-    { id: "third-party", label: "Third-party work" },
+    { id: "notices", label: "Notices" },
   ],
 };

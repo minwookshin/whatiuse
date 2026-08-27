@@ -71,4 +71,10 @@
 @media (prefers-reduced-motion: reduce) {
 .whatiuse-bulk-action-bar { transform: none; }
 }
+
+.whatiuse-bulk-action-bar__feedback { display: inline-flex; min-width: 0; align-items: center; gap: 7px; color: var(--whatiuse-fg-muted); font-size: var(--whatiuse-type-label); }
+
+.whatiuse-bulk-action-bar__feedback svg { flex: 0 0 auto; }
+
+.whatiuse-bulk-action-bar[data-status="error"] .whatiuse-bulk-action-bar__feedback { color: var(--whatiuse-fg-danger); }
 }

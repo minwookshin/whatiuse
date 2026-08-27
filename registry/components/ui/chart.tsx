@@ -28,6 +28,7 @@ import {
   type AnalyticsDatum,
   type AnalyticsSeries,
 } from "../../lib/analytics";
+import { clearAnalyticsTooltipPosition, positionAnalyticsTooltip } from "../../lib/analytics-tooltip-position";
 import { cn } from "../../lib/cn";
 import { AnalyticsInspection } from "./analytics-frame";
 
@@ -115,6 +116,7 @@ export function Chart({
   showGrid = true,
 }: ChartProps) {
   const id = useId();
+  const figureRef = useRef<HTMLElement | null>(null);
   const [currentIndex, setCurrentIndex] = useControllableValue<number | null>({
     value: activeIndex,
     defaultValue: clampAnalyticsIndex(defaultActiveIndex, data.length),
@@ -197,6 +199,7 @@ export function Chart({
     const right = rect.width * plotBox.right / plotBox.width;
     const plotWidth = Math.max(1, rect.width - left - right);
     const ratio = Math.min(1, Math.max(0, (event.clientX - rect.left - left) / plotWidth));
+    positionAnalyticsTooltip(figureRef.current, event.clientX, event.clientY);
     schedulePointerMove(usesBands ? Math.min(data.length - 1, Math.floor(ratio * data.length)) : Math.round(ratio * (data.length - 1)));
   };
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
@@ -228,7 +231,7 @@ export function Chart({
   };
 
   return (
-    <figure className={cn("whatiuse-chart", className)} data-chart-type={chartType} style={chartStyle} aria-labelledby={`${id}-title`} aria-describedby={summaryId}>
+    <figure ref={figureRef} className={cn("whatiuse-chart", className)} data-chart-type={chartType} style={chartStyle} aria-labelledby={`${id}-title`} aria-describedby={summaryId}>
       <figcaption className="whatiuse-chart__header">
         <div><h3 id={`${id}-title`}>{title}</h3>{description && <p>{description}</p>}</div>
         <button type="button" className="whatiuse-chart__data-toggle" aria-pressed={showData} aria-controls={tableId} onClick={() => setShowData((current) => !current)}>{showData ? "View chart" : "View data"}</button>
@@ -251,7 +254,8 @@ export function Chart({
         aria-describedby={instructionsId}
         tabIndex={data.length && !loading && !error ? 0 : -1}
         onPointerMove={handlePointerMove}
-        onPointerLeave={clearPointerMove}
+        onPointerLeave={() => { clearPointerMove(); clearAnalyticsTooltipPosition(figureRef.current); }}
+        onFocus={() => clearAnalyticsTooltipPosition(figureRef.current)}
         onKeyDown={handleKeyDown}
         onClick={() => { if (activeDatum && active !== null) onDatumActivate?.(activeDatum, active); }}
       >
@@ -339,19 +343,21 @@ export function Chart({
       </div>
       </div>
       {inspectedDatum && visible.length > 0 && (
-        <AnalyticsInspection
-          active={activeDatum !== null}
-          label={inspectedDatum.label}
-          items={visible.map((item) => {
-            const value = inspectedDatum.values[item.id];
-            return {
-              id: item.id,
-              label: item.label,
-              value: typeof value === "number" ? valueFormatter(value, item) : "—",
-              tone: item.tone ?? "primary",
-            };
-          })}
-        />
+        <div className="whatiuse-analytics-tooltip">
+          <AnalyticsInspection
+            active={activeDatum !== null}
+            label={inspectedDatum.label}
+            items={visible.map((item) => {
+              const value = inspectedDatum.values[item.id];
+              return {
+                id: item.id,
+                label: item.label,
+                value: typeof value === "number" ? valueFormatter(value, item) : "—",
+                tone: item.tone ?? "primary",
+              };
+            })}
+          />
+        </div>
       )}
       <span className="whatiuse-sr-only" aria-live="polite" aria-atomic="true">{activeDatum ? describeAnalyticsDatum(activeDatum, visible, valueFormatter) : ""}</span>
     </figure>

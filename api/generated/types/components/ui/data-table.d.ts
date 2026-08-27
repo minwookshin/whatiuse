@@ -4,6 +4,7 @@ import type { DataViewColumnPinning, DataViewSort } from "../../lib/data-view-st
 export declare const whatiuseDataTableFeatures: {
     columnSizingFeature: import("@tanstack/table-core").TableFeature;
     columnResizingFeature: import("@tanstack/table-core").TableFeature;
+    columnOrderingFeature: import("@tanstack/table-core").TableFeature;
     columnPinningFeature: import("@tanstack/table-core").TableFeature;
     columnVisibilityFeature: import("@tanstack/table-core").TableFeature;
     rowSelectionFeature: import("@tanstack/table-core").TableFeature;
@@ -57,6 +58,9 @@ export type DataTableProps<TData extends object> = {
     columnVisibility?: ColumnVisibilityState;
     defaultColumnVisibility?: ColumnVisibilityState;
     onColumnVisibilityChange?: (visibility: ColumnVisibilityState) => void;
+    columnOrder?: readonly string[];
+    defaultColumnOrder?: readonly string[];
+    onColumnOrderChange?: (order: readonly string[]) => void;
     columnSizing?: ColumnSizingState;
     defaultColumnSizing?: ColumnSizingState;
     onColumnSizingChange?: (sizing: ColumnSizingState) => void;
@@ -84,4 +88,4 @@ export type DataTableProps<TData extends object> = {
     emptyDescription?: ReactNode;
     onRowActivate?: (row: TData) => void;
 };
-export declare function DataTable<TData extends object>({ ariaLabel, data, columns, getRowId, getRowLabel, className, selectable, selectedRowIds, defaultSelectedRowIds, onSelectedRowIdsChange, sorting, defaultSorting, onSortingChange, manualSorting, columnVisibility, defaultColumnVisibility, onColumnVisibilityChange, columnSizing, defaultColumnSizing, onColumnSizingChange, columnPinning, defaultColumnPinning, onColumnPinningChange, resizable, resizeDirection, page, defaultPage, pageSize, onPageChange, paginate, manualPagination, rowCount, pageCount, hasNextPage, virtualize, loading, isFetching, loadingRows, error, onRetry, emptyTitle, emptyDescription, onRowActivate, }: DataTableProps<TData>): import("react").JSX.Element;
+export declare function DataTable<TData extends object>({ ariaLabel, data, columns, getRowId, getRowLabel, className, selectable, selectedRowIds, defaultSelectedRowIds, onSelectedRowIdsChange, sorting, defaultSorting, onSortingChange, manualSorting, columnVisibility, defaultColumnVisibility, onColumnVisibilityChange, columnOrder, defaultColumnOrder, onColumnOrderChange, columnSizing, defaultColumnSizing, onColumnSizingChange, columnPinning, defaultColumnPinning, onColumnPinningChange, resizable, resizeDirection, page, defaultPage, pageSize, onPageChange, paginate, manualPagination, rowCount, pageCount, hasNextPage, virtualize, loading, isFetching, loadingRows, error, onRetry, emptyTitle, emptyDescription, onRowActivate, }: DataTableProps<TData>): import("react").JSX.Element;

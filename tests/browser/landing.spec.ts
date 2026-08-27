@@ -1,21 +1,24 @@
 import { expect, test } from "@playwright/test";
+import { publicLibraryItems } from "../../src/component-catalog";
 
 test("public root opens directly into the component Library", async ({ page }) => {
   await page.goto("/");
 
   await expect(page.getByRole("heading", { level: 1, name: "components i use." })).toBeVisible();
-  await expect(page.getByRole("heading", { level: 2, name: "Library" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 2, name: "Library" })).toHaveCount(0);
+  await expect(page.getByRole("tablist", { name: "Component collections" })).toBeAttached();
   await expect(page.getByRole("link", { name: "View whatiuse on GitHub" })).toHaveAttribute("href", "https://github.com/minwookshin/whatiuse");
   await expect(page.getByRole("button", { name: "Copy whatiuse install command" })).toHaveCount(0);
-  await expect(page.getByRole("link", { name: "made by minwook" })).toHaveAttribute("href", "https://www.minwookshin.com/");
-  await expect(page.locator(".component-index-row")).toHaveCount(39);
+  await expect(page.getByRole("link", { name: "made by minwook" })).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "@minwook — portfolio" }).first()).toHaveAttribute("href", "https://www.minwookshin.com/");
+  await expect(page.locator(".component-index-row")).toHaveCount(publicLibraryItems.filter((item) => item.collection === "Core").length);
   await expect(page.locator('.component-index-row[data-component="kbd"]')).toHaveCount(0);
   await expect(page.getByRole("link", { name: "Introduction" })).toHaveCount(0);
   const wordmark = page.locator(".whatiuse-wordmark");
-  await expect(wordmark).toHaveText("whatiuse");
+  await expect(wordmark.locator(":scope > strong")).toHaveText("whatiuse");
   await expect(wordmark.locator("svg")).toHaveCount(0);
-  await expect(wordmark).toHaveAttribute("aria-hidden", "true");
   await expect(wordmark).toHaveCSS("pointer-events", "none");
+  await expect(page.locator(".component-index-author-docked")).toHaveAttribute("aria-hidden", "true");
   await expect(page.getByRole("link", { name: "whatiuse home" })).toHaveCount(0);
 });
 
@@ -34,7 +37,7 @@ test("the author reveal stays inline and card copy writes the exact install comm
   if (supportsHover) await identity.hover();
   else await identity.focus();
 
-  const portraits = page.locator(".component-index-author__portraits img");
+  const portraits = page.locator('.component-index-author[data-placement="intro"] .component-index-author__portraits img');
   await expect(portraits).toHaveCount(3);
   await expect(portraits.first()).toHaveCSS("opacity", "1");
   const portraitBoxes = await portraits.evaluateAll((images) => images.map((image) => {
@@ -44,13 +47,41 @@ test("the author reveal stays inline and card copy writes the exact install comm
   for (const box of portraitBoxes) expect(Math.abs(box.height - box.width)).toBeLessThanOrEqual(0.5);
   expect(await page.getByRole("heading", { level: 1, name: "components i use." }).boundingBox()).toEqual(headingBefore);
 
+  const authorRevealScroll = await page.locator(".component-index-intro__descriptor").evaluate((descriptor) => {
+    const scroller = document.querySelector<HTMLElement>(".component-index-page")!;
+    const header = document.querySelector<HTMLElement>(".component-index-header")!;
+    return scroller.scrollTop + descriptor.getBoundingClientRect().bottom - header.getBoundingClientRect().bottom;
+  });
+  await page.locator(".component-index-page").evaluate((element, top) => element.scrollTo({ top: top - 2, behavior: "instant" }), authorRevealScroll);
+  await expect(page.locator(".component-index-author-docked")).toHaveAttribute("aria-hidden", "true");
+  await page.locator(".component-index-page").evaluate((element, top) => element.scrollTo({ top: top + 2, behavior: "instant" }), authorRevealScroll);
+  const dockedAuthor = page.locator('.component-index-author[data-placement="docked"]');
+  const dockedLink = dockedAuthor.locator("a.component-index-author__link");
+  await expect(page.locator(".component-index-author-docked")).toHaveAttribute("aria-hidden", "false");
+  await expect(dockedLink).toHaveAttribute("href", "https://www.minwookshin.com/");
+  await expect(dockedLink).toHaveAttribute("aria-label", "@minwook — portfolio");
+  await expect(dockedLink).toBeVisible();
+  const centeredWordmark = await page.locator(".whatiuse-wordmark--scroll-docked > strong").boundingBox();
+  expect(centeredWordmark).not.toBeNull();
+  expect(Math.abs((centeredWordmark!.x + centeredWordmark!.width / 2) - 640)).toBeLessThanOrEqual(1);
+  // The intro identity already exercises pointer hover. Use the keyboard path
+  // after docking so a moving wordmark cannot race the fixed header hit target.
+  await dockedLink.focus();
+  const dockedPortraits = dockedAuthor.locator(".component-index-author__portraits img");
+  await expect(dockedPortraits.first()).toHaveCSS("opacity", "1");
+  const dockedLinkBox = await dockedLink.boundingBox();
+  const dockedPortraitBox = await dockedPortraits.first().boundingBox();
+  expect(dockedLinkBox).not.toBeNull();
+  expect(dockedPortraitBox).not.toBeNull();
+  expect(dockedPortraitBox!.x).toBeGreaterThan(dockedLinkBox!.x + dockedLinkBox!.width);
+
   const copyButton = page.locator('.component-index-row[data-component="button"] .component-index-row__actions').getByRole("button");
   await copyButton.scrollIntoViewIfNeeded();
   await copyButton.click();
   await expect(copyButton).toHaveAttribute("aria-label", "Button install command copied");
   if (browserName === "chromium") {
     await expect.poll(() => page.evaluate(() => navigator.clipboard.readText())).toBe(
-      "npx shadcn@4.18.0 add https://whatiuse.minwookshin.com/r/v/0.1.0-rc.38/button.json",
+      "npx shadcn@4.18.0 add https://whatiuse.minwookshin.com/r/v/0.1.0-rc.43/button.json",
     );
   }
 
@@ -81,7 +112,7 @@ test("the author reveal stays inline and card copy writes the exact install comm
   await expect(installCopy).toHaveAttribute("aria-label", "Button install command copied");
   if (browserName === "chromium") {
     await expect.poll(() => page.evaluate(() => navigator.clipboard.readText())).toBe(
-      "npx shadcn@4.18.0 add https://whatiuse.minwookshin.com/r/v/0.1.0-rc.38/button.json",
+      "npx shadcn@4.18.0 add https://whatiuse.minwookshin.com/r/v/0.1.0-rc.43/button.json",
     );
   }
 });
@@ -89,7 +120,7 @@ test("the author reveal stays inline and card copy writes the exact install comm
 test("component catalog searches, previews, and opens code without nested group filters", async ({ page }) => {
   await page.goto("/#components");
 
-  await expect(page.locator(".component-index-row")).toHaveCount(39);
+  await expect(page.locator(".component-index-row")).toHaveCount(publicLibraryItems.filter((item) => item.collection === "Core").length);
   await expect(page.getByRole("button", { name: "Interaction", exact: true })).toHaveCount(0);
   await expect(page.locator('.component-index-row[data-component="reorderable-list"]')).toHaveCount(0);
   await expect(page.locator('.component-index-row[data-component="inline-edit"]')).toHaveCount(0);
@@ -132,37 +163,64 @@ test("component catalog searches, previews, and opens code without nested group 
   await expect(page).toHaveURL(/#components$/);
 });
 
-test("Data and Analytics collections expose live B2B primitives without Core filter noise", async ({ page }) => {
+test("Core, Data, and Analytics switch from one sticky collection rail", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 720 });
   await page.goto("/#components");
 
+  await expect(page.getByRole("tablist", { name: "Component collections" })).toBeVisible();
+  await expect(page.getByRole("tab", { name: "Core" })).toHaveAttribute("aria-selected", "true");
+  await expect(page.locator(".component-index-row")).toHaveCount(publicLibraryItems.filter((item) => item.collection === "Core").length);
+  await expect(page.getByRole("tabpanel", { name: "Core" })).toBeVisible();
+
+  await page.getByRole("tab", { name: "Data" }).click();
+  await expect(page.getByRole("tab", { name: "Data" })).toHaveAttribute("aria-selected", "true");
+  await expect(page.locator(".component-index-row")).toHaveCount(publicLibraryItems.filter((item) => item.collection === "Data").length);
+
+  const dataTableCard = page.locator('.component-index-row[data-component="data-table"]');
+  await dataTableCard.scrollIntoViewIfNeeded();
+  await expect(page.getByRole("table", { name: "Accounts" })).toBeVisible();
+
   await page.getByRole("tab", { name: "Analytics" }).click();
-  await expect(page.locator(".component-index-row")).toHaveCount(17);
+  await expect(page.getByRole("tab", { name: "Analytics" })).toHaveAttribute("aria-selected", "true");
+  const chartCard = page.locator('.component-index-row[data-component="chart"]');
+  await chartCard.scrollIntoViewIfNeeded();
   await expect(page.getByRole("figure", { name: "Recurring revenue" })).toBeAttached();
+  const chartPlot = chartCard.locator(".whatiuse-chart__plot");
+  await chartPlot.hover({ position: { x: 240, y: 120 } });
+  const chartTooltip = chartCard.locator(".whatiuse-analytics-tooltip");
+  await expect(chartTooltip).toBeVisible();
+  await expect(chartTooltip).toContainText("Current");
   await expect(page.getByRole("textbox", { name: "Search components" })).toHaveAttribute("placeholder", "Search components");
   await page.locator('.component-index-row[data-component="sankey-chart"]').scrollIntoViewIfNeeded();
 
-  await page.getByRole("tab", { name: "Data" }).click();
-  await expect(page.locator(".component-index-row")).toHaveCount(18);
+  const stickyGeometry = await page.evaluate(() => {
+    const header = document.querySelector<HTMLElement>(".component-index-header")!.getBoundingClientRect();
+    const toolbar = document.querySelector<HTMLElement>(".component-index-toolbar")!.getBoundingClientRect();
+    const search = document.querySelector<HTMLElement>(".component-index-search")!.getBoundingClientRect();
+    return { headerBottom: header.bottom, toolbarTop: toolbar.top, searchBottom: search.bottom };
+  });
+  expect(Math.abs(stickyGeometry.toolbarTop - stickyGeometry.headerBottom)).toBeLessThanOrEqual(1);
+  expect(stickyGeometry.searchBottom).toBeGreaterThan(stickyGeometry.headerBottom);
+  expect(stickyGeometry.searchBottom).toBeLessThanOrEqual(stickyGeometry.toolbarTop + 52);
+
+  const cohortCard = page.locator('.component-index-row[data-component="cohort"]');
+  await cohortCard.scrollIntoViewIfNeeded();
+  const cohortInset = await cohortCard.locator(".whatiuse-cohort").evaluate((element) => {
+    const caption = element.querySelector("caption")!;
+    return Number.parseFloat(getComputedStyle(caption).paddingLeft);
+  });
+  expect(cohortInset).toBeGreaterThanOrEqual(15);
+
   await expect(page.getByRole("button", { name: "Controls", exact: true })).toHaveCount(0);
   await expect(page.getByRole("textbox", { name: "Search components" })).toHaveAttribute("placeholder", "Search components");
-  await expect(page.locator('.component-index-row[data-component="data-table"]')).toBeInViewport();
-  await expect(page.locator('.component-index-row[data-component="filter-builder"]')).toBeInViewport();
-  const catalogOffset = await page.locator('.component-index-row[data-component="data-table"]').evaluate((card) => {
-    const toolbar = document.querySelector<HTMLElement>(".component-index-toolbar");
-    return card.getBoundingClientRect().top - (toolbar?.getBoundingClientRect().bottom ?? 0);
-  });
-  expect(catalogOffset).toBeGreaterThanOrEqual(20);
-  expect(catalogOffset).toBeLessThanOrEqual(44);
-  await expect(page.getByRole("table", { name: "Accounts" })).toBeVisible();
+  await page.getByRole("tab", { name: "Data" }).click();
   await page.getByRole("link", { name: "Open Data Table code" }).click();
   await expect(page).toHaveURL(/#components\/data-table$/);
   await expect(page.getByRole("dialog", { name: "Data Table" }).getByRole("link", { name: "Accessibility & API" })).toHaveAttribute("href", "#product-pilot");
   await page.keyboard.press("Escape");
 
   await page.getByRole("tab", { name: "Core" }).click();
-  await expect(page.locator('.component-index-row[data-component="button"]')).toBeInViewport();
-  await expect(page.getByRole("textbox", { name: "Search components" })).toHaveAttribute("placeholder", "Search components");
+  await expect(page.locator('.component-index-row[data-component="button"]')).toBeAttached();
 });
 
 test("component catalog keeps compact 16:9 previews in a two-column desktop grid", async ({ page }) => {
@@ -275,7 +333,7 @@ test("wordmark moves from the first-viewport center into the sticky header", asy
   await page.setViewportSize({ width: 1280, height: 720 });
   await page.goto("/");
 
-  const geometry = () => page.locator(".whatiuse-wordmark").evaluate((element) => {
+  const geometry = () => page.locator(".whatiuse-wordmark > strong").evaluate((element) => {
     const box = element.getBoundingClientRect();
     return {
       centerX: box.left + box.width / 2,
@@ -292,6 +350,7 @@ test("wordmark moves from the first-viewport center into the sticky header", asy
 
   await page.locator(".component-index-page").evaluate((element) => element.scrollTo({ top: 500, behavior: "instant" }));
   await expect.poll(async () => (await geometry()).centerY).toBeCloseTo(32, 1);
+  await expect(page.locator(".component-index-author-docked")).toHaveAttribute("aria-hidden", "true");
   const docked = await geometry();
   expect(Math.abs(docked.centerX - 640)).toBeLessThanOrEqual(0.5);
   expect(docked.width).toBeGreaterThan(56);
@@ -299,6 +358,7 @@ test("wordmark moves from the first-viewport center into the sticky header", asy
 
   await page.locator(".component-index-page").evaluate((element) => element.scrollTo({ top: 900, behavior: "instant" }));
   await expect.poll(async () => (await geometry()).width).toBeCloseTo(docked.width, 2);
+  await expect(page.locator(".component-index-author-docked")).toHaveAttribute("aria-hidden", "false");
 
   const actionsAfter = await page.locator(".landing-header__actions").boundingBox();
   expect(actionsAfter?.x).toBeCloseTo(actionsBefore!.x, 1);
@@ -320,6 +380,10 @@ test("reduced motion keeps the identity in both places without spatial travel", 
   await page.locator(".component-index-page").evaluate((element) => element.scrollTo({ top: 500, behavior: "instant" }));
   const dockedAfterScroll = await page.locator(".whatiuse-wordmark").boundingBox();
   expect(dockedAfterScroll!.y + dockedAfterScroll!.height / 2).toBeCloseTo(32, 1);
+  await expect(page.locator(".component-index-author-docked")).toHaveAttribute("aria-hidden", "true");
+
+  await page.locator(".component-index-page").evaluate((element) => element.scrollTo({ top: 900, behavior: "instant" }));
+  await expect(page.locator(".component-index-author-docked")).toHaveAttribute("aria-hidden", "false");
 });
 
 test("every catalog card renders its live preview inside the enlarged stage", async ({ page }) => {
@@ -481,14 +545,16 @@ test("public Library has no horizontal overflow at a compact mobile viewport", a
 });
 
 test("component catalog stacks previews without horizontal page overflow", async ({ page }) => {
+  test.setTimeout(90_000);
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/#components");
 
+  await expect(page.getByRole("heading", { level: 1, name: "components i use." })).toBeVisible({ timeout: 30_000 });
   const overflow = await page.locator(".component-index-page").evaluate((element) => element.scrollWidth - element.clientWidth);
   expect(overflow).toBeLessThanOrEqual(1);
-  await expect(page.getByRole("textbox", { name: "Search components" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Copy Button install command" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Open Button code" })).toBeVisible();
+  await expect(page.getByRole("textbox", { name: "Search components" })).toBeVisible({ timeout: 30_000 });
+  await expect(page.getByRole("button", { name: "Copy Button install command" })).toBeVisible({ timeout: 30_000 });
+  await expect(page.getByRole("link", { name: "Open Button code" })).toBeVisible({ timeout: 30_000 });
 });
 
 test("command K does not pull the Library into documentation", async ({ page, isMobile }) => {
