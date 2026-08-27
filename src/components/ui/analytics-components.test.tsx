@@ -79,9 +79,10 @@ describe("whatiuse Analytics components", () => {
     const cancelFrame = vi.spyOn(window, "cancelAnimationFrame").mockImplementation((id) => {
       frames.delete(id);
     });
-    render(<Chart title="Revenue" data={data} series={series} onActiveIndexChange={onActiveIndexChange} />);
+    const { container } = render(<Chart title="Revenue" data={data} series={series} onActiveIndexChange={onActiveIndexChange} />);
 
     const plot = screen.getByRole("group", { name: "Revenue. 3 data points." });
+    const tooltip = container.querySelector(".whatiuse-analytics-tooltip");
     vi.spyOn(plot, "getBoundingClientRect").mockReturnValue({
       x: 0,
       y: 0,
@@ -94,8 +95,9 @@ describe("whatiuse Analytics components", () => {
       toJSON: () => ({}),
     });
 
-    fireEvent.pointerMove(plot, { clientX: 120 });
-    fireEvent.pointerMove(plot, { clientX: 120 });
+    fireEvent.pointerMove(plot, { clientX: 120, clientY: 100 });
+    fireEvent.pointerMove(plot, { clientX: 120, clientY: 100 });
+    expect(tooltip).toHaveAttribute("data-pointer-positioned", "true");
     expect(requestFrame).toHaveBeenCalledTimes(1);
     expect(onActiveIndexChange).not.toHaveBeenCalled();
 
@@ -106,6 +108,7 @@ describe("whatiuse Analytics components", () => {
     fireEvent.pointerMove(plot, { clientX: 520 });
     expect(requestFrame).toHaveBeenCalledTimes(2);
     fireEvent.pointerLeave(plot);
+    expect(tooltip).not.toHaveAttribute("data-pointer-positioned");
     expect(cancelFrame).toHaveBeenCalledWith(2);
     expect(onActiveIndexChange).toHaveBeenLastCalledWith(null);
 

@@ -1,8 +1,8 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "generatedBy": "scripts/verify-runtime-performance.mjs",
-  "generatedAt": "2026-08-19T14:00:58.827Z",
-  "releaseVersion": "0.1.0-rc.38",
+  "generatedAt": "2026-08-27T16:37:29.521Z",
+  "releaseVersion": "0.1.0-rc.43",
   "status": "passed",
   "mode": "local-production-preview",
   "viewport": {
@@ -18,37 +18,37 @@
     "cls": 0.05,
     "longestTaskMs": 250,
     "documentationTransitionMs": 1500,
-    "sharedDetailSelectionMs": 750,
+    "buttonActivationMs": 300,
     "dialogOpenMs": 750
   },
   "measurements": {
     "landing": {
-      "fcpMs": 132,
-      "lcpMs": 440,
+      "fcpMs": 104,
+      "lcpMs": 432,
       "cls": 0,
       "longestTaskMs": 0,
       "longTaskCount": 0,
-      "domContentLoadedMs": 72,
-      "loadMs": 72,
+      "domContentLoadedMs": 65,
+      "loadMs": 65,
       "resourceRequests": 20,
-      "resourceTransferBytes": 612866
+      "resourceTransferBytes": 609712
     },
     "documentation": {
-      "fcpMs": 132,
-      "lcpMs": 448,
-      "cls": 0.0024,
+      "fcpMs": 100,
+      "lcpMs": 440,
+      "cls": 0.0019,
       "longestTaskMs": 0,
       "longTaskCount": 0,
-      "domContentLoadedMs": 70,
-      "loadMs": 70,
+      "domContentLoadedMs": 63,
+      "loadMs": 63,
       "resourceRequests": 16,
-      "resourceTransferBytes": 479452
+      "resourceTransferBytes": 472142
     },
-    "documentationTransitionMs": 413,
+    "documentationTransitionMs": 861,
     "interactions": {
-      "sharedDetailSelectionMs": 5,
-      "dialogOpenMs": 9,
-      "longestTaskMs": 69
+      "buttonActivationMs": 12,
+      "dialogOpenMs": 12,
+      "longestTaskMs": 0
     }
   },
   "environment": {

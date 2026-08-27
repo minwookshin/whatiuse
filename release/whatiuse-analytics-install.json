@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "generatedBy": "scripts/verify-whatiuse-analytics-consumer.mjs",
-  "generatedAt": "2026-08-19T13:58:53.001Z",
-  "version": "0.1.0-rc.38",
+  "generatedAt": "2026-08-27T16:33:28.341Z",
+  "version": "0.1.0-rc.43",
   "status": "passed",
   "fixture": "Fresh React + TypeScript + Vite application using the source registry",
   "item": "whatiuse-analytics",
@@ -59,5 +59,5 @@
   "semanticDataTable": true,
   "typecheck": "passed",
   "productionBuild": "passed",
-  "elapsedMs": 13644
+  "elapsedMs": 18906
 }

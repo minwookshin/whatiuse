@@ -1,17 +1,36 @@
-import { render, screen, within } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it } from "vitest";
+import { render, screen, waitFor, within } from "@testing-library/react";
+import userEvent, { type UserEvent } from "@testing-library/user-event";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { components } from "./App";
-import { libraryComponents } from "./component-catalog";
+import { publicLibraryItems } from "./component-catalog";
 import App from "./legacy-app";
 import { componentGuidance } from "./component-guidance";
 
 describe("design system workspace", () => {
+  async function openComponentFromSearch(user: UserEvent, name: string) {
+    const search = screen.getByRole("textbox", { name: "Search documentation" });
+    await user.clear(search);
+    await user.type(search, name);
+    await user.click(within(screen.getByRole("region", { name: "Documentation search results" })).getByRole("link", { name }));
+  }
+
   beforeEach(() => {
     window.history.replaceState(null, "", "#button");
     window.localStorage.clear();
     document.documentElement.removeAttribute("data-theme");
+    vi.stubGlobal("fetch", vi.fn(async (input: RequestInfo | URL) => {
+      const match = String(input).match(/\/([^/]+)\.json$/);
+      const id = match?.[1] ?? "component";
+      return new Response(JSON.stringify({
+        files: [
+          { target: `components/ui/${id}.tsx`, content: `export function ${id.replace(/(^|-)(\w)/g, (_, _dash, letter: string) => letter.toUpperCase())}() { return null; }` },
+          { target: `styles/components/${id}.css`, content: `.whatiuse-${id} { display: block; }` },
+        ],
+      }), { headers: { "Content-Type": "application/json" }, status: 200 });
+    }));
   });
+
+  afterEach(() => vi.unstubAllGlobals());
 
   it("shows design-system information architecture without product inbox chrome", () => {
     render(<App />);
@@ -31,9 +50,11 @@ describe("design system workspace", () => {
 
     expect(window.location.hash).toBe("");
     expect(screen.getByRole("heading", { level: 1, name: "components i use." })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { level: 2, name: "Library" })).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { level: 2, name: "Library" })).not.toBeInTheDocument();
+    expect(screen.getByRole("tablist", { name: "Component collections" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Open documentation" })).toHaveAttribute("href", "#installation");
-    expect(screen.getByRole("link", { name: "made by minwook" })).toHaveAttribute("href", "https://www.minwookshin.com/");
+    expect(screen.queryByRole("link", { name: "made by minwook" })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "@minwook — portfolio" })).toHaveAttribute("href", "https://www.minwookshin.com/");
     expect(screen.queryByRole("complementary", { name: "Design system navigation" })).not.toBeInTheDocument();
   });
 
@@ -41,18 +62,19 @@ describe("design system workspace", () => {
     window.history.replaceState(null, "", "#components");
     const { container } = render(<App />);
 
-    expect(screen.getByRole("link", { name: "made by minwook" })).toHaveAttribute("href", "https://www.minwookshin.com/");
+    expect(screen.queryByRole("link", { name: "made by minwook" })).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: "MIT license" })).toHaveAttribute("href", "#licensing");
     const wordmark = container.querySelector<HTMLElement>(".whatiuse-wordmark");
     expect(wordmark).not.toBeNull();
-    expect(wordmark).toHaveTextContent(/^whatiuse$/);
+    expect(wordmark?.querySelector(":scope > strong")).toHaveTextContent(/^whatiuse$/);
     expect(wordmark?.tagName).toBe("DIV");
     expect(wordmark).not.toHaveAttribute("href");
     expect(screen.queryByRole("link", { name: "whatiuse home" })).not.toBeInTheDocument();
     expect(container.querySelector(".whatiuse-wordmark svg")).toBeNull();
     expect(screen.getByRole("link", { name: "@minwook — portfolio" })).toHaveAttribute("href", "https://www.minwookshin.com/");
     expect(screen.getByRole("link", { name: "@minwook — portfolio" })).toHaveTextContent("@minwook");
-    expect(container.querySelectorAll(".component-index-author__portraits img")).toHaveLength(3);
+    expect(container.querySelectorAll('.component-index-author[data-placement="intro"] .component-index-author__portraits img')).toHaveLength(3);
+    expect(container.querySelectorAll('.component-index-author[data-placement="docked"] .component-index-author__portraits img')).toHaveLength(3);
   });
 
   it("lists every component with an interactive preview and opens a URL-backed code inspector", async () => {
@@ -60,8 +82,8 @@ describe("design system workspace", () => {
     window.history.replaceState(null, "", "#components");
     const { container } = render(<App />);
 
-    expect(screen.getByRole("heading", { level: 2, name: "Library" })).toBeInTheDocument();
-    expect(container.querySelectorAll(".component-index-row")).toHaveLength(libraryComponents.length);
+    expect(screen.queryByRole("heading", { level: 2, name: "Library" })).not.toBeInTheDocument();
+    expect(container.querySelectorAll(".component-index-row")).toHaveLength(publicLibraryItems.filter((item) => item.collection === "Core").length);
     expect(container.querySelector('.component-index-row[data-component="kbd"]')).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /^Interaction$/ })).not.toBeInTheDocument();
     expect(container.querySelector('.component-index-row[data-component="shared-detail"]')).not.toBeInTheDocument();
@@ -82,6 +104,7 @@ describe("design system workspace", () => {
     await user.type(search, "table");
     expect(container.querySelectorAll(".component-index-row")).toHaveLength(1);
     expect(screen.getByRole("link", { name: "Open Table code" })).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Open Data Table code" })).not.toBeInTheDocument();
     expect(screen.queryByRole("link", { name: "Open Button code" })).not.toBeInTheDocument();
 
     await user.click(screen.getByRole("link", { name: "Open Table code" }));
@@ -93,7 +116,7 @@ describe("design system workspace", () => {
     expect(within(inspector).getByRole("button", { name: "Copy Table React source" })).toBeInTheDocument();
     await user.click(within(inspector).getByRole("button", { name: "CSS" }));
     expect(within(inspector).getByText("table.css", { exact: true })).toBeInTheDocument();
-    expect(within(inspector).getByRole("region", { name: "Table CSS source" })).toHaveTextContent(".whatiuse-table");
+    await waitFor(() => expect(within(inspector).getByRole("region", { name: "Table CSS source" })).toHaveTextContent(".whatiuse-table"));
     expect(within(inspector).getByRole("link", { name: "Accessibility & API" })).toHaveAttribute("href", "#table");
 
     await user.keyboard("{Escape}");
@@ -101,18 +124,26 @@ describe("design system workspace", () => {
     expect(window.location.hash).toBe("#components");
   });
 
-  it("keeps Data and Analytics as focused Library collections", async () => {
+  it("switches between Core, Data, and Analytics from one collection rail", async () => {
     const user = userEvent.setup();
     window.history.replaceState(null, "", "#components");
     const { container } = render(<App />);
 
+    expect(screen.getByRole("tablist", { name: "Component collections" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Core" })).toHaveAttribute("aria-selected", "true");
+    expect(container.querySelectorAll(".component-index-row")).toHaveLength(publicLibraryItems.filter((item) => item.collection === "Core").length);
+    expect(screen.getByRole("tabpanel", { name: "Core" })).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Open Data Table code" })).not.toBeInTheDocument();
+
     await user.click(screen.getByRole("tab", { name: "Data" }));
-    expect(container.querySelectorAll(".component-index-row")).toHaveLength(18);
+    expect(screen.getByRole("tab", { name: "Data" })).toHaveAttribute("aria-selected", "true");
+    expect(container.querySelectorAll(".component-index-row")).toHaveLength(publicLibraryItems.filter((item) => item.collection === "Data").length);
     expect(screen.getByRole("link", { name: "Open Data Table code" })).toHaveAttribute("href", "#components/data-table");
     expect(screen.queryByRole("button", { name: "Controls" })).not.toBeInTheDocument();
 
     await user.click(screen.getByRole("tab", { name: "Analytics" }));
-    expect(container.querySelectorAll(".component-index-row")).toHaveLength(17);
+    expect(screen.getByRole("tab", { name: "Analytics" })).toHaveAttribute("aria-selected", "true");
+    expect(container.querySelectorAll(".component-index-row")).toHaveLength(publicLibraryItems.filter((item) => item.collection === "Analytics").length);
     expect(screen.getByRole("link", { name: "Open Chart code" })).toHaveAttribute("href", "#components/chart");
 
     await user.click(screen.getByRole("link", { name: "Open Chart code" }));
@@ -123,9 +154,8 @@ describe("design system workspace", () => {
   it("switches the live documentation when a component is selected", async () => {
     const user = userEvent.setup();
     render(<App />);
-    const catalog = screen.getByRole("region", { name: "Component catalog" });
 
-    await user.click(within(catalog).getByRole("link", { name: /^Menu$/ }));
+    await openComponentFromSearch(user, "Menu");
 
     expect(screen.getByRole("heading", { level: 1, name: "Menu" })).toBeInTheDocument();
     expect(window.location.hash).toBe("#menu");
@@ -176,6 +206,30 @@ describe("design system workspace", () => {
     expect(componentCatalog.parentElement?.parentElement).toHaveAttribute("aria-hidden", "true");
     expect(componentCatalog.parentElement?.parentElement).toHaveAttribute("inert");
     expect(screen.getByRole("region", { name: "Foundation catalog" })).toBeInTheDocument();
+  });
+
+  it("keeps the public documentation IA small and task-based", async () => {
+    const user = userEvent.setup();
+    window.history.replaceState(null, "", "#installation");
+    render(<App />);
+
+    const gettingStarted = screen.getByRole("region", { name: "Getting started documentation" });
+    expect(within(gettingStarted).getAllByRole("link").map((link) => link.textContent)).toEqual(["Installation", "Coding agents"]);
+
+    await user.click(screen.getByRole("button", { name: "Reference" }));
+    const reference = screen.getByRole("region", { name: "Reference documentation" });
+    expect(within(reference).getAllByRole("link").map((link) => link.textContent)).toEqual(["Compatibility", "Accessibility", "Open source"]);
+    expect(screen.queryByRole("link", { name: "Browser support" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Contributing" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Releases" })).not.toBeInTheDocument();
+  });
+
+  it("keeps retired documentation hashes as compact reference aliases", async () => {
+    window.history.replaceState(null, "", "#browser-support");
+    render(<App />);
+
+    expect(await screen.findByRole("heading", { level: 1, name: "Compatibility" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 2, name: "Browsers" })).toBeInTheDocument();
   });
 
   it("opens each foundation as a dedicated document route", async () => {
@@ -263,8 +317,8 @@ describe("design system workspace", () => {
     expect(actions).toHaveTextContent("whatiuse");
     expect(actions).not.toHaveTextContent("Components");
     expect(screen.queryByText("Alpha")).not.toBeInTheDocument();
-    expect(within(catalog).getByRole("link", { name: "Button" })).toHaveAttribute("aria-current", "page");
-    expect(within(catalog).getByRole("link", { name: "Icon Button" })).not.toHaveAttribute("aria-current");
+    expect(within(catalog).getAllByRole("link").map((link) => link.textContent)).toEqual(["Core", "Data", "Analytics"]);
+    expect(within(catalog).queryByRole("link", { name: "Button" })).not.toBeInTheDocument();
     expect(screen.getByLabelText("Button reference summary")).toHaveTextContent("Base UI");
     expect(screen.getByLabelText("Button reference summary")).toHaveTextContent("whatiuse");
   });
@@ -351,11 +405,10 @@ describe("design system workspace", () => {
   it("returns to the preview when the user moves to another component", async () => {
     const user = userEvent.setup();
     render(<App />);
-    const catalog = screen.getByRole("region", { name: "Component catalog" });
 
     await user.click(screen.getByText("Show code"));
     expect(screen.getByText("Show code").closest("details")).toHaveAttribute("open");
-    await user.click(within(catalog).getByRole("link", { name: /^Dialog$/ }));
+    await openComponentFromSearch(user, "Dialog");
 
     expect(screen.getByRole("heading", { level: 1, name: "Dialog" })).toBeInTheDocument();
     expect(screen.getByText("Show code").closest("details")).not.toHaveAttribute("open");
@@ -372,8 +425,7 @@ describe("design system workspace", () => {
   it("publishes every component route with a component-specific state contract", () => {
     const { container } = render(<App />);
     const catalog = screen.getByRole("region", { name: "Component catalog" });
-    const componentIds = new Set(components.map((component) => `#${component.id}`));
-    expect(within(catalog).getAllByRole("link").filter((link) => componentIds.has(link.getAttribute("href") ?? ""))).toHaveLength(libraryComponents.length);
+    expect(within(catalog).getAllByRole("link").map((link) => link.textContent)).toEqual(["Core", "Data", "Analytics"]);
     expect(container.querySelectorAll(".state-tile")).toHaveLength(componentGuidance.button.states.length);
     expect(Object.keys(componentGuidance)).toHaveLength(components.length);
     for (const guidance of Object.values(componentGuidance)) {
@@ -425,15 +477,14 @@ describe("design system workspace", () => {
     const user = userEvent.setup();
     window.history.replaceState(null, "", "#context-switcher");
     const { container } = render(<App />);
-    const catalog = screen.getByRole("region", { name: "Component catalog" });
 
     expect(container.querySelectorAll(".state-control-stack > .state-inline-surface")).toHaveLength(3);
     expect(container.querySelector(".whatiuse-context-switcher__popup")).not.toBeInTheDocument();
 
-    await user.click(within(catalog).getByRole("link", { name: "Popover" }));
+    await openComponentFromSearch(user, "Popover");
     expect(container.querySelectorAll('.state-overlay-stack[data-composition="compound"]')).toHaveLength(componentGuidance.popover.states.length);
 
-    await user.click(within(catalog).getByRole("link", { name: "Tooltip" }));
+    await openComponentFromSearch(user, "Tooltip");
     expect(container.querySelector('.state-overlay-stack[data-composition="compound"]')).not.toBeInTheDocument();
   });
 
@@ -450,8 +501,7 @@ describe("design system workspace", () => {
   it("keeps overlay specimens closed until the user presses a trigger", async () => {
     const user = userEvent.setup();
     render(<App />);
-    const catalog = screen.getByRole("region", { name: "Component catalog" });
-    await user.click(within(catalog).getByRole("link", { name: "Popover" }));
+    await openComponentFromSearch(user, "Popover");
     expect(screen.queryByRole("dialog", { name: "View options" })).not.toBeInTheDocument();
   });
 

@@ -14,8 +14,8 @@ export declare const whatiuseDataComponentContracts: readonly [{
     readonly useWhen: readonly ["Rows share comparable attributes.", "Sorting, selection, or bounded pagination supports a real task."];
     readonly avoidWhen: readonly ["Records have no meaningful shared columns.", "A short list or cards communicate the content more directly."];
     readonly requires: readonly ["Stable row ids", "Human-readable row labels", "Column labels", "Loading, fetching, empty, and error copy"];
-    readonly states: readonly ["default", "sorted", "selected", "resized", "pinned", "loading", "fetching", "empty", "error", "virtualized"];
-    readonly compositionRules: readonly ["Search and filters sit outside the table model.", "Server mode receives already processed rows and a total count.", "Column resizing commits on end.", "Bulk actions appear only after selection.", "Details preserve the selected row identity."];
+    readonly states: readonly ["default", "sorted", "selected", "reordered", "resized", "pinned", "loading", "fetching", "empty", "error", "virtualized"];
+    readonly compositionRules: readonly ["Search and filters sit outside the table model.", "Server mode receives already processed rows and a total count.", "Column order uses stable ids and composes with pinning and visibility.", "Column resizing commits on end.", "Bulk actions appear only after selection.", "Details preserve the selected row identity."];
     readonly accessibility: readonly ["Use semantic table markup.", "Give selection controls record-specific names.", "Expose sort direction with aria-sort.", "Expose resize handles as keyboard-operable separators.", "Virtual rows preserve total row count and row indexes."];
 }, {
     readonly id: "filter-builder";
@@ -26,6 +26,15 @@ export declare const whatiuseDataComponentContracts: readonly [{
     readonly states: readonly ["empty", "editing", "active", "duplicate replacement", "cleared"];
     readonly compositionRules: readonly ["Keep active clauses next to the trigger.", "Replace an identical field/operator pair instead of duplicating it.", "Do not hide active filters inside the flyout."];
     readonly accessibility: readonly ["Announce additions and removals.", "Keep the trigger available after a clause is added.", "Return focus to the trigger when the flyout closes."];
+}, {
+    readonly id: "query-builder";
+    readonly intent: "Draft and apply several field conditions as one explicit query change.";
+    readonly useWhen: readonly ["People need more than a few visible filter chips.", "All-versus-any matching changes the result meaning."];
+    readonly avoidWhen: readonly ["One facet or search field expresses the task.", "The product requires nested Boolean groups or a text query language."];
+    readonly requires: readonly ["Stable field ids", "Supported operator lists", "Controlled applied conditions", "An explicit Apply action"];
+    readonly states: readonly ["empty", "draft", "all", "any", "applied", "cancelled"];
+    readonly compositionRules: readonly ["Draft edits never mutate results before Apply.", "Keep one flat group in the compact component.", "A field change resets incompatible operator and value state."];
+    readonly accessibility: readonly ["Label every condition row and input.", "Keep add and remove actions keyboard reachable.", "All and Any use single-selection semantics."];
 }, {
     readonly id: "data-toolbar";
     readonly intent: "Keep view, search, filter, and display controls in one compact product boundary.";
@@ -41,18 +50,27 @@ export declare const whatiuseDataComponentContracts: readonly [{
     readonly useWhen: readonly ["People repeatedly return to the same collection configuration.", "System and personal views have distinct ownership."];
     readonly avoidWhen: readonly ["Only one view exists.", "The saved object is a report or dashboard rather than collection state."];
     readonly requires: readonly ["Stable view ids", "Visible view names", "Explicit personal-view management callbacks"];
-    readonly states: readonly ["system view", "personal view", "selected", "save", "update", "delete"];
+    readonly states: readonly ["system view", "personal view", "selected", "share", "save", "update", "delete"];
     readonly compositionRules: readonly ["Persist query and display state, never transient selection.", "Keep system views immutable.", "A deleted current view falls back to a valid system view."];
     readonly accessibility: readonly ["Expose the current view in the trigger name.", "Use one radio group for mutually exclusive views.", "Return focus to the trigger after selection."];
 }, {
-    readonly id: "column-visibility-menu";
-    readonly intent: "Let people reduce or restore table columns while protecting required comparison context.";
+    readonly id: "column-manager";
+    readonly intent: "Let people choose, order, pin, and restore table columns while protecting required comparison context.";
     readonly useWhen: readonly ["A table has optional columns.", "Horizontal space or task focus changes by person."];
     readonly avoidWhen: readonly ["Every column is essential.", "Hiding columns changes the meaning of exported data without disclosure."];
-    readonly requires: readonly ["Stable column ids", "Human labels", "Required-column flags"];
-    readonly states: readonly ["all visible", "partially visible", "required", "reset sizing"];
-    readonly compositionRules: readonly ["Keep at least one meaningful identity column visible.", "Visibility does not mutate source data.", "Persist the preference separately from server query state."];
-    readonly accessibility: readonly ["Announce the visible-column count in the trigger.", "Required columns remain disabled and named.", "Checkbox state mirrors the rendered table."];
+    readonly requires: readonly ["Stable column ids", "Human labels", "Required-column flags", "Controlled order and pinning when those features are exposed"];
+    readonly states: readonly ["all visible", "partially visible", "required", "reordered", "pinned start", "pinned end", "reset sizing"];
+    readonly compositionRules: readonly ["Keep at least one meaningful identity column visible.", "Visibility and order do not mutate source data.", "Pinned regions remain visually separate from unpinned order.", "Persist display preferences separately from server query state."];
+    readonly accessibility: readonly ["Announce the visible-column count in the trigger.", "Required columns remain disabled and named.", "Every move and pin action includes the column name.", "Checkbox state mirrors the rendered table."];
+}, {
+    readonly id: "editable-cell";
+    readonly intent: "Edit one compact value in place without turning the whole row into a form.";
+    readonly useWhen: readonly ["One short value changes independently.", "Immediate context is more useful than a separate edit page."];
+    readonly avoidWhen: readonly ["Several fields must validate together.", "The value requires a complex picker or irreversible confirmation."];
+    readonly requires: readonly ["A visible current value", "Async commit callback", "Cancel behavior", "Concrete validation copy"];
+    readonly states: readonly ["idle", "editing", "saving", "error", "disabled"];
+    readonly compositionRules: readonly ["Preserve the cell width across states.", "Enter saves and Escape cancels.", "A failed save keeps the draft available.", "Do not nest the editor inside another interactive row trigger."];
+    readonly accessibility: readonly ["Name the edit trigger with the field.", "Move focus into the input when editing starts.", "Restore focus after save or cancel.", "Announce save errors without moving focus away from the input."];
 }, {
     readonly id: "facet-filter";
     readonly intent: "Filter by several values from one small enumerable dimension with visible selection count.";
@@ -104,7 +122,7 @@ export declare const whatiuseDataComponentContracts: readonly [{
     readonly useWhen: readonly ["Two or more records can receive the same reversible action."];
     readonly avoidWhen: readonly ["The action needs record-by-record confirmation.", "Nothing is selected."];
     readonly requires: readonly ["Selection count", "At least one action", "A clear-selection path"];
-    readonly states: readonly ["hidden", "visible", "busy", "error"];
+    readonly states: readonly ["hidden", "visible", "busy", "complete", "undo", "error"];
     readonly compositionRules: readonly ["Overlay or reserve space so the table does not jump.", "Place destructive actions after neutral actions.", "Use Undo for reversible completion."];
     readonly accessibility: readonly ["Announce the selection count.", "Keep focus stable after an action.", "Give clear-selection an explicit label."];
 }, {
@@ -144,6 +162,15 @@ export declare const whatiuseDataComponentContracts: readonly [{
     readonly compositionRules: readonly ["Export only declared columns.", "Keep visible and selected scopes separate.", "Neutralize spreadsheet formula prefixes in CSV output."];
     readonly accessibility: readonly ["Announce the exported row count and format.", "Keep every export option keyboard reachable.", "Do not infer sensitive columns from rendered cells."];
 }, {
+    readonly id: "data-export-progress";
+    readonly intent: "Expose the state of a background export without blocking the collection that started it.";
+    readonly useWhen: readonly ["Export generation is asynchronous.", "People may cancel, retry, or download after completion."];
+    readonly avoidWhen: readonly ["The download is immediate.", "The backend cannot expose truthful progress or completion state."];
+    readonly requires: readonly ["Stable export job state", "Progress or honest indeterminate status", "Cancel, retry, or download callbacks when supported"];
+    readonly states: readonly ["idle", "running", "complete", "error", "cancelled"];
+    readonly compositionRules: readonly ["Keep the status geometry stable.", "Do not infer progress from elapsed time.", "Completion belongs to the originating export job.", "Retry creates or resumes an explicit job."];
+    readonly accessibility: readonly ["Expose determinate progress with progressbar semantics.", "Announce completion and failure once.", "Keep action labels explicit and keyboard reachable."];
+}, {
     readonly id: "property-list";
     readonly intent: "Read stable object metadata as compact label-value relationships.";
     readonly useWhen: readonly ["A detail surface contains several short facts.", "Labels and values need repeatable alignment."];
@@ -163,18 +190,18 @@ export declare const whatiuseDataComponentContracts: readonly [{
     readonly accessibility: readonly ["Use ordered-list semantics.", "Keep actor and action as text.", "A selectable event is one button, not several nested targets."];
 }, {
     readonly id: "data-state";
-    readonly intent: "Reserve collection geometry while communicating loading, empty, or failed data.";
+    readonly intent: "Reserve collection geometry while communicating loading, empty, failed, or permission-limited data.";
     readonly useWhen: readonly ["A table, list, or chart needs one shared state surface."];
     readonly avoidWhen: readonly ["Inline field feedback is sufficient.", "Existing content can remain visible during a background refresh."];
     readonly requires: readonly ["Concrete title", "Recovery or next action when one exists"];
-    readonly states: readonly ["loading", "empty", "error"];
-    readonly compositionRules: readonly ["Keep the state inside the owning collection frame.", "Background fetching does not replace usable data with loading.", "Error actions describe recovery, not generic dismissal."];
-    readonly accessibility: readonly ["Loading and empty use status semantics.", "Errors use alert semantics.", "Icons stay redundant with text."];
+    readonly states: readonly ["loading", "empty", "error", "forbidden"];
+    readonly compositionRules: readonly ["Keep the state inside the owning collection frame.", "Background fetching does not replace usable data with loading.", "Error actions describe recovery, not generic dismissal.", "Permission copy names the next responsible person or role."];
+    readonly accessibility: readonly ["Loading, empty, and permission states use status semantics.", "Errors use alert semantics.", "Icons stay redundant with text."];
 }];
 export declare const whatiuseDataViewStateContract: {
     readonly version: 1;
     readonly serverOwned: readonly ["query", "filters", "sorting", "grouping", "pagination", "dateRange"];
-    readonly viewOwned: readonly ["columnVisibility", "columnSizing", "columnPinning", "density", "viewId"];
+    readonly viewOwned: readonly ["columnVisibility", "columnOrder", "columnSizing", "columnPinning", "density", "viewId"];
     readonly transient: readonly ["selection", "resize draft", "fetching status", "open overlays"];
     readonly rules: readonly ["URL state and server requests derive from the same validated DataViewState.", "Server requests never include column sizing, pinning, or overlay state.", "Saved views persist query and display state, but never selection or in-flight work.", "Query, filter, sort, and date changes reset pagination to page one.", "Unknown URL and storage values are ignored instead of trusted."];
 };

@@ -19,6 +19,7 @@ describe("Data view state", () => {
       sorting: [{ id: "revenue", direction: "desc" }],
       pagination: { page: 3, pageSize: 50 },
       columnVisibility: { owner: false },
+      columnOrder: ["customer", "revenue", "owner"],
       columnSizing: { customer: 280 },
       columnPinning: { start: ["customer"], end: ["actions"] },
       dateRange: { from: "2026-07-01", to: "2026-07-31" },
@@ -36,6 +37,7 @@ describe("Data view state", () => {
     const current = createDataViewState({ pagination: { page: 7, pageSize: 25 } });
     expect(patchDataViewState(current, { query: "critical" }).pagination.page).toBe(1);
     expect(patchDataViewState(current, { columnVisibility: { owner: false } }).pagination.page).toBe(7);
+    expect(patchDataViewState(current, { columnOrder: ["status", "owner"] }).pagination.page).toBe(7);
   });
 
   it("serializes only changes from a recipe baseline", () => {

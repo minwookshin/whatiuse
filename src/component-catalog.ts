@@ -66,10 +66,11 @@ export const dataLibraryComponents = [
   { id: "filter-builder", name: "Filters", collection: "Data", description: "Small visible conditions that stay attached to the list they change.", docsHref: "#product-pilot" },
   { id: "data-toolbar", name: "Data Toolbar", collection: "Data", description: "Search, view, and column controls in one compact product row.", docsHref: "#product-pilot" },
   { id: "saved-view-menu", name: "Saved Views", collection: "Data", description: "Named collection states with explicit personal-view management.", docsHref: "#product-pilot" },
-  { id: "column-visibility-menu", name: "Columns", collection: "Data", description: "Visible-column choices that preserve required product context.", docsHref: "#product-pilot" },
+  { id: "column-manager", name: "Column Manager", collection: "Data", description: "Visibility, order, pinning, and width reset in one focused display control.", docsHref: "#product-pilot" },
+  { id: "editable-cell", name: "Editable Cell", collection: "Data", description: "Compact in-place editing with save, cancel, validation, and async recovery.", docsHref: "#product-pilot" },
   { id: "facet-filter", name: "Facet Filter", collection: "Data", description: "Fast multi-selection for small enumerable dimensions and counts.", docsHref: "#product-pilot" },
   { id: "data-sort-menu", name: "Sort", collection: "Data", description: "One explicit field and direction for predictable collection order.", docsHref: "#product-pilot" },
-  { id: "data-group-menu", name: "Group", collection: "Data", description: "A single grouping dimension without turning the toolbar into a query builder.", docsHref: "#product-pilot" },
+  { id: "data-group-menu", name: "Group", collection: "Data", description: "A single grouping dimension that keeps the toolbar compact.", docsHref: "#product-pilot" },
   { id: "data-density-control", name: "Density", collection: "Data", description: "Compact, default, and comfortable row rhythm as a user preference.", docsHref: "#product-pilot" },
   { id: "data-result-summary", name: "Result Summary", collection: "Data", description: "Visible, filtered, and selected record counts in one quiet status line.", docsHref: "#product-pilot" },
   { id: "bulk-action-bar", name: "Bulk Actions", collection: "Data", description: "Selection-aware actions that stay close to the affected records.", docsHref: "#product-pilot" },
@@ -77,9 +78,10 @@ export const dataLibraryComponents = [
   { id: "cursor-pagination", name: "Cursor Pagination", collection: "Data", description: "Previous and next traversal when total page counts are unknown or unstable.", docsHref: "#product-pilot" },
   { id: "date-range-filter", name: "Date Range", collection: "Data", description: "Preset or exact date boundaries in one small temporary surface.", docsHref: "#product-pilot" },
   { id: "data-export-menu", name: "Export", collection: "Data", description: "Download visible or selected records as CSV or JSON.", docsHref: "#product-pilot" },
+  { id: "data-export-progress", name: "Export Progress", collection: "Data", description: "Background export progress with cancel, retry, and download states.", docsHref: "#product-pilot" },
   { id: "property-list", name: "Property List", collection: "Data", description: "Dense label-value metadata for inspectors, details, and settings summaries.", docsHref: "#product-pilot" },
   { id: "audit-log", name: "Audit Log", collection: "Data", description: "Chronological product events with actors, targets, time, and optional evidence.", docsHref: "#product-pilot" },
-  { id: "data-state", name: "Data State", collection: "Data", description: "Stable loading, empty, and error feedback for any collection surface.", docsHref: "#product-pilot" },
+  { id: "data-state", name: "Data State", collection: "Data", description: "Stable loading, empty, error, and permission feedback for any collection surface.", docsHref: "#product-pilot" },
 ] as const;
 
 export const analyticsLibraryComponents = [

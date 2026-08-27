@@ -2,13 +2,12 @@
 
 import "../../styles/whatiuse-base.css";
 import "../../styles/components/data-toolbar.css";
-import { ArrowCounterClockwise, CaretDown, Check, FloppyDisk, SlidersHorizontal, Trash } from "@phosphor-icons/react";
+import { ArrowCounterClockwise, CaretDown, FloppyDisk, LinkSimple, Trash } from "@phosphor-icons/react";
 import type { HTMLAttributes, ReactNode } from "react";
 import { cn } from "../../lib/cn";
 import { Button } from "./button";
 import {
   Menu,
-  MenuCheckboxItem,
   MenuContent,
   MenuItem,
   MenuLabel,
@@ -43,10 +42,11 @@ export type SavedViewsProps = {
   onSaveCurrent?: () => void;
   onUpdateCurrent?: () => void;
   onDeleteCurrent?: () => void;
+  onCopyLink?: () => void;
   label?: string;
 };
 
-export function SavedViews({ views, value, onValueChange, onSaveCurrent, onUpdateCurrent, onDeleteCurrent, label = "View" }: SavedViewsProps) {
+export function SavedViews({ views, value, onValueChange, onSaveCurrent, onUpdateCurrent, onDeleteCurrent, onCopyLink, label = "View" }: SavedViewsProps) {
   const selected = views.find((view) => view.id === value) ?? views[0];
   const canManageCurrent = selected?.scope === "personal";
   return (
@@ -57,38 +57,11 @@ export function SavedViews({ views, value, onValueChange, onSaveCurrent, onUpdat
         <MenuRadioGroup value={value} onValueChange={(nextValue) => onValueChange(nextValue)}>
           {views.map((view) => <MenuRadioItem key={view.id} value={view.id} closeOnClick><span className="whatiuse-saved-views__copy"><strong>{view.label}</strong>{view.description && <small>{view.description}</small>}</span>{typeof view.count === "number" && <small className="whatiuse-saved-views__count">{view.count}</small>}</MenuRadioItem>)}
         </MenuRadioGroup>
-        {(onSaveCurrent || (canManageCurrent && (onUpdateCurrent || onDeleteCurrent))) && <MenuSeparator />}
+        {(onCopyLink || onSaveCurrent || (canManageCurrent && (onUpdateCurrent || onDeleteCurrent))) && <MenuSeparator />}
+        {onCopyLink && <MenuItem onClick={onCopyLink}><LinkSimple aria-hidden="true" />Copy view link</MenuItem>}
         {onSaveCurrent && <MenuItem onClick={onSaveCurrent}><FloppyDisk aria-hidden="true" />Save as new view</MenuItem>}
         {canManageCurrent && onUpdateCurrent && <MenuItem onClick={onUpdateCurrent}><ArrowCounterClockwise aria-hidden="true" />Update current view</MenuItem>}
         {canManageCurrent && onDeleteCurrent && <MenuItem className="whatiuse-menu__item--danger" onClick={onDeleteCurrent}><Trash aria-hidden="true" />Delete current view</MenuItem>}
-      </MenuContent>
-    </Menu>
-  );
-}
-
-export type ColumnManagerColumn = {
-  id: string;
-  label: string;
-  visible: boolean;
-  required?: boolean;
-};
-
-export type ColumnManagerProps = {
-  columns: readonly ColumnManagerColumn[];
-  onVisibilityChange: (id: string, visible: boolean) => void;
-  onResetSizing?: () => void;
-  label?: string;
-};
-
-export function ColumnManager({ columns, onVisibilityChange, onResetSizing, label = "Columns" }: ColumnManagerProps) {
-  const visibleCount = columns.filter((column) => column.visible).length;
-  return (
-    <Menu>
-      <MenuTrigger render={<Button size="small" variant="ghost" leadingIcon={<SlidersHorizontal />} aria-label={`${visibleCount} of ${columns.length} columns visible`} />}>{label}</MenuTrigger>
-      <MenuContent className="whatiuse-column-manager" align="end">
-        <MenuLabel>Visible columns</MenuLabel>
-        {columns.map((column) => <MenuCheckboxItem key={column.id} checked={column.visible} disabled={column.required} closeOnClick={false} onCheckedChange={(checked) => onVisibilityChange(column.id, checked)}>{column.label}{column.required && <span className="whatiuse-column-manager__required"><Check aria-hidden="true" />Required</span>}</MenuCheckboxItem>)}
-        {onResetSizing && <><MenuSeparator /><MenuItem onClick={onResetSizing}><ArrowCounterClockwise aria-hidden="true" />Reset column widths</MenuItem></>}
       </MenuContent>
     </Menu>
   );

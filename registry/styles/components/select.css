@@ -44,14 +44,14 @@
   box-shadow: var(--whatiuse-shadow-flyout);
   color: var(--whatiuse-ink);
   transform-origin: var(--transform-origin);
-  transition: opacity var(--whatiuse-enter-duration) var(--whatiuse-ease-out, ease-out), transform var(--whatiuse-enter-duration) var(--whatiuse-ease-out, ease-out);
+  transition: opacity var(--whatiuse-flyout-enter-duration) var(--whatiuse-ease-out, ease-out), transform var(--whatiuse-flyout-enter-duration) var(--whatiuse-ease-out, ease-out);
 }
 
 .whatiuse-select-popup[data-starting-style] { opacity: 0; transform: translateY(-2px) scale(0.99); }
 
 .whatiuse-select-popup[data-ending-style] { opacity: 0; transform: translateY(-1px) scale(0.995); }
 
-.whatiuse-select-popup[data-ending-style] { transition-duration: var(--whatiuse-exit-duration); }
+.whatiuse-select-popup[data-ending-style] { transition-duration: var(--whatiuse-flyout-exit-duration); }
 
 .whatiuse-select-popup:focus-visible,
 .whatiuse-select-item:focus-visible { outline: 0; }

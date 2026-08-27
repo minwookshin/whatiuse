@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, userEvent, within } from "storybook/test";
+import { expect, userEvent, waitFor, within } from "storybook/test";
 import {
   AnalyticsRendererGallery,
   ConversionRetentionRecipe,
@@ -57,7 +57,7 @@ export const ProductUsage: Story = {
     plot.focus();
     await userEvent.keyboard("{Home}");
     await expect(canvas.getByText("12 accounts", { selector: ".whatiuse-analytics-recipe__header small" })).toBeVisible();
-    await expect(canvas.getByText("Aug 3", { selector: ".whatiuse-analytics-inspection > strong" })).toBeVisible();
+    await waitFor(() => expect(canvas.getByText("Aug 3", { selector: ".whatiuse-analytics-inspection > strong" })).toBeVisible());
     canvasElement.dataset.storyReady = "true";
   },
 };

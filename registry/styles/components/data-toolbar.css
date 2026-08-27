@@ -52,19 +52,6 @@
 
 .whatiuse-saved-views__count { margin-left: auto; font-variant-numeric: tabular-nums; }
 
-.whatiuse-column-manager { min-width: 216px; }
-
-.whatiuse-column-manager__required {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  margin-left: auto;
-  color: var(--whatiuse-fg-subtle);
-  font-size: var(--whatiuse-type-metadata);
-}
-
-.whatiuse-column-manager__required svg { width: 10px; height: 10px; }
-
 @media (max-width: 700px) {
 .whatiuse-data-toolbar {
     grid-template-columns: minmax(0, 1fr);

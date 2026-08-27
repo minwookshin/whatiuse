@@ -28,7 +28,7 @@
 
 .whatiuse-alert__content strong { font-size: var(--whatiuse-type-ui); font-weight: 580; letter-spacing: -0.01em; }
 
-.whatiuse-alert__content > span { color: var(--whatiuse-fg-muted); font-size: var(--whatiuse-type-label); line-height: 1.45; }
+.whatiuse-alert__body { display: grid; gap: 7px; color: var(--whatiuse-fg-muted); font-size: var(--whatiuse-type-label); line-height: 1.45; }
 
 .whatiuse-alert__action { display: inline-flex; align-items: center; }
 

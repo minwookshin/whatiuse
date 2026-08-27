@@ -7,11 +7,11 @@
 
 .whatiuse-tooltip kbd { display: inline-flex; flex: 0 0 auto; align-items: center; justify-content: center; color: var(--whatiuse-ink-tertiary); font-family: inherit; font-size: 10px; line-height: 1; white-space: nowrap; }
 
-.whatiuse-tooltip { display: flex; align-items: center; gap: 8px; max-width: 240px; padding: 6px 8px; border-radius: 5px; background: var(--whatiuse-inverse); color: var(--whatiuse-on-inverse); font-size: 12px; line-height: 1.35; box-shadow: 0 5px 18px rgba(0, 0, 0, 0.18); transform-origin: var(--transform-origin); transition: opacity var(--whatiuse-enter-duration) var(--whatiuse-ease-out), transform var(--whatiuse-enter-duration) var(--whatiuse-ease-out); }
+.whatiuse-tooltip { display: flex; align-items: center; gap: 8px; max-width: 240px; padding: 6px 8px; border-radius: 5px; background: var(--whatiuse-inverse); color: var(--whatiuse-on-inverse); font-size: 12px; line-height: 1.35; box-shadow: 0 5px 18px rgba(0, 0, 0, 0.18); transform-origin: var(--transform-origin); transition: opacity var(--whatiuse-flyout-enter-duration) var(--whatiuse-ease-out), transform var(--whatiuse-flyout-enter-duration) var(--whatiuse-ease-out); }
 
 .whatiuse-tooltip[data-starting-style] { opacity: 0; transform: scale(0.96); }
 
-.whatiuse-tooltip[data-ending-style] { opacity: 0; transform: scale(0.98); transition-duration: var(--whatiuse-exit-duration); }
+.whatiuse-tooltip[data-ending-style] { opacity: 0; transform: scale(0.98); transition-duration: var(--whatiuse-flyout-exit-duration); }
 
 .whatiuse-tooltip[data-instant] { transition-duration: 0ms; }
 

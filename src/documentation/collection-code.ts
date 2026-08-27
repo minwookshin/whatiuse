@@ -26,10 +26,15 @@ export function AccountViews({ view, setView }) {
     { id: "risk", label: "At risk", scope: "personal" },
   ]} />;
 }`,
-  "column-visibility-menu": `import { ColumnVisibilityMenu } from "whatiuse";
+  "column-manager": `import { ColumnManager } from "whatiuse";
 
-export function AccountColumns({ columns, setVisible }) {
-  return <ColumnVisibilityMenu columns={columns} onVisibilityChange={setVisible} />;
+export function AccountColumns({ columns, setVisible, setOrder }) {
+  return <ColumnManager columns={columns} onVisibilityChange={setVisible} onOrderChange={setOrder} />;
+}`,
+  "editable-cell": `import { EditableCell } from "whatiuse";
+
+export function AccountOwner({ owner, saveOwner }) {
+  return <EditableCell value={owner} label="account owner" onCommit={saveOwner} />;
 }`,
   "facet-filter": `import { FacetFilter } from "whatiuse";
 
@@ -94,6 +99,11 @@ export function UpdatedRange({ value, setValue }) {
 
 export function ExportAccounts({ rows, columns }) {
   return <DataExportMenu rows={rows} columns={columns} fileName="accounts" />;
+}`,
+  "data-export-progress": `import { DataExportProgress } from "whatiuse";
+
+export function ExportStatus({ progress, cancel }) {
+  return <DataExportProgress status="running" progress={progress} onCancel={cancel} />;
 }`,
   "property-list": `import { PropertyList } from "whatiuse";
 

@@ -266,3 +266,34 @@ body {
 @media (max-width: 720px) {
   .analytics-story { padding: 24px 16px; }
 }
+
+.data-component-story {
+  display: grid;
+  min-height: 100vh;
+  padding: 48px;
+  place-items: center;
+  color: var(--whatiuse-ink);
+  background: var(--whatiuse-canvas);
+}
+
+.data-component-story__stage {
+  display: grid;
+  width: min(760px, 100%);
+  min-height: 320px;
+  place-items: center;
+  padding: 40px;
+  border-radius: var(--whatiuse-radius-container);
+  background: var(--whatiuse-bg-stage);
+}
+
+.data-component-story__stack {
+  display: grid;
+  width: min(620px, 100%);
+  justify-items: end;
+  gap: 10px;
+}
+
+@media (max-width: 720px) {
+  .data-component-story { padding: 20px; }
+  .data-component-story__stage { min-height: 260px; padding: 24px 16px; }
+}

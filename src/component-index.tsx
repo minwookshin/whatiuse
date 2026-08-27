@@ -5,7 +5,7 @@ import {
   MagnifyingGlass,
   X,
 } from "@phosphor-icons/react";
-import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "motion/react";
+import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { lazy, Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState, type RefObject } from "react";
 import {
   getPublicLibraryItem,
@@ -100,13 +100,14 @@ const overlayPreviews = new Set<PublicLibraryItemId>([
   "filter-builder",
   "data-toolbar",
   "saved-view-menu",
-  "column-visibility-menu",
+  "column-manager",
   "facet-filter",
   "data-sort-menu",
   "data-group-menu",
   "row-actions-menu",
   "date-range-filter",
   "data-export-menu",
+  "data-export-progress",
 ]);
 
 const flagshipPreviews = new Set<PublicLibraryItemId>([
@@ -135,6 +136,7 @@ type WordmarkGeometry = {
   travel: number;
   scale: number;
   dockDistance: number;
+  headerHeight: number;
 };
 
 function readWordmarkGeometry(): WordmarkGeometry {
@@ -144,31 +146,65 @@ function readWordmarkGeometry(): WordmarkGeometry {
     travel: Math.max(0, window.innerHeight / 2 - headerHeight / 2),
     scale: compact ? 3.7 : 4.8,
     dockDistance: Math.max(260, Math.min(480, window.innerHeight * .58)),
+    headerHeight,
   };
 }
 
 function ScrollDockedWordmark({
   pageRef,
+  descriptorRef,
 }: {
   pageRef: RefObject<HTMLDivElement | null>;
+  descriptorRef: RefObject<HTMLDivElement | null>;
 }) {
   const reduceMotion = useReducedMotion();
   const [geometry, setGeometry] = useState(readWordmarkGeometry);
+  const [authorVisible, setAuthorVisible] = useState(false);
   const { scrollY } = useScroll({ container: pageRef });
-  const softenedScrollY = useSpring(scrollY, {
-    stiffness: 420,
-    damping: 54,
-    mass: .45,
-  });
-  const transform = useTransform(
-    softenedScrollY,
+  const travelTransform = useTransform(
+    scrollY,
     [0, geometry.dockDistance],
     [
-      `translate3d(0, ${geometry.travel}px, 0) scale(${geometry.scale})`,
-      "translate3d(0, 0px, 0) scale(1)",
+      `translate3d(0, ${geometry.travel}px, 0)`,
+      "translate3d(0, 0px, 0)",
     ],
     { clamp: true },
   );
+  const wordmarkScale = useTransform(
+    scrollY,
+    [0, geometry.dockDistance],
+    [`scale(${geometry.scale})`, "scale(1)"],
+    { clamp: true },
+  );
+  useEffect(() => {
+    const page = pageRef.current;
+    const descriptor = descriptorRef.current;
+    if (!page || !descriptor) return;
+
+    const updateFromGeometry = () => {
+      const pageBox = page.getBoundingClientRect();
+      const descriptorBox = descriptor.getBoundingClientRect();
+      const nextVisible = page.scrollTop > 0 && descriptorBox.bottom <= pageBox.top + geometry.headerHeight;
+      setAuthorVisible((current) => current === nextVisible ? current : nextVisible);
+    };
+
+    if (typeof IntersectionObserver === "undefined") {
+      updateFromGeometry();
+      page.addEventListener("scroll", updateFromGeometry, { passive: true });
+      return () => page.removeEventListener("scroll", updateFromGeometry);
+    }
+
+    const observer = new IntersectionObserver(([entry]) => {
+      const nextVisible = !entry?.isIntersecting;
+      setAuthorVisible((current) => current === nextVisible ? current : nextVisible);
+    }, {
+      root: page,
+      rootMargin: `-${geometry.headerHeight}px 0px 0px 0px`,
+      threshold: 0,
+    });
+    observer.observe(descriptor);
+    return () => observer.disconnect();
+  }, [descriptorRef, geometry.headerHeight, pageRef]);
 
   useLayoutEffect(() => {
     const updateGeometry = () => setGeometry(readWordmarkGeometry());
@@ -180,23 +216,36 @@ function ScrollDockedWordmark({
   return (
     <motion.div
       className="whatiuse-wordmark whatiuse-wordmark--scroll-docked"
-      aria-hidden="true"
-      style={{ transform: reduceMotion ? "translate3d(0, 0, 0) scale(1)" : transform }}
+      style={{ transform: reduceMotion ? "translate3d(0, 0, 0)" : travelTransform }}
     >
-      <strong>whatiuse</strong>
+      <motion.strong aria-hidden="true" style={{ transform: reduceMotion ? "scale(1)" : wordmarkScale }}>whatiuse</motion.strong>
+      <span
+        className="component-index-author-docked"
+        aria-hidden={!authorVisible}
+        data-visible={authorVisible || undefined}
+      >
+        <AuthorIdentity placement="docked" interactive={authorVisible} />
+      </span>
     </motion.div>
   );
 }
 
-function AuthorIdentity() {
+function AuthorIdentity({
+  placement = "intro",
+  interactive = true,
+}: {
+  placement?: "intro" | "docked";
+  interactive?: boolean;
+}) {
   return (
-    <span className="component-index-author">
+    <span className="component-index-author" data-placement={placement}>
       <a
         className="component-index-author__link"
         href="https://www.minwookshin.com/"
         target="_blank"
         rel="noreferrer"
         aria-label="@minwook — portfolio"
+        tabIndex={interactive ? undefined : -1}
       >
         @minwook
       </a>
@@ -298,6 +347,7 @@ export function ComponentIndexPage({
   onThemeChange,
 }: ComponentIndexPageProps) {
   const pageRef = useRef<HTMLDivElement>(null);
+  const descriptorRef = useRef<HTMLDivElement>(null);
   const catalogRef = useRef<HTMLDivElement>(null);
   const [collection, setCollection] = useState<LibraryCollection>("Core");
   const [query, setQuery] = useState("");
@@ -358,6 +408,20 @@ export function ComponentIndexPage({
     setQuery("");
   };
 
+  const handleCollectionKeys = (event: React.KeyboardEvent<HTMLButtonElement>, currentIndex: number) => {
+    let nextIndex = currentIndex;
+    if (event.key === "ArrowRight") nextIndex = (currentIndex + 1) % libraryCollections.length;
+    else if (event.key === "ArrowLeft") nextIndex = (currentIndex - 1 + libraryCollections.length) % libraryCollections.length;
+    else if (event.key === "Home") nextIndex = 0;
+    else if (event.key === "End") nextIndex = libraryCollections.length - 1;
+    else return;
+
+    event.preventDefault();
+    const nextCollection = libraryCollections[nextIndex];
+    selectCollection(nextCollection);
+    document.getElementById(`component-index-collection-${nextCollection.toLocaleLowerCase()}`)?.focus();
+  };
+
   const copyInstall = async (id: PublicLibraryItemId) => {
     const command = getComponentInstallCommand(id);
     if (!await copyText(command)) return;
@@ -390,26 +454,36 @@ export function ComponentIndexPage({
           }}>Skip to main content</a>
 
           <header className="landing-header component-index-header">
-            <ScrollDockedWordmark pageRef={pageRef} />
+            <ScrollDockedWordmark pageRef={pageRef} descriptorRef={descriptorRef} />
             <PublicHeaderActions theme={theme} onThemeChange={onThemeChange} />
           </header>
 
           <main id="component-index-content" tabIndex={-1}>
             <section className="component-index-intro" aria-labelledby="component-index-title">
               <span className="component-index-intro__static-wordmark" aria-hidden="true">whatiuse</span>
-              <div className="component-index-intro__descriptor">
+              <div ref={descriptorRef} className="component-index-intro__descriptor">
                 <h1 id="component-index-title">components i use.</h1>
                 <AuthorIdentity />
               </div>
             </section>
 
-            <div className="component-index-library-heading">
-              <h2>Library</h2>
-            </div>
-
             <div className="component-index-toolbar">
               <div className="component-index-collections" role="tablist" aria-label="Component collections">
-                {libraryCollections.map((item) => <button key={item} type="button" role="tab" aria-selected={collection === item} onClick={() => selectCollection(item)}>{item}</button>)}
+                {libraryCollections.map((item, index) => (
+                  <button
+                    id={`component-index-collection-${item.toLocaleLowerCase()}`}
+                    key={item}
+                    type="button"
+                    role="tab"
+                    aria-controls="component-index-catalog"
+                    aria-selected={collection === item}
+                    tabIndex={collection === item ? 0 : -1}
+                    onClick={() => selectCollection(item)}
+                    onKeyDown={(event) => handleCollectionKeys(event, index)}
+                  >
+                    {item}
+                  </button>
+                ))}
               </div>
               <div className="component-index-search">
                 <MagnifyingGlass aria-hidden="true" />
@@ -423,7 +497,14 @@ export function ComponentIndexPage({
 
             <div ref={catalogRef} className="component-index-groups">
               {visibleGroups.map(({ group, items }) => (
-                <section className="component-index-group" data-collection={collection.toLocaleLowerCase()} key={group} aria-label={`${group} components`}>
+                <section
+                  id="component-index-catalog"
+                  className="component-index-group"
+                  data-collection={group.toLocaleLowerCase()}
+                  key={group}
+                  role="tabpanel"
+                  aria-labelledby={`component-index-collection-${group.toLocaleLowerCase()}`}
+                >
                   <ul aria-label={`${group} components`}>
                     {items.map((component) => (
                       <CatalogRow
@@ -442,7 +523,6 @@ export function ComponentIndexPage({
             </div>
 
             <footer className="component-index-footer">
-              <a href="https://www.minwookshin.com/" target="_blank" rel="noreferrer">made by minwook</a>
               <a href="#licensing">MIT license</a>
             </footer>
           </main>

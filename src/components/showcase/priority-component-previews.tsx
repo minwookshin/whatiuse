@@ -135,7 +135,7 @@ export function IssueActionsMenuPreview() {
       </div>
       <Menu>
         <MenuTrigger render={<Button variant="secondary" size="small" trailingIcon={<CaretDown />}>Actions</Button>} />
-        <MenuContent className="whatiuse-issue-actions-menu" aria-label="Issue actions">
+        <MenuContent className="whatiuse-issue-actions-menu" aria-label="Issue actions" align="end">
           <MenuLabel>Issue</MenuLabel>
           <MenuCheckboxItem
             checked={following}

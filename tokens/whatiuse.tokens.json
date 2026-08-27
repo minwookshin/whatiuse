@@ -289,8 +289,16 @@
           "$description": "Immediate press and release feedback.",
           "$value": { "value": 110, "unit": "ms" }
         },
+        "flyout-enter-duration": {
+          "$description": "Anchored tooltip, menu, select, and popover entrance.",
+          "$value": { "value": 140, "unit": "ms" }
+        },
+        "flyout-exit-duration": {
+          "$description": "Anchored temporary surface exit.",
+          "$value": { "value": 100, "unit": "ms" }
+        },
         "enter-duration": {
-          "$description": "Occasional small overlay entrance.",
+          "$description": "Modal, sheet, and larger overlay entrance.",
           "$value": { "value": 180, "unit": "ms" }
         },
         "exit-duration": {

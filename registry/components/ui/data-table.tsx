@@ -11,6 +11,7 @@ import {
   WarningCircle,
 } from "@phosphor-icons/react";
 import {
+  columnOrderingFeature,
   columnPinningFeature,
   columnResizingFeature,
   columnSizingFeature,
@@ -28,6 +29,7 @@ import {
   useTable,
   type Column,
   type ColumnDef,
+  type ColumnOrderState,
   type ColumnPinningState,
   type ColumnSizingState,
   type ColumnVisibilityState,
@@ -58,6 +60,7 @@ import {
 export const whatiuseDataTableFeatures = tableFeatures({
   columnSizingFeature,
   columnResizingFeature,
+  columnOrderingFeature,
   columnPinningFeature,
   columnVisibilityFeature,
   rowSelectionFeature,
@@ -115,6 +118,9 @@ export type DataTableProps<TData extends object> = {
   columnVisibility?: ColumnVisibilityState;
   defaultColumnVisibility?: ColumnVisibilityState;
   onColumnVisibilityChange?: (visibility: ColumnVisibilityState) => void;
+  columnOrder?: readonly string[];
+  defaultColumnOrder?: readonly string[];
+  onColumnOrderChange?: (order: readonly string[]) => void;
   columnSizing?: ColumnSizingState;
   defaultColumnSizing?: ColumnSizingState;
   onColumnSizingChange?: (sizing: ColumnSizingState) => void;
@@ -222,6 +228,9 @@ export function DataTable<TData extends object>({
   columnVisibility,
   defaultColumnVisibility,
   onColumnVisibilityChange,
+  columnOrder,
+  defaultColumnOrder,
+  onColumnOrderChange,
   columnSizing,
   defaultColumnSizing,
   onColumnSizingChange,
@@ -259,6 +268,9 @@ export function DataTable<TData extends object>({
 
   const [internalVisibility, setInternalVisibility] = useState<ColumnVisibilityState>(defaultColumnVisibility ?? {});
   const visibilityState = columnVisibility ?? internalVisibility;
+
+  const [internalOrder, setInternalOrder] = useState<ColumnOrderState>(() => [...(defaultColumnOrder ?? [])]);
+  const orderState = columnOrder === undefined ? internalOrder : [...columnOrder];
 
   const [internalSizing, setInternalSizing] = useState<ColumnSizingState>(defaultColumnSizing ?? {});
   const sizingState = columnSizing ?? internalSizing;
@@ -318,6 +330,12 @@ export function DataTable<TData extends object>({
     onColumnVisibilityChange?.(next);
   };
 
+  const updateOrder = (updater: Updater<ColumnOrderState>) => {
+    const next = functionalUpdate(updater, orderState);
+    if (columnOrder === undefined) setInternalOrder(next);
+    onColumnOrderChange?.(next);
+  };
+
   const updateSizing = (updater: Updater<ColumnSizingState>) => {
     const next = functionalUpdate(updater, sizingState);
     if (columnSizing === undefined) setInternalSizing(next);
@@ -354,6 +372,7 @@ export function DataTable<TData extends object>({
       rowSelection: selectionState,
       sorting: sortingState,
       columnVisibility: visibilityState,
+      columnOrder: orderState,
       columnSizing: sizingState,
       columnPinning: pinningState,
       pagination: paginationState,
@@ -361,12 +380,13 @@ export function DataTable<TData extends object>({
     onRowSelectionChange: updateSelection,
     onSortingChange: updateSorting,
     onColumnVisibilityChange: updateVisibility,
+    onColumnOrderChange: updateOrder,
     onColumnSizingChange: updateSizing,
     onColumnPinningChange: updatePinning,
     onPaginationChange: updatePagination,
   });
 
-  const visibleColumns = columns.filter((column) => visibilityState[column.id] !== false);
+  const visibleColumns = table.getVisibleLeafColumns();
   const colSpan = Math.max(1, visibleColumns.length + (selectable ? 1 : 0));
   const rows = table.getRowModel().rows;
   const totalPages = table.getPageCount();
@@ -531,7 +551,10 @@ export function DataTable<TData extends object>({
         {loading ? Array.from({ length: Math.max(1, loadingRows) }, (_, rowIndex) => (
           <TableRow key={`loading-${rowIndex}`} aria-hidden="true">
             {selectable && <TableCell className="whatiuse-data-table__selection-cell"><Skeleton width={16} height={16} /></TableCell>}
-            {visibleColumns.map((column, columnIndex) => <TableCell key={column.id} data-align={column.align ?? "start"}><Skeleton width={columnIndex === 0 ? "68%" : "48%"} height={10} /></TableCell>)}
+            {visibleColumns.map((column, columnIndex) => {
+              const source = columnsById.get(column.id);
+              return <TableCell key={column.id} data-align={source?.align ?? "start"}><Skeleton width={columnIndex === 0 ? "68%" : "48%"} height={10} /></TableCell>;
+            })}
           </TableRow>
         )) : error ? (
           <TableRow><TableCell className="whatiuse-data-table__state" colSpan={colSpan}><EmptyState size="compact" icon={<WarningCircle />} title="Could not load data" description={error} primaryAction={onRetry ? <Button size="small" onClick={onRetry}>Try again</Button> : undefined} /></TableCell></TableRow>

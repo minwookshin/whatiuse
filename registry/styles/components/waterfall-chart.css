@@ -5,7 +5,7 @@
 @layer whatiuse.components {
 .whatiuse-waterfall-chart__grid line { stroke: color-mix(in oklch, var(--whatiuse-separator) 70%, transparent); stroke-width: 1; vector-effect: non-scaling-stroke; }
 
-.whatiuse-waterfall-chart__grid text { fill: var(--whatiuse-fg-subtle); font-size: 9px; dominant-baseline: middle; }
+.whatiuse-waterfall-chart__grid text { fill: var(--whatiuse-fg-subtle); font-size: var(--whatiuse-type-metadata); dominant-baseline: middle; }
 
 .whatiuse-waterfall-chart__connectors line { stroke: color-mix(in oklch, var(--whatiuse-fg-default) 20%, transparent); stroke-dasharray: 2 2; stroke-width: 1; vector-effect: non-scaling-stroke; }
 
@@ -19,5 +19,5 @@
 
 .whatiuse-waterfall-chart__bars rect[data-active] { opacity: 1; }
 
-.whatiuse-waterfall-chart__x-axis text { fill: var(--whatiuse-fg-subtle); font-size: 9px; }
+.whatiuse-waterfall-chart__x-axis text { fill: var(--whatiuse-fg-subtle); font-size: var(--whatiuse-type-metadata); }
 }

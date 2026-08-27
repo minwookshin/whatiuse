@@ -101,8 +101,8 @@ const browserProjectNames = [...playwrightSource.matchAll(/\{\s*name:\s*"([^"]+)
 
 if (componentCount !== publicApi.componentCount) fail(`registry/API component drift: ${componentCount} versus ${publicApi.componentCount}`);
 if (componentCount !== storyComponentCount) fail(`registry/Storybook component drift: ${componentCount} versus ${storyComponentCount}`);
-if (documentationShellRouteCount !== 69) fail(`documentation shell must expose 69 routes; found ${documentationShellRouteCount}`);
-if (publicRouteCount !== 70) fail(`public site must expose 70 routes including the landing page; found ${publicRouteCount}`);
+if (documentationShellRouteCount !== 66) fail(`documentation shell must expose 66 routes; found ${documentationShellRouteCount}`);
+if (publicRouteCount !== 67) fail(`public site must expose 67 routes including the landing page; found ${publicRouteCount}`);
 if (new Set(browserProjectNames).size !== browserProjectNames.length || browserProjectNames.length !== 5) {
   fail(`browser matrix must expose five unique projects; found ${browserProjectNames.join(", ") || "none"}`);
 }
@@ -160,8 +160,6 @@ const bundleAssertions = [
   [performance.totals.initialCriticalGzipBytes, performance.budgets.initialCriticalGzipBytes],
   [performance.routes.documentationShell.jsGzipBytes, performance.budgets.documentationShellJsGzipBytes],
   [performance.routes.publicDocumentation.jsGzipBytes, performance.budgets.publicDocumentationJsGzipBytes],
-  [performance.routes.dataRecipes.jsGzipBytes, performance.budgets.dataRecipesJsGzipBytes],
-  [performance.routes.analyticsRecipes.jsGzipBytes, performance.budgets.analyticsRecipesJsGzipBytes],
   [performance.routes.productPatterns.jsGzipBytes, performance.budgets.productPatternsJsGzipBytes],
   [performance.totals.largestComponentRouteJsGzipBytes, performance.budgets.largestComponentRouteJsGzipBytes],
   [performance.totals.largestJavaScriptRawBytes, performance.budgets.largestJavaScriptRawBytes],
@@ -318,7 +316,7 @@ const evidence = {
       documentationLcpMs: runtimePerformance.measurements.documentation.lcpMs,
       maximumCls: Math.max(runtimePerformance.measurements.landing.cls, runtimePerformance.measurements.documentation.cls),
       documentationTransitionMs: runtimePerformance.measurements.documentationTransitionMs,
-      sharedDetailSelectionMs: runtimePerformance.measurements.interactions.sharedDetailSelectionMs,
+      buttonActivationMs: runtimePerformance.measurements.interactions.buttonActivationMs,
       dialogOpenMs: runtimePerformance.measurements.interactions.dialogOpenMs,
     },
   },

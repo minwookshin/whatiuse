@@ -1,0 +1,33 @@
+/* Generated from src/foundation.css and src/styles.css. Do not edit directly. */
+
+@layer whatiuse.tokens, whatiuse.base, whatiuse.components;
+
+@layer whatiuse.components {
+.whatiuse-query-builder {
+  display: grid;
+  width: min(640px, 100%);
+  gap: 10px;
+}
+
+.whatiuse-query-builder__header,
+.whatiuse-query-builder__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.whatiuse-query-builder__conditions { display: grid; gap: 6px; }
+
+.whatiuse-query-builder__condition {
+  display: grid;
+  grid-template-columns: minmax(110px, .9fr) minmax(132px, 1fr) minmax(110px, 1fr) 28px;
+  align-items: end;
+  gap: 6px;
+}
+
+.whatiuse-query-builder__condition > .whatiuse-field { min-width: 0; }
+
+.whatiuse-query-builder__condition .whatiuse-select,
+.whatiuse-query-builder__condition .whatiuse-field__control { width: 100%; }
+}

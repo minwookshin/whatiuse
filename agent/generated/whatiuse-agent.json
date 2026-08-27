@@ -1,7 +1,7 @@
 {
   "$schema": "https://whatiuse.minwookshin.com/agent/whatiuse-agent.schema.json",
   "schemaVersion": 1,
-  "version": "0.1.0-rc.38",
+  "version": "0.1.0-rc.43",
   "generatedBy": "scripts/build-agent-contract.mjs",
   "system": {
     "schemaVersion": 1,
@@ -1547,7 +1547,7 @@
       "id": "data-table",
       "title": "Data Table",
       "type": "registry:component",
-      "description": "Headless sorting, selection, visibility, pagination, and collection states over semantic table markup.",
+      "description": "Headless sorting, selection, visibility, ordering, pagination, and collection states over semantic table markup.",
       "registryItem": "@whatiuse/data-table",
       "registryDependencies": [
         "@whatiuse/whatiuse-base",
@@ -1601,6 +1601,26 @@
       ]
     },
     {
+      "id": "query-builder",
+      "title": "Query Builder",
+      "type": "registry:component",
+      "description": "A flat all-or-any condition builder with draft, apply, and cancel behavior.",
+      "registryItem": "@whatiuse/query-builder",
+      "registryDependencies": [
+        "@whatiuse/whatiuse-base",
+        "@whatiuse/button",
+        "@whatiuse/button-group",
+        "@whatiuse/data-view-state",
+        "@whatiuse/icon-button",
+        "@whatiuse/segmented-control",
+        "@whatiuse/select",
+        "@whatiuse/text-field"
+      ],
+      "packageDependencies": [
+        "@phosphor-icons/react@^2.1.10"
+      ]
+    },
+    {
       "id": "bulk-action-bar",
       "title": "Bulk Action Bar",
       "type": "registry:component",
@@ -1608,7 +1628,9 @@
       "registryItem": "@whatiuse/bulk-action-bar",
       "registryDependencies": [
         "@whatiuse/whatiuse-base",
-        "@whatiuse/icon-button"
+        "@whatiuse/button",
+        "@whatiuse/icon-button",
+        "@whatiuse/spinner"
       ],
       "packageDependencies": [
         "@phosphor-icons/react@^2.1.10"
@@ -1634,9 +1656,43 @@
       "registryItem": "@whatiuse/column-visibility-menu",
       "registryDependencies": [
         "@whatiuse/whatiuse-base",
-        "@whatiuse/data-toolbar"
+        "@whatiuse/column-manager"
       ],
       "packageDependencies": []
+    },
+    {
+      "id": "column-manager",
+      "title": "Column Manager",
+      "type": "registry:component",
+      "description": "Column visibility, order, pinning, and width reset with accessible named controls.",
+      "registryItem": "@whatiuse/column-manager",
+      "registryDependencies": [
+        "@whatiuse/whatiuse-base",
+        "@whatiuse/button",
+        "@whatiuse/button-group",
+        "@whatiuse/checkbox",
+        "@whatiuse/icon-button",
+        "@whatiuse/popover"
+      ],
+      "packageDependencies": [
+        "@phosphor-icons/react@^2.1.10"
+      ]
+    },
+    {
+      "id": "editable-cell",
+      "title": "Editable Cell",
+      "type": "registry:component",
+      "description": "Compact in-place editing with async save, cancel, validation, and focus restoration.",
+      "registryItem": "@whatiuse/editable-cell",
+      "registryDependencies": [
+        "@whatiuse/whatiuse-base",
+        "@whatiuse/button-group",
+        "@whatiuse/icon-button",
+        "@whatiuse/spinner"
+      ],
+      "packageDependencies": [
+        "@phosphor-icons/react@^2.1.10"
+      ]
     },
     {
       "id": "facet-filter",
@@ -1798,6 +1854,7 @@
       "registryDependencies": [
         "@whatiuse/whatiuse-base",
         "@whatiuse/button",
+        "@whatiuse/button-group",
         "@whatiuse/data-view-state",
         "@whatiuse/date-picker",
         "@whatiuse/popover"
@@ -1818,6 +1875,23 @@
         "@whatiuse/button",
         "@whatiuse/data-export",
         "@whatiuse/menu"
+      ],
+      "packageDependencies": [
+        "@phosphor-icons/react@^2.1.10"
+      ]
+    },
+    {
+      "id": "data-export-progress",
+      "title": "Data Export Progress",
+      "type": "registry:component",
+      "description": "Background export progress with cancel, retry, completion, and download actions.",
+      "registryItem": "@whatiuse/data-export-progress",
+      "registryDependencies": [
+        "@whatiuse/whatiuse-base",
+        "@whatiuse/alert",
+        "@whatiuse/button",
+        "@whatiuse/icon-button",
+        "@whatiuse/progress"
       ],
       "packageDependencies": [
         "@phosphor-icons/react@^2.1.10"
@@ -2121,6 +2195,7 @@
         "@whatiuse/badge",
         "@whatiuse/bulk-action-bar",
         "@whatiuse/button",
+        "@whatiuse/column-manager",
         "@whatiuse/column-visibility-menu",
         "@whatiuse/cursor-pagination",
         "@whatiuse/data-density-control",
@@ -2132,13 +2207,16 @@
         "@whatiuse/data-toolbar",
         "@whatiuse/date-range-filter",
         "@whatiuse/data-export-menu",
+        "@whatiuse/data-export-progress",
         "@whatiuse/data-export",
         "@whatiuse/data-view-state",
         "@whatiuse/dialog",
         "@whatiuse/facet-filter",
         "@whatiuse/filter-builder",
+        "@whatiuse/query-builder",
         "@whatiuse/icon-button",
         "@whatiuse/inline-edit",
+        "@whatiuse/editable-cell",
         "@whatiuse/menu",
         "@whatiuse/property-list",
         "@whatiuse/row-actions-menu",

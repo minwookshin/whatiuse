@@ -11,7 +11,7 @@
   gap: 8px;
   padding: 0 9px;
   border: 1px solid var(--whatiuse-control-border);
-  border-radius: 9px;
+  border-radius: var(--whatiuse-radius-control);
   background: color-mix(in oklab, var(--whatiuse-bg-subtle) 42%, var(--whatiuse-bg-control));
   box-shadow: var(--whatiuse-shadow-control);
   color: var(--whatiuse-fg-default);
@@ -54,13 +54,13 @@
   box-shadow: var(--whatiuse-shadow-flyout);
   color: var(--whatiuse-fg-default);
   transform-origin: var(--transform-origin);
-  transition: opacity var(--whatiuse-enter-duration) var(--whatiuse-ease-out), transform var(--whatiuse-enter-duration) var(--whatiuse-ease-out);
+  transition: opacity var(--whatiuse-flyout-enter-duration) var(--whatiuse-ease-out), transform var(--whatiuse-flyout-enter-duration) var(--whatiuse-ease-out);
 }
 
 .whatiuse-context-switcher__popup[data-starting-style],
 .whatiuse-context-switcher__popup[data-ending-style] { opacity: 0; transform: translateY(-2px) scale(.99); }
 
-.whatiuse-context-switcher__popup[data-ending-style] { transition-duration: var(--whatiuse-exit-duration); }
+.whatiuse-context-switcher__popup[data-ending-style] { transition-duration: var(--whatiuse-flyout-exit-duration); }
 
 .whatiuse-context-switcher__list { display: grid; gap: 2px; padding: 4px; overflow-y: auto; }
 

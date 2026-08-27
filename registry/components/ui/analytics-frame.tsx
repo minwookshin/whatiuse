@@ -9,9 +9,11 @@ import {
   useRef,
   useState,
   type CSSProperties,
+  type PointerEvent,
   type ReactNode,
 } from "react";
 import { clampAnalyticsIndex } from "../../lib/analytics";
+import { clearAnalyticsTooltipPosition, positionAnalyticsTooltip } from "../../lib/analytics-tooltip-position";
 import { cn } from "../../lib/cn";
 
 export const analyticsClassNames = {
@@ -85,13 +87,17 @@ export function AnalyticsFrame({
   showDataByDefault = false,
 }: AnalyticsFrameProps) {
   const id = useId();
+  const frameRef = useRef<HTMLElement | null>(null);
   const [showData, setShowData] = useState(showDataByDefault);
   const tableId = `${id}-table`;
   const summaryId = `${id}-summary`;
   const style = { "--whatiuse-analytics-height": `${height}px` } as CSSProperties;
   const hasState = loading || Boolean(error) || Boolean(empty);
+  const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
+    if (inspection) positionAnalyticsTooltip(frameRef.current, event.clientX, event.clientY);
+  };
   return (
-    <figure className={cn("whatiuse-analytics-frame", className)} style={style} aria-labelledby={`${id}-title`} aria-describedby={summaryId}>
+    <figure ref={frameRef} className={cn("whatiuse-analytics-frame", className)} style={style} aria-labelledby={`${id}-title`} aria-describedby={summaryId}>
       <figcaption className="whatiuse-analytics-frame__header">
         <div><h3 id={`${id}-title`}>{title}</h3>{description && <p>{description}</p>}</div>
         <button type="button" className="whatiuse-analytics-frame__data-toggle" aria-pressed={showData} aria-controls={tableId} disabled={hasState} onClick={() => setShowData((current) => !current)}>{showData ? "View chart" : "View data"}</button>
@@ -105,12 +111,21 @@ export function AnalyticsFrame({
           </div>
         ) : (
           <>
-            <div className="whatiuse-analytics-frame__plot" hidden={showData} aria-label={plotLabel}>{plot}</div>
+            <div
+              className="whatiuse-analytics-frame__plot"
+              hidden={showData}
+              aria-label={plotLabel}
+              onPointerMove={handlePointerMove}
+              onPointerLeave={() => clearAnalyticsTooltipPosition(frameRef.current)}
+              onFocusCapture={() => clearAnalyticsTooltipPosition(frameRef.current)}
+            >
+              {plot}
+            </div>
             <div id={tableId} className={cn("whatiuse-analytics-frame__table", !showData && "whatiuse-chart__table--visually-hidden")}>{table}</div>
           </>
         )}
       </div>
-      {inspection && <div className="whatiuse-analytics-frame__inspection">{inspection}</div>}
+      {inspection && <div className="whatiuse-analytics-frame__inspection whatiuse-analytics-tooltip">{inspection}</div>}
       <span className="whatiuse-sr-only" aria-live="polite" aria-atomic="true">{activeDescription}</span>
     </figure>
   );

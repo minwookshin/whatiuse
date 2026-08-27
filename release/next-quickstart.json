@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
   "generatedBy": "scripts/verify-next-consumer.mjs",
-  "generatedAt": "2026-08-19T13:57:43.986Z",
-  "version": "0.1.0-rc.38",
+  "generatedAt": "2026-08-27T14:03:14.788Z",
+  "version": "0.1.0-rc.43",
   "status": "passed",
   "framework": "Next.js App Router",
   "frameworkVersion": "16.3.1",
   "react": "19.2.0",
   "fixture": "examples/quickstart-next",
   "targetMs": 600000,
-  "elapsedMs": 14135,
+  "elapsedMs": 18739,
   "automatedJourney": "configure pinned registry, install Button, customize one semantic role, switch theme behind a client boundary, type-check, and production-build",
   "humanNoviceTimingClaim": false,
   "serverComponentBoundary": "layout and page stay server-rendered; the interactive proof is an explicit client component",
@@ -17,7 +17,7 @@
   "themeToggle": true,
   "semanticOverride": "--whatiuse-radius-control: 9px",
   "commands": [
-    "npx shadcn@4.18.0 registry add @whatiuse=https://whatiuse.minwookshin.com/r/v/0.1.0-rc.38/{name}.json",
+    "npx shadcn@4.18.0 registry add @whatiuse=https://whatiuse.minwookshin.com/r/v/0.1.0-rc.43/{name}.json",
     "npx shadcn@4.18.0 add @whatiuse/button",
     "npm run typecheck",
     "npm run build"

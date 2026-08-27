@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "generatedBy": "scripts/verify-whatiuse-product-patterns-consumer.mjs",
-  "generatedAt": "2026-08-19T13:59:06.940Z",
-  "version": "0.1.0-rc.38",
+  "generatedAt": "2026-08-27T16:33:46.335Z",
+  "version": "0.1.0-rc.43",
   "status": "passed",
   "fixture": "Fresh React + TypeScript + Vite application using the source registry",
   "item": "whatiuse-product-patterns",
@@ -22,5 +22,5 @@
   ],
   "typecheck": "passed",
   "productionBuild": "passed",
-  "elapsedMs": 12402
+  "elapsedMs": 15883
 }

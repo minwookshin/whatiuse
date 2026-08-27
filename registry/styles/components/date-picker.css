@@ -62,11 +62,13 @@
   box-shadow: var(--whatiuse-shadow-flyout);
   backdrop-filter: blur(14px);
   transform-origin: var(--trigger-anchor-point);
-  transition: opacity var(--whatiuse-enter-duration) var(--whatiuse-ease-out), transform var(--whatiuse-enter-duration) var(--whatiuse-ease-out);
+  transition: opacity var(--whatiuse-flyout-enter-duration) var(--whatiuse-ease-out), transform var(--whatiuse-flyout-enter-duration) var(--whatiuse-ease-out);
 }
 
 .whatiuse-date-picker__popover[data-entering],
 .whatiuse-date-picker__popover[data-exiting] { opacity: 0; transform: translateY(-2px) scale(.985); }
+
+.whatiuse-date-picker__popover[data-exiting] { transition-duration: var(--whatiuse-flyout-exit-duration); }
 
 .whatiuse-date-picker__dialog { outline: 0; }
 

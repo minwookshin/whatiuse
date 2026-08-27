@@ -28,7 +28,7 @@
 .whatiuse-gauge__marker-label { color: var(--whatiuse-fg-subtle); font-size: var(--whatiuse-type-metadata); font-variant-numeric: tabular-nums; }
 
 .whatiuse-gauge__minimum,
-.whatiuse-gauge__maximum { position: absolute; top: 72%; }
+.whatiuse-gauge__maximum { position: absolute; top: 78%; }
 
 .whatiuse-gauge__minimum { left: calc(50% - 92px); }
 

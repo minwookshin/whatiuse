@@ -17,7 +17,7 @@ const budgets = {
   cls: 0.05,
   longestTaskMs: 250,
   documentationTransitionMs: 1500,
-  sharedDetailSelectionMs: 750,
+  buttonActivationMs: 300,
   dialogOpenMs: 750,
 };
 
@@ -127,25 +127,28 @@ async function interactionMetrics(browser, baseUrl) {
   const context = await browser.newContext({ viewport: { width: 1280, height: 720 }, reducedMotion: "reduce" });
   await installObservers(context);
   const page = await context.newPage();
-  await page.goto(`${baseUrl}/#product-pilot`, { waitUntil: "networkidle" });
-  await page.getByRole("heading", { level: 1, name: "Data" }).waitFor({ state: "visible" });
-  await page.getByRole("button", { name: /Tune shared detail motion/ }).waitFor({ state: "visible" });
-  const selectionMs = await page.evaluate(() => new Promise((resolveMetric, reject) => {
-    const trigger = [...document.querySelectorAll("button")].find((button) => button.textContent?.includes("Tune shared detail motion"));
-    if (!trigger) return reject(new Error("Shared Detail trigger is missing"));
+  await page.goto(`${baseUrl}/#components`, { waitUntil: "networkidle" });
+  await page.getByRole("heading", { level: 1, name: "components i use." }).waitFor({ state: "visible" });
+  const buttonCard = page.locator('.component-index-row[data-component="button"]');
+  await buttonCard.scrollIntoViewIfNeeded();
+  await buttonCard.getByRole("button", { name: "Create issue" }).waitFor({ state: "visible" });
+  const buttonActivationMs = await page.evaluate(() => new Promise((resolveMetric, reject) => {
+    const trigger = document.querySelector('.component-index-row[data-component="button"] button[aria-label="Create issue"]');
+    if (!(trigger instanceof HTMLButtonElement)) return reject(new Error("Button interaction trigger is missing"));
     const start = performance.now();
     trigger.click();
     const inspect = () => {
-      const ready = [...document.querySelectorAll("h1, h2, h3")].some((heading) => heading.textContent?.trim() === "Tune shared detail motion");
-      if (ready) return resolveMetric(performance.now() - start);
-      if (performance.now() - start > 2_000) return reject(new Error("Shared Detail did not commit"));
+      if (trigger.getAttribute("aria-busy") === "true") return resolveMetric(performance.now() - start);
+      if (performance.now() - start > 2_000) return reject(new Error("Button loading state did not commit"));
       requestAnimationFrame(inspect);
     };
     inspect();
   }));
-  const dialogMs = await page.evaluate(() => new Promise((resolveMetric, reject) => {
-    const trigger = [...document.querySelectorAll("button")].find((button) => button.textContent?.trim() === "New issue");
-    if (!trigger) return reject(new Error("Dialog trigger is missing"));
+  await page.goto(`${baseUrl}/#dialog`, { waitUntil: "networkidle" });
+  await page.getByRole("heading", { level: 1, name: "Dialog" }).waitFor({ state: "visible" });
+  const dialogTrigger = page.getByRole("button", { name: /Edit details|Open dialog/i }).first();
+  await dialogTrigger.waitFor({ state: "visible" });
+  const dialogMs = await dialogTrigger.evaluate((trigger) => new Promise((resolveMetric, reject) => {
     const start = performance.now();
     trigger.click();
     const inspect = () => {
@@ -158,7 +161,7 @@ async function interactionMetrics(browser, baseUrl) {
   const longTasks = await page.evaluate(() => window.__whatiuseRuntimePerformance?.longTasks ?? []);
   await context.close();
   return {
-    sharedDetailSelectionMs: Math.round(selectionMs),
+    buttonActivationMs: Math.round(buttonActivationMs),
     dialogOpenMs: Math.round(dialogMs),
     longestTaskMs: Math.round(Math.max(0, ...longTasks)),
   };
@@ -205,11 +208,11 @@ try {
   if (landing.cls > budgets.cls || documentation.cls > budgets.cls) failures.push(`CLS ${Math.max(landing.cls, documentation.cls)}`);
   if (landing.longestTaskMs > budgets.longestTaskMs || documentation.longestTaskMs > budgets.longestTaskMs) failures.push(`long task ${Math.max(landing.longestTaskMs, documentation.longestTaskMs)}ms`);
   if (documentationTransitionMs > budgets.documentationTransitionMs) failures.push(`documentation transition ${documentationTransitionMs}ms`);
-  if (interactions.sharedDetailSelectionMs > budgets.sharedDetailSelectionMs) failures.push(`Shared Detail ${interactions.sharedDetailSelectionMs}ms`);
+  if (interactions.buttonActivationMs > budgets.buttonActivationMs) failures.push(`Button activation ${interactions.buttonActivationMs}ms`);
   if (interactions.dialogOpenMs > budgets.dialogOpenMs) failures.push(`Dialog ${interactions.dialogOpenMs}ms`);
 
   const evidence = {
-    schemaVersion: 1,
+    schemaVersion: 2,
     generatedBy: "scripts/verify-runtime-performance.mjs",
     generatedAt: new Date().toISOString(),
     releaseVersion: packageJson.version,
@@ -225,7 +228,7 @@ try {
   await writeFile(output, `${JSON.stringify(evidence, null, 2)}\n`, "utf8");
   if (failures.length) throw new Error(`[runtime-performance] budgets failed: ${failures.join(", ")}`);
   console.log(`[runtime-performance] landing FCP/LCP ${landing.fcpMs}/${landing.lcpMs}ms, docs ${documentation.fcpMs}/${documentation.lcpMs}ms, CLS ${Math.max(landing.cls, documentation.cls)}, longest task ${Math.max(landing.longestTaskMs, documentation.longestTaskMs)}ms`);
-  console.log(`[runtime-performance] docs transition ${documentationTransitionMs}ms, Shared Detail ${interactions.sharedDetailSelectionMs}ms, Dialog ${interactions.dialogOpenMs}ms`);
+  console.log(`[runtime-performance] docs transition ${documentationTransitionMs}ms, Button activation ${interactions.buttonActivationMs}ms, Dialog ${interactions.dialogOpenMs}ms`);
 } finally {
   await browser?.close();
   await stopChild(preview);

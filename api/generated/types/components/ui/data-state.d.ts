@@ -1,6 +1,6 @@
 import type { HTMLAttributes, ReactNode } from "react";
 export type DataStateProps = HTMLAttributes<HTMLDivElement> & {
-    state: "loading" | "empty" | "error";
+    state: "loading" | "empty" | "error" | "forbidden";
     title?: ReactNode;
     description?: ReactNode;
     action?: ReactNode;

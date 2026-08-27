@@ -7,7 +7,7 @@
 
 .whatiuse-radar-chart__grid line { stroke: color-mix(in oklch, var(--whatiuse-separator) 68%, transparent); stroke-width: 1; vector-effect: non-scaling-stroke; }
 
-.whatiuse-radar-chart__grid text { fill: var(--whatiuse-fg-subtle); font-size: 9px; dominant-baseline: middle; }
+.whatiuse-radar-chart__grid text { fill: var(--whatiuse-fg-subtle); font-size: var(--whatiuse-type-metadata); dominant-baseline: middle; }
 
 .whatiuse-radar-chart__grid g[data-active] text { fill: var(--whatiuse-fg-default); font-weight: 590; }
 

@@ -8,7 +8,13 @@
 .system-brand__home .system-brand__mark svg { width: 14px; height: 14px; }
 .system-nav--consolidated .system-brand__home strong { font-size: 16px; font-weight: 620; letter-spacing: -.025em; }
 .system-nav--consolidated > .system-component-search--global { display: flex; flex: 0 0 34px; margin: 8px 10px 5px; }
-.system-nav--consolidated .system-nav__items { padding-top: 3px; }
+.system-nav--consolidated .system-nav__items { padding-top: 2px; }
+
+/* Primary destinations use the same compact rhythm as component rows. */
+.system-nav--consolidated .system-nav-group + .system-nav-group { margin-top: 0; }
+.system-nav--consolidated .system-nav-group__trigger { height: 31px; }
+.system-nav--consolidated .system-nav-group__content-inner { padding: 1px 0 6px; }
+.system-nav--consolidated .system-component-group a { min-height: 30px; }
 
 .system-topbar--consolidated,
 :root[data-theme="dark"] .system-topbar--consolidated {

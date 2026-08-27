@@ -16,17 +16,14 @@ test("every public documentation route renders without viewport overflow", async
   expect(errors).toEqual([]);
 });
 
-test("installation opens with verified Vite, Next.js, and update paths", async ({ page, isMobile }) => {
+test("installation keeps the verified setup and update paths concise", async ({ page, isMobile }) => {
   await page.goto("/#installation");
 
-  const quickstart = page.locator("#quickstart");
-  await expect(quickstart.getByRole("heading", { level: 2, name: "Choose a path" })).toBeVisible();
-  await expect(quickstart.getByText("Vite — React 18 and 19", { exact: false })).toBeVisible();
-  await expect(quickstart.getByText("Next.js 16.3.1", { exact: false })).toBeVisible();
-  await expect(quickstart.getByText("Registry update — dry-run", { exact: false })).toBeVisible();
-
-  await expect(page.locator("#vite").getByText("npx shadcn@4.18.0 add @whatiuse/button", { exact: true })).toBeVisible();
-  await expect(page.locator("#next").getByText("npx shadcn@4.18.0 add @whatiuse/button", { exact: true })).toBeVisible();
+  await expect(page.locator("#install").getByRole("heading", { level: 2, name: "Install" })).toBeVisible();
+  await expect(page.locator("#install").getByText("npx shadcn@4.18.0 add @whatiuse/button", { exact: false })).toBeVisible();
+  await expect(page.locator("#frameworks").getByText("Vite", { exact: true })).toBeVisible();
+  await expect(page.locator("#frameworks").getByText("React 18 or 19", { exact: true })).toBeVisible();
+  await expect(page.locator("#frameworks").getByText("Next.js 16.3.1", { exact: true })).toBeVisible();
   await expect(page.locator("#update").getByText("--dry-run", { exact: false })).toBeVisible();
 
   const overflowingCodeBlocks = await page.locator(".public-doc-code pre").evaluateAll((blocks) =>
@@ -36,8 +33,8 @@ test("installation opens with verified Vite, Next.js, and update paths", async (
 
   if (!isMobile) {
     const outline = page.getByRole("complementary", { name: "Page outline" });
-    await expect(outline.getByRole("button", { name: "Choose a path" })).toHaveAttribute("aria-current", "location");
-    await expect(outline.getByText("01 / 08")).toBeVisible();
+    await expect(outline.getByRole("button", { name: "Install" })).toHaveAttribute("aria-current", "location");
+    await expect(outline.getByText("01 / 05")).toBeVisible();
   }
 });
 
@@ -62,11 +59,11 @@ test("desktop page outline keeps the requested section current", async ({ page, 
   test.skip(isMobile, "The persistent page outline is a desktop affordance.");
   await page.goto("/#product-pilot");
   const outline = page.getByRole("complementary", { name: "Page outline" });
-  const auditLog = outline.getByRole("button", { name: "Audit Log" });
-  await auditLog.click();
-  await expect(auditLog).toHaveAttribute("aria-current", "location");
-  await expect(outline.getByText("03 / 06")).toBeVisible();
-  await expect(page).toHaveURL(/#product-pilot\/audit-log$/);
+  const contract = outline.getByRole("button", { name: "Composition contract" });
+  await contract.click();
+  await expect(contract).toHaveAttribute("aria-current", "location");
+  await expect(outline.getByText("02 / 03")).toBeVisible();
+  await expect(page).toHaveURL(/#product-pilot\/data-contract$/);
 });
 
 test("documentation section links open at the requested section", async ({ page, isMobile }) => {
@@ -75,9 +72,17 @@ test("documentation section links open at the requested section", async ({ page,
 
   const outline = page.getByRole("complementary", { name: "Page outline" });
   const troubleshooting = outline.getByRole("button", { name: "Troubleshooting" });
-  await expect(page.getByRole("heading", { level: 2, name: "Common failures" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 2, name: "Troubleshooting" })).toBeVisible();
   await expect(troubleshooting).toHaveAttribute("aria-current", "location");
   await expect.poll(() => page.locator(".system-detail__scroll").evaluate((element) => element.scrollTop)).toBeGreaterThan(0);
+});
+
+test("public Data documentation omits the retired Query Builder entry", async ({ page }) => {
+  await page.goto("/#product-pilot");
+
+  const primitives = page.getByRole("table", { name: "whatiuse Data product primitives" });
+  await expect(primitives.getByText("query-builder", { exact: true })).toHaveCount(0);
+  await expect(primitives.getByText("column-manager", { exact: true })).toBeVisible();
 });
 
 test("documentation search includes section labels", async ({ page, isMobile }) => {
@@ -108,9 +113,8 @@ test("mobile navigation opens, routes, and closes", async ({ page, isMobile }) =
   await page.getByRole("button", { name: "Open navigation" }).click();
   const navigation = page.getByRole("complementary", { name: "Design system navigation" });
   await expect(navigation).toHaveAttribute("data-open", "true");
-  const components = navigation.getByRole("button", { name: "Components", exact: true });
-  if (await components.getAttribute("aria-expanded") === "false") await components.click();
-  await page.getByRole("link", { name: "Button", exact: true }).click();
+  await navigation.getByRole("textbox", { name: "Search documentation" }).fill("Button");
+  await navigation.getByRole("link", { name: "Button", exact: true }).click();
   await expect(page.getByRole("heading", { level: 1, name: "Button" })).toBeVisible();
   await expect(navigation).not.toHaveAttribute("data-open", "true");
 });
