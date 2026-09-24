@@ -1,6 +1,8 @@
 import { expect, test } from "@playwright/test";
 import { publicLibraryItems } from "../../src/component-catalog";
 
+const buttonInstallCommand = "npx shadcn@4.18.0 registry add @whatiuse=https://raw.githubusercontent.com/minwookshin/whatiuse/76c5542112152432fbf914121d10d0d9ac531c9d/public/r/v/0.1.0-rc.43/{name}.json\nnpx shadcn@4.18.0 add @whatiuse/button";
+
 test("public root opens directly into the component Library", async ({ page }) => {
   await page.goto("/");
 
@@ -81,7 +83,7 @@ test("the author reveal stays inline and card copy writes the exact install comm
   await expect(copyButton).toHaveAttribute("aria-label", "Button install command copied");
   if (browserName === "chromium") {
     await expect.poll(() => page.evaluate(() => navigator.clipboard.readText())).toBe(
-      "npx shadcn@4.18.0 add https://whatiuse.minwookshin.com/r/v/0.1.0-rc.43/button.json",
+      buttonInstallCommand,
     );
   }
 
@@ -112,7 +114,7 @@ test("the author reveal stays inline and card copy writes the exact install comm
   await expect(installCopy).toHaveAttribute("aria-label", "Button install command copied");
   if (browserName === "chromium") {
     await expect.poll(() => page.evaluate(() => navigator.clipboard.readText())).toBe(
-      "npx shadcn@4.18.0 add https://whatiuse.minwookshin.com/r/v/0.1.0-rc.43/button.json",
+      buttonInstallCommand,
     );
   }
 });
