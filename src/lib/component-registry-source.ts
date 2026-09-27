@@ -1,4 +1,4 @@
-import { getComponentRegistryPath } from "./component-install-command";
+import { getComponentRegistryUrl } from "./component-install-command";
 
 export type ComponentSourceFile = "react" | "css";
 export type ComponentSources = Record<ComponentSourceFile, string>;
@@ -37,7 +37,7 @@ export async function loadComponentSources(
   id: string,
   options: { signal?: AbortSignal; fetcher?: typeof fetch } = {},
 ): Promise<ComponentSources> {
-  const response = await (options.fetcher ?? fetch)(getComponentRegistryPath(id), {
+  const response = await (options.fetcher ?? fetch)(getComponentRegistryUrl(id), {
     cache: "force-cache",
     headers: { Accept: "application/json" },
     signal: options.signal,
