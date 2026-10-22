@@ -31,7 +31,7 @@ describe("component registry source", () => {
       css: ".button {}",
     });
     expect(fetcher).toHaveBeenCalledWith(
-      `/r/v/${packageManifest.version}/button.json`,
+      `https://raw.githubusercontent.com/minwookshin/whatiuse/76c5542112152432fbf914121d10d0d9ac531c9d/public/r/v/${packageManifest.version}/button.json`,
       expect.objectContaining({ cache: "force-cache", headers: { Accept: "application/json" } }),
     );
   });

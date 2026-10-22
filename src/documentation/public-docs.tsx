@@ -6,6 +6,7 @@ import agentEvaluation from "../../release/agent-evaluation.json";
 import nextQuickstartManifest from "../../examples/quickstart-next/package.json";
 import { componentMaturity, readyCandidateComponents } from "../component-maturity";
 import { copyText } from "../lib/copy-text";
+import { getPinnedRegistryTemplate } from "../lib/component-install-command";
 import {
   whatiuseDataComponentContracts,
   whatiuseDataRecipeContracts,
@@ -174,7 +175,7 @@ function ComponentStatus() {
 }
 
 function Installation() {
-  const pinnedRegistry = `${packageManifest.homepage}/r/v/${packageManifest.version}/{name}.json`;
+  const pinnedRegistry = getPinnedRegistryTemplate();
   return <>
     <DocSection id="install" title="Install">
       <p>Run these commands inside an existing React and TypeScript project.</p>

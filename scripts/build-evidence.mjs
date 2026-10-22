@@ -346,7 +346,7 @@ const expectedJson = `${JSON.stringify(evidence, null, 2)}\n`;
 
 const docClaims = {
   "README.md": [
-    `https://whatiuse.minwookshin.com/r/v/${evidence.release.version}/{name}.json`,
+    `https://raw.githubusercontent.com/minwookshin/whatiuse/76c5542112152432fbf914121d10d0d9ac531c9d/public/r/v/${evidence.release.version}/{name}.json`,
   ],
 };
 
