@@ -5,6 +5,7 @@ import { tmpdir } from "node:os";
 import { performance } from "node:perf_hooks";
 import { join, resolve } from "node:path";
 import { promisify } from "node:util";
+import { motionTypeOverrides } from "./adoption-test-utils.mjs";
 
 const exec = promisify(execFile);
 const root = process.cwd();
@@ -110,6 +111,7 @@ try {
   await writeFile(resolve(fixture, "src/index.css"), "/* whatiuse source registry owns component CSS. */\n");
   await writeFile(resolve(fixture, "package.json"), `${JSON.stringify({
     name: "whatiuse-agent-evaluation", private: true, version: "0.0.0", type: "module",
+    overrides: motionTypeOverrides,
     dependencies: { react: packageJson.devDependencies.react, "react-dom": packageJson.devDependencies["react-dom"] },
     devDependencies: { "@types/react": packageJson.devDependencies["@types/react"], "@types/react-dom": packageJson.devDependencies["@types/react-dom"], typescript: packageJson.devDependencies.typescript, vite: packageJson.devDependencies.vite },
   }, null, 2)}\n`);
