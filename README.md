@@ -10,4 +10,10 @@ npx shadcn@4.18.0 registry add \
 npx shadcn@4.18.0 add @whatiuse/button
 ```
 
+For npm projects that type-check dependencies (`skipLibCheck: false`), set this override before adding Motion 13 items such as Data or Product Patterns. Motion 13 and `csstype@3.2.4` declare incompatible types for `pathLength`.
+
+```sh
+npm pkg set 'overrides.@types/react.csstype=3.2.3'
+```
+
 Pre-release; APIs may change.

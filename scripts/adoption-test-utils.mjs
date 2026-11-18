@@ -9,6 +9,8 @@ export const exec = promisify(execFile);
 export const root = process.cwd();
 export const packageJson = JSON.parse(await readFile(resolve(root, "package.json"), "utf8"));
 export const shadcnCli = `shadcn@${packageJson.devDependencies.shadcn}`;
+// Motion 13 defines its own SVG pathLength type, which conflicts with csstype 3.2.4.
+export const motionTypeOverrides = { "@types/react": { csstype: "3.2.3" } };
 export const shadcnExecutable = process.platform === "win32"
   ? resolve(root, "node_modules/.bin/shadcn.cmd")
   : resolve(root, "node_modules/.bin/shadcn");
