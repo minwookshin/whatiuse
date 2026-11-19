@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import nextQuickstartManifest from "../../examples/quickstart-next/package.json" with { type: "json" };
 import { publicRoutes } from "./public-routes";
 
 test("every public documentation route renders without viewport overflow", async ({ page }) => {
@@ -23,7 +24,7 @@ test("installation keeps the verified setup and update paths concise", async ({ 
   await expect(page.locator("#install").getByText("npx shadcn@4.18.0 add @whatiuse/button", { exact: false })).toBeVisible();
   await expect(page.locator("#frameworks").getByText("Vite", { exact: true })).toBeVisible();
   await expect(page.locator("#frameworks").getByText("React 18 or 19", { exact: true })).toBeVisible();
-  await expect(page.locator("#frameworks").getByText("Next.js 16.3.1", { exact: true })).toBeVisible();
+  await expect(page.locator("#frameworks").getByText(`Next.js ${nextQuickstartManifest.dependencies.next}`, { exact: true })).toBeVisible();
   await expect(page.locator("#update").getByText("--dry-run", { exact: false })).toBeVisible();
 
   const overflowingCodeBlocks = await page.locator(".public-doc-code pre").evaluateAll((blocks) =>
